@@ -1,37 +1,42 @@
-# CLAUDE.md — FPMC Platform
+# FPMC Platform & Storefront
 
-Conventions for every Claude Code session in this repo. Keep this file lean — details live in `/docs`.
+Cinematic public storefront + auth-gated platform for FPMC (Film Production Music Crew).
+Built **from scratch** — simple and clean, without compromising quality or functionality.
 
-## What this repo is
-One codebase, two layers: a cinematic public **storefront** and an auth-gated **platform** (5 audiences).
-**Current phase: LAUNCH SLICE** — one cinematic page + `/links` + legal pages. Hard deadline: **live 12 July 2026** (Radi release 24 July). Nothing else ships before that.
+## Read order (every session / every new contributor)
+1. `CLAUDE.md` — project rules, locked decisions, v1 module set, phases.
+2. `FPMC_Website-Blueprint.md` — the stakeholder spec (German): what and why.
+3. `db/schema.sql` — the complete v1 data layer (DDL + RLS notes).
+4. `BUILD-SESSION-KICKOFF.md` — how build sessions run, phase gates, P0 prompt.
 
-## Launch Slice scope (and nothing more)
-- Routes: `/` (Radi project hub: hero loop, embedded YouTube, email capture with double opt-in, hidden giveaway section), `/links` (link-in-bio, GDPR-clean, no third-party trackers), `/impressum`, `/datenschutz`
-- NO shop, NO login, NO platform features — those are P0–P6 (see `docs/FPMC_Website-Blueprint.md` §10)
-- Build the Slice as the first routes of the platform repo, not a throwaway
+## Ground rules (short version)
+- **From scratch.** No code ported from earlier projects.
+- **v1 scope is locked** (see CLAUDE.md): storefront · auth/roles · client portal with
+  signature/PDF · member area · digital shop (entitlements) · partner (invite-only) ·
+  crew workspace. Invoicing lives **outside** this platform (Köfman).
+- **EU + DSGVO from P0:** EU Supabase, RLS everywhere, no secrets in the repo,
+  self-hosted fonts, data minimization.
+- **Languages:** DE (default) / EN / AR with full RTL — built in from P0.
+- **Design:** achromatic cinematic UI. Navy `#1F3A5F` / Gold `#C8A24B` are
+  **logo & print tokens only**, never UI colors.
+- **Phases P0–P6**, one per working block; each ends committed → tagged → backed up
+  (3-2-1, Datentresor SSD) before the next begins.
 
-## Stack (locked)
-- React + Vite · Tailwind
-- Supabase, **EU region** (email capture table now; full schema port later per `docs/FPMC_Website-Engineering-Handoff.md`)
-- Transactional email via branded domain — **never a sandbox sender**
-- i18n: DE (default) / EN / AR with full RTL. Flat translation keys, kept in sync across all language files.
+## Stack
+React + Vite · Supabase (EU: Auth, Postgres + RLS, Storage, Edge Functions) ·
+Stripe + Stripe Tax (digital products, idempotent webhook) · self-hosted OFL fonts.
 
-## Design system: Lichtspiel v2 — SUPERSEDES Blueprint §6
-See `docs/DESIGN-SYSTEM-LICHTSPIEL-V2.md`. The short version:
-- **Fully achromatic web UI**: void black `#0A0A0A`, carbon, graphite. Navy `#1F3A5F` and gold `#C8A24B` are **logo/print only — never web UI**.
-- Type: **Cinzel** (display, uppercase, hard cap 96px, neutral-to-positive tracking) · **Inter 300** (body) · **Pinyon Script** (rare accents) · **Amiri / Noto Naskh Arabic** (AR/RTL)
-- All fonts **self-hosted, OFL** — no Google Fonts CDN (GDPR)
-- Motion: Higgsfield loops as brand signature (assets in `assets/`, prompts in `docs/FPMC_WS2_Asset-Kit_EN.md`)
+## Structure (target)
+```
+fpmc-platform/
+├── CLAUDE.md
+├── README.md
+├── BUILD-SESSION-KICKOFF.md
+├── FPMC_Website-Blueprint.md
+├── db/
+│   └── schema.sql
+├── src/                 (created in P0)
+└── supabase/            (migrations + edge functions, from P1)
+```
 
-## Rules
-- Secrets only in `.env` (gitignored) — never in code, never in commits
-- One branch + commit per building block; PR-sized changes; tag releases (`slice-v1` etc.)
-- GDPR by default: cookie-light, no tracking without consent, EU data residency
-- Fix, don't inherit: the four known HOKAN weaknesses (unauthenticated AI passthrough, sandbox sender, non-idempotent payment reminders, hardcoded admin address) must not enter this repo
-- German copy is the default surface language; EN mirrors; AR via the i18n system
-
-## Working style
-- Plan mode before any multi-file build; get the plan approved first
-- Read files from the repo instead of asking for pastes
-- After each completed block: commit with a clear message, then the context can be cleared
+*Confidential — internal use only.*
