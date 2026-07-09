@@ -14,7 +14,7 @@ export const IMPRESSUM: DocByLocale = {
       {
         heading: "Angaben gemäß § 5 DDG",
         body: [
-          "FPMC GbR [[vollständige Bezeichnung der GbR — bitte bestätigen]]\nVertreten durch die Gesellschafter: [[Vor- und Nachnamen aller Gesellschafter]]\n[[Straße und Hausnummer]]\n[[PLZ]] [[Ort]]\nDeutschland",
+          "FPMC GbR\nVertreten durch die Gesellschafter: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\n[[Straße und Hausnummer]]\n[[PLZ]] [[Ort]] (Raum Köln / Bergisch Gladbach)\nDeutschland",
         ],
       },
       {
@@ -29,7 +29,9 @@ export const IMPRESSUM: DocByLocale = {
       },
       {
         heading: "Redaktionell verantwortlich (§ 18 Abs. 2 MStV)",
-        body: ["[[Vor- und Nachname]]\nAnschrift wie oben"],
+        body: [
+          "Hazem Hokan [[bitte bestätigen, falls ein anderer Gesellschafter verantwortlich sein soll]]\nAnschrift wie oben",
+        ],
       },
       {
         heading: "Haftung für Inhalte",
@@ -57,7 +59,7 @@ export const IMPRESSUM: DocByLocale = {
       {
         heading: "Information pursuant to § 5 DDG",
         body: [
-          "FPMC GbR [[full legal name of the GbR — please confirm]]\nRepresented by the partners: [[full names of all partners]]\n[[street and number]]\n[[postal code]] [[city]]\nGermany",
+          "FPMC GbR\nRepresented by the partners: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\n[[street and number]]\n[[postal code]] [[city]] (Cologne / Bergisch Gladbach area)\nGermany",
         ],
       },
       {
@@ -72,7 +74,9 @@ export const IMPRESSUM: DocByLocale = {
       },
       {
         heading: "Responsible for content (§ 18 (2) MStV)",
-        body: ["[[first and last name]]\naddress as above"],
+        body: [
+          "Hazem Hokan [[confirm if a different partner should be responsible]]\naddress as above",
+        ],
       },
       {
         heading: "Note",
@@ -92,7 +96,7 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Verantwortlicher",
         body: [
-          "Verantwortlich für die Datenverarbeitung auf dieser Website:\nFPMC GbR [[Bezeichnung wie im Impressum]], [[Anschrift]], [[Ort]].\nE-Mail: hello@fpmc.house",
+          "Verantwortlich für die Datenverarbeitung auf dieser Website:\nFPMC GbR, vertreten durch die Gesellschafter (siehe Impressum), [[Anschrift]], [[Ort]].\nE-Mail: hello@fpmc.house",
         ],
       },
       {
@@ -152,7 +156,7 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Controller",
         body: [
-          "Controller for data processing on this website:\nFPMC GbR [[name as in the legal notice]], [[address]], [[city]].\nEmail: hello@fpmc.house",
+          "Controller for data processing on this website:\nFPMC GbR, represented by its partners (see legal notice), [[address]], [[city]].\nEmail: hello@fpmc.house",
         ],
       },
       {
