@@ -1,0 +1,55 @@
+{
+  "meta.skip": "Skip to content",
+
+  "nav.home": "Home",
+  "nav.connect": "Connect",
+  "nav.links": "Links",
+
+  "lang.label": "Language",
+  "lang.de": "DE",
+  "lang.en": "EN",
+  "lang.ar": "AR",
+
+  "hero.kicker": "Film · Music · AI",
+  "hero.tagline": "Building the bridge between the German-speaking world and MENA.",
+  "hero.cta": "Start a project",
+  "hero.scroll": "What we build",
+
+  "services.title": "What we build for businesses",
+  "services.aivideo.title": "AI ad videos",
+  "services.aivideo.body": "Modular ad clips for social media (Reels, TikTok ads). Produced within 48 hours through AI-powered pipelines.",
+  "services.websites.title": "Websites that win clients",
+  "services.websites.body": "Landing pages and websites for local businesses, optimized directly for customer acquisition. Cinematic, fast, GDPR-clean.",
+  "services.boost.title": "Digital Boost (bundle)",
+  "services.boost.body": "Website + 3 AI ad videos, as subscription or fixed price. One partner for your entire digital presence.",
+  "services.artists.title": "For artists & labels",
+  "services.artists.body": "High-end music production with a cross-cultural sound, cinematic music videos (AI for VFX & post-production), documentary content coverage and podcast production.",
+  "services.cta": "Start a project",
+
+  "teaser.label": "Soon",
+  "teaser.text": "First chapter: 24.07.",
+
+  "contact.title": "Contact",
+  "contact.body": "One partner for your entire digital presence. Write to us — we'll get back to you.",
+  "contact.cta": "Start a project",
+
+  "connect.kicker": "Connect",
+  "connect.title": "Let's build something.",
+  "connect.body": "FPMC connects film, music and AI — and the German-speaking world with MENA. Artist, brand or creative partner: if you want to make something exceptional, reach out.",
+  "connect.cta": "Reach out",
+
+  "links.tagline": "Film · Music · AI",
+  "links.youtube": "YouTube",
+  "links.instagram": "Instagram",
+  "links.tiktok": "TikTok",
+  "links.contact": "Contact",
+  "links.soon": "Premiere link soon",
+
+  "footer.impressum": "Legal notice",
+  "footer.datenschutz": "Privacy",
+  "footer.rights": "FPMC · Film Production & Music Club",
+
+  "notfound.title": "Page not found",
+  "notfound.body": "This page doesn't exist.",
+  "notfound.cta": "Back to home"
+}
