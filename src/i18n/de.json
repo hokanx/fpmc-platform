@@ -1,0 +1,55 @@
+{
+  "meta.skip": "Zum Inhalt springen",
+
+  "nav.home": "Start",
+  "nav.connect": "Connect",
+  "nav.links": "Links",
+
+  "lang.label": "Sprache",
+  "lang.de": "DE",
+  "lang.en": "EN",
+  "lang.ar": "AR",
+
+  "hero.kicker": "Film · Musik · KI",
+  "hero.tagline": "Wir bauen die Brücke zwischen der DACH-Region und der MENA-Welt.",
+  "hero.cta": "Projekt anfragen",
+  "hero.scroll": "Was wir bauen",
+
+  "services.title": "Was wir für Unternehmen bauen",
+  "services.aivideo.title": "KI-Werbevideos",
+  "services.aivideo.body": "Modulare Werbeclips für Social Media (Reels, TikTok Ads). Produktion innerhalb von 48 Stunden durch KI-gestützte Pipelines.",
+  "services.websites.title": "Websites, die Kunden bringen",
+  "services.websites.body": "Landingpages und Websites für lokale Betriebe, direkt auf Neukundengewinnung optimiert. Cinematic, schnell, DSGVO-sauber.",
+  "services.boost.title": "Digital-Boost (Kombipaket)",
+  "services.boost.body": "Website + 3 KI-Werbevideos, als Abo oder Festpreis. Ein Partner für den kompletten digitalen Auftritt.",
+  "services.artists.title": "Für Artists & Labels",
+  "services.artists.body": "High-End-Musikproduktion mit Cross-Cultural-Sound, kinematografische Musikvideos (KI für VFX & Postproduktion), dokumentarische Content-Begleitung und Podcast-Produktion.",
+  "services.cta": "Projekt anfragen",
+
+  "teaser.label": "Bald",
+  "teaser.text": "Erstes Kapitel: 24.07.",
+
+  "contact.title": "Kontakt",
+  "contact.body": "Ein Partner für den kompletten digitalen Auftritt. Schreib uns — wir melden uns.",
+  "contact.cta": "Projekt anfragen",
+
+  "connect.kicker": "Connect",
+  "connect.title": "Lass uns etwas bauen.",
+  "connect.body": "FPMC verbindet Film, Musik und KI — und die DACH-Welt mit MENA. Ob Artist, Brand oder Kreativpartner: Wenn du etwas Außergewöhnliches machen willst, melde dich.",
+  "connect.cta": "Melde dich",
+
+  "links.tagline": "Film · Musik · KI",
+  "links.youtube": "YouTube",
+  "links.instagram": "Instagram",
+  "links.tiktok": "TikTok",
+  "links.contact": "Kontakt",
+  "links.soon": "Premiere-Link folgt",
+
+  "footer.impressum": "Impressum",
+  "footer.datenschutz": "Datenschutz",
+  "footer.rights": "FPMC · Film Production & Music Club",
+
+  "notfound.title": "Seite nicht gefunden",
+  "notfound.body": "Diese Seite existiert nicht.",
+  "notfound.cta": "Zur Startseite"
+}

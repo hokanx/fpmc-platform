@@ -1,0 +1,37 @@
+{
+  "_note": "AR is stubbed for V0: real strings where confirmed, otherwise the resolver falls back EN → DE. Full AR copy + review lands in a later block. RTL layout is already live.",
+
+  "meta.skip": "تخطَّ إلى المحتوى",
+
+  "nav.home": "الرئيسية",
+  "nav.connect": "تواصل",
+  "nav.links": "روابط",
+
+  "lang.label": "اللغة",
+
+  "hero.kicker": "سينما · موسيقى · ذكاء اصطناعي",
+  "hero.tagline": "نبني الجسر بين العالم الناطق بالألمانية والعالم العربي.",
+  "hero.cta": "ابدأ مشروعًا",
+  "hero.scroll": "ما نبنيه",
+
+  "services.title": "ما نبنيه للشركات",
+  "services.cta": "ابدأ مشروعًا",
+
+  "teaser.label": "قريبًا",
+  "teaser.text": "الفصل الأول: ٢٤ يوليو",
+
+  "contact.title": "تواصل",
+  "contact.cta": "ابدأ مشروعًا",
+
+  "connect.kicker": "تواصل",
+  "connect.title": "لنصنع شيئًا معًا.",
+  "connect.cta": "تواصل معنا",
+
+  "links.tagline": "سينما · موسيقى · ذكاء اصطناعي",
+  "links.contact": "تواصل",
+
+  "footer.impressum": "بيان قانوني",
+  "footer.datenschutz": "الخصوصية",
+
+  "notfound.cta": "إلى الصفحة الرئيسية"
+}
