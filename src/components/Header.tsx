@@ -18,10 +18,14 @@ export function Header() {
         </Link>
 
         <nav
-          className="flex items-center gap-5"
+          className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1"
           aria-label={t("nav.home")}
         >
-          <NavLink to="/" end className={navClass}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => "hidden sm:inline " + navClass({ isActive })}
+          >
             {t("nav.home")}
           </NavLink>
           <NavLink to="/studio" className={navClass}>
