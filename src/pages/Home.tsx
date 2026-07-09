@@ -18,7 +18,7 @@ export function Home() {
     <>
       <Hero />
 
-      <Marquee text="Film · Music · AI · DACH × MENA · Cinematic · 48h" />
+      <Marquee text={t("marquee.home")} />
 
       {/* Services */}
       <section id="services" className="px-5 py-20 sm:py-28">

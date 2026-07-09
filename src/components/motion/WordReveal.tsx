@@ -36,7 +36,10 @@ export function WordReveal({
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
     >
       {words.map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden align-top">
+        <span
+          key={i}
+          className="inline-block overflow-hidden pb-[0.2em] align-bottom [margin-bottom:-0.2em]"
+        >
           <motion.span variants={word} className="inline-block">
             {w}
           </motion.span>

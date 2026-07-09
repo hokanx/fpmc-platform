@@ -45,9 +45,9 @@ export const studioContent = {
       sub: "Film, Sound, Business und KI — alles im Haus.",
       members: [
         { name: "Saeed", role: "Film & Regie. SAE-Diplom, echte Produktionen.", langs: "AR · DE · EN" },
-        { name: "Dilara", role: "Finanzen & Organisation. Struktur hinter der Kreativität.", langs: "DE · EN · TR" },
+        { name: "Dilara", role: "Finanzen & Organisation, Bachelor in Filmmaking. Struktur hinter der Kreativität.", langs: "DE · EN · TR" },
         { name: "Jasper", role: "Sound & Musikproduktion. Audio-Diplom, Producer.", langs: "DE · EN · FR" },
-        { name: "Hazem", role: "KI, Design & Marketing. Baut und erzählt.", langs: "AR · DE · EN · NL" },
+        { name: "Hazem", role: "KI, Design, Marketing & Musikproduktion. Baut und erzählt.", langs: "AR · DE · EN" },
       ],
       counters: [
         { value: "0", label: "versteckte Kosten" },
@@ -160,9 +160,9 @@ export const studioContent = {
       sub: "Film, sound, business and AI — all in-house.",
       members: [
         { name: "Saeed", role: "Film & directing. SAE diploma, real productions.", langs: "AR · DE · EN" },
-        { name: "Dilara", role: "Finance & operations. Structure behind the craft.", langs: "DE · EN · TR" },
+        { name: "Dilara", role: "Finance & operations, bachelor in filmmaking. Structure behind the craft.", langs: "DE · EN · TR" },
         { name: "Jasper", role: "Sound & music production. Audio diploma, producer.", langs: "DE · EN · FR" },
-        { name: "Hazem", role: "AI, design & marketing. Builds it and tells it.", langs: "AR · DE · EN · NL" },
+        { name: "Hazem", role: "AI, design, marketing & music production. Builds it and tells it.", langs: "AR · DE · EN" },
       ],
       counters: [
         { value: "0", label: "hidden costs" },
