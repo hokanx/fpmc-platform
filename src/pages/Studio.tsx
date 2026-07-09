@@ -4,6 +4,7 @@ import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Logo } from "../components/Logo";
 import { Marquee } from "../components/Marquee";
+import { Reveal } from "../components/motion/Reveal";
 import { LangSwitcher } from "../components/LangSwitcher";
 import { studioContent } from "../content/studio.content";
 import { CONTACT_EMAIL, MAILTO, SOCIALS, WHATSAPP } from "../config";
@@ -33,7 +34,7 @@ function Section({
         className
       }
     >
-      <div className="reveal mx-auto max-w-6xl">{children}</div>
+      <Reveal className="mx-auto max-w-6xl">{children}</Reveal>
     </section>
   );
 }
