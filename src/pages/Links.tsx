@@ -20,9 +20,7 @@ export function Links() {
       <div className="mx-auto flex max-w-sm flex-col items-center text-center">
         <h1 className="sr-only">FPMC — {t("links.tagline")}</h1>
         <Logo className="w-40" />
-        <p className="mt-6 text-[0.7rem] uppercase tracking-[0.35em] text-ash">
-          {t("links.tagline")}
-        </p>
+        <p className="eyebrow mt-6">{t("links.tagline")}</p>
 
         <nav className="mt-10 flex w-full flex-col gap-3">
           {buttons.map((b) => (

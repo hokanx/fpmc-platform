@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fontsource/amiri": "^5.1.0",
+    "@fontsource/antonio": "^5.2.8",
     "@fontsource/cinzel": "^5.1.0",
     "@fontsource/inter": "^5.1.0",
     "@fontsource/noto-naskh-arabic": "^5.1.0",

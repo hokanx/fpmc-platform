@@ -3,6 +3,20 @@
 Status: locked decision. **Supersedes Blueprint §6 (Navy/Gold)** for all web UI.
 The idea: light against darkness — a projector beam in a dark cinema. Everything on the web surface is achromatic; the brand appears through light, typography and motion, not color.
 
+> ## Update — Lichtspiel v2 · Poster edition (2026-07, owner-approved)
+> The site now expresses Lichtspiel through a **poster structure** (adapted from a
+> maximalist single-accent-on-dark reference), while keeping the **achromatic rule intact**:
+> - **Colour:** unchanged — void/carbon/graphite/ash/light, **no hue**. `--light` is the single "accent".
+> - **Display type:** **Antonio** (condensed grotesque, self-hosted OFL) replaces Cinzel on the web —
+>   UPPERCASE, poster-scale (`clamp()` up to ~13rem), negative tracking, tight leading. Body stays **Inter**.
+>   (Cinzel/Pinyon remain valid for print.) The old "Cinzel ≤96px" cap applies to the retired display face only.
+> - **Shape language:** controls (buttons/badges/inputs) are **full pills**; cards `6px`; **dotted `--light` rules**
+>   separate sections; flat surfaces, **no shadows** (depth via the void→carbon→graphite step).
+> - **Motion & imagery:** unchanged — slow projector-beam; Higgsfield cinematic stills/loops behind poster type.
+>
+> The base spec below still governs colour, motion and a11y. Where it names Cinzel as the web display
+> face or a 96px cap, the Poster edition supersedes it for the live site.
+
 ## Color tokens (web)
 | Token | Value | Use |
 |---|---|---|
