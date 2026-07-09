@@ -19,15 +19,20 @@ export function Links() {
     <section className="px-5 py-16 sm:py-20">
       <div className="mx-auto flex max-w-sm flex-col items-center text-center">
         <h1 className="sr-only">FPMC — {t("links.tagline")}</h1>
-        <Logo className="w-40" />
-        <p className="eyebrow mt-6">{t("links.tagline")}</p>
+        <div className="rise-in w-40">
+          <Logo className="w-40" />
+        </div>
+        <p className="eyebrow rise-in mt-6" style={{ animationDelay: "0.08s" }}>
+          {t("links.tagline")}
+        </p>
 
         <nav className="mt-10 flex w-full flex-col gap-3">
-          {buttons.map((b) => (
+          {buttons.map((b, i) => (
             <a
               key={b.label}
               href={b.href}
-              className="btn btn-block"
+              className="btn btn-block rise-in"
+              style={{ animationDelay: `${0.16 + i * 0.07}s` }}
               {...(b.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
@@ -37,7 +42,10 @@ export function Links() {
           ))}
         </nav>
 
-        <p className="mt-8 text-xs uppercase tracking-widest text-ash/70">
+        <p
+          className="rise-in mt-8 text-xs uppercase tracking-widest text-ash/70"
+          style={{ animationDelay: `${0.16 + buttons.length * 0.07}s` }}
+        >
           {t("links.soon")} <span aria-hidden="true">⏳</span>
         </p>
       </div>

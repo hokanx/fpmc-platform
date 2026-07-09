@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { Reveal } from "../components/motion/Reveal";
 
 export function NotFound() {
   const { t } = useI18n();
@@ -8,7 +9,7 @@ export function NotFound() {
 
   return (
     <section className="px-5 py-28">
-      <div className="mx-auto max-w-xl text-center">
+      <Reveal className="mx-auto max-w-xl text-center">
         <p className="font-display text-5xl tracking-widest text-ash">404</p>
         <h1 className="mt-6 text-2xl">{t("notfound.title")}</h1>
         <p className="mt-4 text-ash">{t("notfound.body")}</p>
@@ -17,7 +18,7 @@ export function NotFound() {
             {t("notfound.cta")}
           </Link>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

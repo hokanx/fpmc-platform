@@ -5,13 +5,15 @@ import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Logo } from "../components/Logo";
 import { Marquee } from "../components/Marquee";
 import { Reveal } from "../components/motion/Reveal";
+import { WordReveal } from "../components/motion/WordReveal";
+import { Stagger, StaggerItem } from "../components/motion/Stagger";
+import { Counter } from "../components/motion/Counter";
 import { LangSwitcher } from "../components/LangSwitcher";
 import { studioContent } from "../content/studio.content";
 import { CONTACT_EMAIL, MAILTO, SOCIALS, WHATSAPP } from "../config";
 
 type Copy = typeof studioContent.de;
 
-// Studio content only exists in DE/EN; AR falls back to DE (page renders LTR).
 function useStudioCopy(): Copy {
   const { locale } = useI18n();
   return (locale === "en" ? studioContent.en : studioContent.de) as unknown as Copy;
@@ -30,11 +32,10 @@ function Section({
     <section
       id={id}
       className={
-        "scroll-mt-24 border-t border-dotted border-light/20 px-5 py-20 sm:py-24 " +
-        className
+        "scroll-mt-24 border-t border-dotted border-light/20 px-5 py-20 sm:py-24 " + className
       }
     >
-      <Reveal className="mx-auto max-w-6xl">{children}</Reveal>
+      <div className="mx-auto max-w-6xl">{children}</div>
     </section>
   );
 }
@@ -71,22 +72,24 @@ function Hero({ c }: { c: Copy }) {
         <div className="hero-haze" />
       </div>
       <div className="mx-auto max-w-6xl">
-        <p className="eyebrow">FPMC Studio</p>
-        <h1 className="display-lg mt-6 max-w-5xl">{c.hero.headline}</h1>
-        <p className="mt-8 max-w-xl text-lg leading-relaxed text-light/85">
-          {c.hero.subline}
-        </p>
-        <ul className="mt-8 flex flex-wrap gap-2">
-          {c.hero.badges.map((b) => (
-            <li key={b} className="badge">
-              {b}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-10 flex flex-wrap items-center gap-3">
-          <a href="#contact" className="btn btn-fill">{c.hero.ctaPrimary}</a>
-          <a href="#pricing" className="btn">{c.hero.ctaSecondary}</a>
-        </div>
+        <Reveal>
+          <p className="eyebrow">FPMC Studio</p>
+        </Reveal>
+        <WordReveal as="h1" className="display-lg mt-6 max-w-5xl text-balance" text={c.hero.headline} />
+        <Reveal delay={0.1}>
+          <p className="mt-8 max-w-xl text-lg leading-relaxed text-light/85">{c.hero.subline}</p>
+          <ul className="mt-8 flex flex-wrap gap-2">
+            {c.hero.badges.map((b) => (
+              <li key={b} className="badge">
+                {b}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <a href="#contact" className="btn btn-fill">{c.hero.ctaPrimary}</a>
+            <a href="#pricing" className="btn">{c.hero.ctaSecondary}</a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -96,30 +99,31 @@ function Why({ c }: { c: Copy }) {
   const [active, setActive] = useState(0);
   return (
     <Section id="why">
-      <h2>{c.why.headline}</h2>
-      <p className="mt-4 text-ash">{c.why.sub}</p>
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <WordReveal as="h2" className="text-balance" text={c.why.headline} />
+      <Reveal>
+        <p className="mt-4 text-ash">{c.why.sub}</p>
+      </Reveal>
+      <Stagger className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
         {c.why.reasons.map((r, i) => {
           const on = i === active;
           return (
-            <button
-              key={r.label}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-pressed={on}
-              className={
-                "rounded-[6px] border p-4 text-left transition-colors " +
-                (on ? "border-light bg-carbon" : "border-graphite hover:border-ash/60")
-              }
-            >
-              <span className="font-display text-base uppercase tracking-wide">
-                {r.label}
-              </span>
-            </button>
+            <StaggerItem key={r.label}>
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                aria-pressed={on}
+                className={
+                  "w-full rounded-[6px] border p-4 text-left transition-colors " +
+                  (on ? "border-light bg-carbon" : "border-graphite hover:border-ash/60")
+                }
+              >
+                <span className="font-display text-base uppercase tracking-wide">{r.label}</span>
+              </button>
+            </StaggerItem>
           );
         })}
-      </div>
-      <p className="display-lg mt-8 max-w-4xl !text-[clamp(1.75rem,4vw,3rem)]">
+      </Stagger>
+      <p className="display-lg mt-8 max-w-4xl text-balance !text-[clamp(1.75rem,4vw,3rem)]">
         {c.why.reasons[active].line}
       </p>
     </Section>
@@ -129,29 +133,31 @@ function Why({ c }: { c: Copy }) {
 function Crew({ c }: { c: Copy }) {
   return (
     <Section id="crew">
-      <h2>{c.crew.headline}</h2>
-      <p className="mt-4 text-ash">{c.crew.sub}</p>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2">
+      <WordReveal as="h2" className="text-balance" text={c.crew.headline} />
+      <Reveal>
+        <p className="mt-4 text-ash">{c.crew.sub}</p>
+      </Reveal>
+      <Stagger className="mt-10 grid gap-4 sm:grid-cols-2">
         {c.crew.members.map((m) => (
-          <article key={m.name} className="card p-6">
-            <h3>{m.name}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-ash">{m.role}</p>
-            <p className="mt-3 text-[0.7rem] uppercase tracking-widest text-ash/70">
-              {m.langs}
-            </p>
-          </article>
+          <StaggerItem key={m.name} className="h-full">
+            <article className="card h-full p-6">
+              <h3>{m.name}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ash">{m.role}</p>
+              <p className="mt-3 text-[0.7rem] uppercase tracking-widest text-ash/70">{m.langs}</p>
+            </article>
+          </StaggerItem>
         ))}
-      </div>
-      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      </Stagger>
+      <Stagger className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {c.crew.counters.map((k) => (
-          <div key={k.label} className="card p-5 text-center">
-            <div className="font-display text-5xl">{k.value}</div>
-            <div className="mt-2 text-[0.68rem] uppercase tracking-widest text-ash">
-              {k.label}
+          <StaggerItem key={k.label}>
+            <div className="card p-5 text-center">
+              <Counter value={k.value} className="font-display text-5xl" />
+              <div className="mt-2 text-[0.68rem] uppercase tracking-widest text-ash">{k.label}</div>
             </div>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </Section>
   );
 }
@@ -159,19 +165,22 @@ function Crew({ c }: { c: Copy }) {
 function Showreel({ c }: { c: Copy }) {
   return (
     <Section id="showreel">
-      <h2>{c.showreel.headline}</h2>
-      <p className="mt-4 text-ash">{c.showreel.sub}</p>
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <WordReveal as="h2" className="text-balance" text={c.showreel.headline} />
+      <Reveal>
+        <p className="mt-4 text-ash">{c.showreel.sub}</p>
+      </Reveal>
+      <Stagger className="mt-8 grid gap-4 sm:grid-cols-3">
         {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="card flex aspect-video items-center justify-center"
-            aria-hidden="true"
-          >
-            <Logo className="w-20 opacity-10" />
-          </div>
+          <StaggerItem key={i}>
+            <div
+              className="card flex aspect-video items-center justify-center"
+              aria-hidden="true"
+            >
+              <Logo className="w-20 opacity-10" />
+            </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </Section>
   );
 }
@@ -179,20 +188,22 @@ function Showreel({ c }: { c: Copy }) {
 function How({ c }: { c: Copy }) {
   return (
     <Section id="how">
-      <h2>{c.how.headline}</h2>
-      <ol className="mt-10 space-y-6">
+      <WordReveal as="h2" className="text-balance" text={c.how.headline} />
+      <Stagger className="mt-10 space-y-6">
         {c.how.steps.map((s, i) => (
-          <li key={s.title} className="flex gap-5">
-            <span className="font-display text-3xl text-ash tabular-nums leading-none">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <div>
-              <h3>{s.title}</h3>
-              <p className="mt-1 text-sm text-ash">{s.line}</p>
+          <StaggerItem key={s.title}>
+            <div className="flex gap-5">
+              <span className="font-display text-3xl leading-none text-ash tabular-nums">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3>{s.title}</h3>
+                <p className="mt-1 text-sm text-ash">{s.line}</p>
+              </div>
             </div>
-          </li>
+          </StaggerItem>
         ))}
-      </ol>
+      </Stagger>
     </Section>
   );
 }
@@ -200,46 +211,51 @@ function How({ c }: { c: Copy }) {
 function Pricing({ c }: { c: Copy }) {
   return (
     <Section id="pricing">
-      <h2>{c.pricing.headline}</h2>
-      <p className="mt-4 text-ash">{c.pricing.sub}</p>
+      <WordReveal as="h2" className="text-balance" text={c.pricing.headline} />
+      <Reveal>
+        <p className="mt-4 text-ash">{c.pricing.sub}</p>
+      </Reveal>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
+      <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
         {c.pricing.tiers.map((t) => (
-          <article
-            key={t.name}
-            className={
-              "relative flex flex-col rounded-[6px] border bg-carbon p-6 " +
-              (t.highlight ? "border-light" : "border-graphite")
-            }
-          >
-            {"tag" in t && t.tag && (
-              <span className="badge badge-solid absolute right-4 top-4">{t.tag}</span>
-            )}
-            <h3>{t.name}</h3>
-            <p className="mt-2 font-display text-4xl">{t.price}</p>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-ash">{t.line}</p>
-            <a href="#contact" className={"btn mt-6 " + (t.highlight ? "btn-fill" : "")}>
-              {c.nav.cta}
-            </a>
-          </article>
+          <StaggerItem key={t.name} className="h-full">
+            <article
+              className={
+                "relative flex h-full flex-col rounded-[6px] border bg-carbon p-6 " +
+                (t.highlight ? "border-light" : "border-graphite")
+              }
+            >
+              {"tag" in t && t.tag && (
+                <span className="badge badge-solid absolute right-4 top-4">{t.tag}</span>
+              )}
+              <h3>{t.name}</h3>
+              <p className="mt-2 font-display text-4xl">{t.price}</p>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-ash">{t.line}</p>
+              <a href="#contact" className={"btn mt-6 " + (t.highlight ? "btn-fill" : "")}>
+                {c.nav.cta}
+              </a>
+            </article>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <Stagger className="mt-4 grid gap-4 sm:grid-cols-2">
         {c.pricing.addons.map((a) => (
-          <article key={a.name} className="card p-5">
-            <div className="flex items-baseline justify-between gap-3">
-              <h3>{a.name}</h3>
-              <span className="font-display text-lg text-ash">{a.price}</span>
-            </div>
-            <p className="mt-2 text-sm text-ash">{a.line}</p>
-          </article>
+          <StaggerItem key={a.name}>
+            <article className="card p-5">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3>{a.name}</h3>
+                <span className="font-display text-lg text-ash">{a.price}</span>
+              </div>
+              <p className="mt-2 text-sm text-ash">{a.line}</p>
+            </article>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
-      <p className="mt-6 text-xs uppercase tracking-widest text-ash/70">
-        {c.pricing.footnote}
-      </p>
+      <Reveal className="mt-6">
+        <p className="text-xs uppercase tracking-widest text-ash/70">{c.pricing.footnote}</p>
+      </Reveal>
     </Section>
   );
 }
@@ -247,16 +263,13 @@ function Pricing({ c }: { c: Copy }) {
 function Entertainment({ c }: { c: Copy }) {
   return (
     <Section id="entertainment">
-      <h2>{c.entertainment.headline}</h2>
-      <p className="mt-6 max-w-xl text-lg text-ash">{c.entertainment.body}</p>
-      <a
-        href={SOCIALS.youtube}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn mt-8"
-      >
-        {c.entertainment.cta}
-      </a>
+      <WordReveal as="h2" className="text-balance" text={c.entertainment.headline} />
+      <Reveal>
+        <p className="mt-6 max-w-xl text-lg text-ash">{c.entertainment.body}</p>
+        <a href={SOCIALS.youtube} target="_blank" rel="noopener noreferrer" className="btn mt-8">
+          {c.entertainment.cta}
+        </a>
+      </Reveal>
     </Section>
   );
 }
@@ -264,8 +277,10 @@ function Entertainment({ c }: { c: Copy }) {
 function Proof({ c }: { c: Copy }) {
   return (
     <Section id="proof">
-      <h2>{c.proof.headline}</h2>
-      <p className="mt-6 max-w-xl text-lg text-ash">{c.proof.body}</p>
+      <WordReveal as="h2" className="text-balance" text={c.proof.headline} />
+      <Reveal>
+        <p className="mt-6 max-w-xl text-lg text-ash">{c.proof.body}</p>
+      </Reveal>
     </Section>
   );
 }
@@ -273,28 +288,25 @@ function Proof({ c }: { c: Copy }) {
 function Faq({ c }: { c: Copy }) {
   return (
     <Section id="faq">
-      <h2>{c.faq.headline}</h2>
-      <div className="mt-8 border-y border-dotted border-light/20">
+      <WordReveal as="h2" className="text-balance" text={c.faq.headline} />
+      <Stagger className="mt-8 border-y border-dotted border-light/20">
         {c.faq.items.map((item) => (
-          <details
-            key={item.q}
-            className="group border-b border-dotted border-light/15 py-4 last:border-b-0"
-          >
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
-              <span className="font-display text-lg uppercase tracking-wide">
-                {item.q}
-              </span>
-              <span
-                className="text-ash transition-transform group-open:rotate-45"
-                aria-hidden="true"
-              >
-                +
-              </span>
-            </summary>
-            <p className="mt-3 text-sm leading-relaxed text-ash">{item.a}</p>
-          </details>
+          <StaggerItem key={item.q}>
+            <details className="group border-b border-dotted border-light/15 py-4 last:border-b-0">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+                <span className="font-display text-lg uppercase tracking-wide">{item.q}</span>
+                <span
+                  className="text-ash transition-transform group-open:rotate-45"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed text-ash">{item.a}</p>
+            </details>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
     </Section>
   );
 }
@@ -327,12 +339,13 @@ function Contact({ c }: { c: Copy }) {
 
   return (
     <Section id="contact">
-      <h2>{c.contact.headline}</h2>
-      <p className="mt-4 max-w-xl text-ash">{c.contact.sub}</p>
-
-      <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="btn btn-fill mt-8">
-        {c.contact.whatsapp}
-      </a>
+      <WordReveal as="h2" className="text-balance" text={c.contact.headline} />
+      <Reveal>
+        <p className="mt-4 max-w-xl text-ash">{c.contact.sub}</p>
+        <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="btn btn-fill mt-8">
+          {c.contact.whatsapp}
+        </a>
+      </Reveal>
 
       {sent ? (
         <p className="card mt-10 border-light p-6 text-light">{f.success}</p>
@@ -432,7 +445,6 @@ export function Studio() {
   const c = useStudioCopy();
   useDocumentTitle("Studio");
 
-  // Content is DE/EN only → force LTR even if the global locale is AR.
   return (
     <div dir="ltr" className="flex min-h-dvh flex-col">
       <StudioNav c={c} />
