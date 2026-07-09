@@ -5,7 +5,7 @@ import { MAILTO } from "../config";
 // Cinematic still generated with Higgsfield (achromatic beam-room). Drop the file
 // at public/media/hero.jpg and it takes over; until then it fails gracefully to the
 // CSS projector-beam below (onError hides the <img>, revealing the beam).
-const HERO_IMAGE = "/media/hero.jpg";
+const HERO_IMAGE = "/media/hero.png";
 
 export function Hero() {
   const { t } = useI18n();
