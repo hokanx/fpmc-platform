@@ -7,9 +7,9 @@ export function Footer() {
   const { t } = useI18n();
 
   return (
-    <footer className="mt-auto border-t border-graphite/60">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-5 py-8 text-sm text-ash sm:flex-row sm:items-center sm:justify-between">
-        <p className="tracking-wide">{t("footer.rights")}</p>
+    <footer className="mt-auto border-t border-dotted border-light/20">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-ash sm:flex-row sm:items-center sm:justify-between">
+        <p className="font-display uppercase tracking-wide">{t("footer.rights")}</p>
 
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <a href={MAILTO} className="hover:text-light transition-colors">

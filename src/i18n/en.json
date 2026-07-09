@@ -2,6 +2,7 @@
   "meta.skip": "Skip to content",
 
   "nav.home": "Home",
+  "nav.studio": "Studio",
   "nav.connect": "Connect",
   "nav.links": "Links",
 
@@ -14,6 +15,8 @@
   "hero.tagline": "Building the bridge between the German-speaking world and MENA.",
   "hero.cta": "Start a project",
   "hero.scroll": "What we build",
+
+  "marquee.home": "Cinematic websites · AI ad videos · Music production · DACH × MENA",
 
   "services.title": "What we build for businesses",
   "services.aivideo.title": "AI ad videos",

@@ -7,22 +7,29 @@ export function Header() {
   const { t } = useI18n();
 
   const navClass = ({ isActive }: { isActive: boolean }) =>
-    "text-xs uppercase tracking-widest transition-colors " +
+    "font-display text-sm uppercase tracking-wide transition-colors " +
     (isActive ? "text-light" : "text-ash hover:text-light");
 
   return (
-    <header className="w-full border-b border-graphite/60">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
+    <header className="sticky top-0 z-40 w-full border-b border-dotted border-light/20 bg-void/85 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
         <Link to="/" aria-label="FPMC — Home" className="shrink-0">
           <Logo className="h-7 w-auto" />
         </Link>
 
         <nav
-          className="flex items-center gap-5"
+          className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1"
           aria-label={t("nav.home")}
         >
-          <NavLink to="/" end className={navClass}>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => "hidden sm:inline " + navClass({ isActive })}
+          >
             {t("nav.home")}
+          </NavLink>
+          <NavLink to="/studio" className={navClass}>
+            {t("nav.studio")}
           </NavLink>
           <NavLink to="/connect" className={navClass}>
             {t("nav.connect")}

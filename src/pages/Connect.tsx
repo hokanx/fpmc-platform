@@ -1,5 +1,7 @@
 import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { Reveal } from "../components/motion/Reveal";
+import { WordReveal } from "../components/motion/WordReveal";
 import { CONTACT_EMAIL, MAILTO } from "../config";
 
 export function Connect() {
@@ -8,25 +10,27 @@ export function Connect() {
 
   return (
     <section className="px-5 py-24 sm:py-28">
-      <div className="mx-auto max-w-2xl">
-        <p className="text-[0.7rem] uppercase tracking-[0.35em] text-ash">
-          {t("connect.kicker")}
-        </p>
-        <h1 className="mt-5 text-3xl sm:text-4xl">{t("connect.title")}</h1>
-        <p className="mt-7 text-lg leading-relaxed text-light/90">
-          {t("connect.body")}
-        </p>
-        <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          <a href={MAILTO} className="btn">
-            {t("connect.cta")}
-          </a>
-          <a
-            href={MAILTO}
-            className="text-sm tracking-wide text-ash transition-colors hover:text-light"
-          >
-            {CONTACT_EMAIL}
-          </a>
-        </div>
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <p className="eyebrow">{t("connect.kicker")}</p>
+        </Reveal>
+        <WordReveal as="h1" className="display-lg mt-6 max-w-4xl text-balance" text={t("connect.title")} />
+        <Reveal delay={0.1}>
+          <p className="mt-8 max-w-xl text-lg leading-relaxed text-light/85">
+            {t("connect.body")}
+          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-5">
+            <a href={MAILTO} className="btn btn-fill">
+              {t("connect.cta")}
+            </a>
+            <a
+              href={MAILTO}
+              className="font-display text-lg uppercase tracking-wide text-ash transition-colors hover:text-light"
+            >
+              {CONTACT_EMAIL}
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

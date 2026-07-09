@@ -2,6 +2,7 @@
   "meta.skip": "Zum Inhalt springen",
 
   "nav.home": "Start",
+  "nav.studio": "Studio",
   "nav.connect": "Connect",
   "nav.links": "Links",
 
@@ -14,6 +15,8 @@
   "hero.tagline": "Wir bauen die Brücke zwischen der DACH-Region und der MENA-Welt.",
   "hero.cta": "Projekt anfragen",
   "hero.scroll": "Was wir bauen",
+
+  "marquee.home": "Cinematische Websites · KI-Werbevideos · Musikproduktion · DACH × MENA",
 
   "services.title": "Was wir für Unternehmen bauen",
   "services.aivideo.title": "KI-Werbevideos",

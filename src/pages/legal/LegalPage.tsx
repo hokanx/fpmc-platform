@@ -1,6 +1,9 @@
 import { Fragment } from "react";
 import { useI18n } from "../../i18n";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { Reveal } from "../../components/motion/Reveal";
+import { WordReveal } from "../../components/motion/WordReveal";
+import { Stagger, StaggerItem } from "../../components/motion/Stagger";
 import type { LegalDoc } from "./legalContent";
 
 // Renders a paragraph, highlighting any [[placeholder]] the owner still owes.
@@ -30,14 +33,16 @@ export function LegalPage({ doc }: { doc: { de: LegalDoc; en: LegalDoc } }) {
   return (
     <section className="px-5 py-20 sm:py-24">
       <div className="mx-auto max-w-2xl">
-        <h1 className="text-3xl sm:text-4xl">{content.title}</h1>
+        <WordReveal as="h1" className="text-3xl text-balance sm:text-4xl" text={content.title} />
         {content.updated && (
-          <p className="mt-3 text-sm text-ash">{content.updated}</p>
+          <Reveal>
+            <p className="mt-3 text-sm text-ash">{content.updated}</p>
+          </Reveal>
         )}
 
-        <div className="mt-10 space-y-9">
+        <Stagger className="mt-10 space-y-9">
           {content.sections.map((section) => (
-            <div key={section.heading}>
+            <StaggerItem key={section.heading}>
               <h2 className="text-base sm:text-lg">{section.heading}</h2>
               {section.body.map((para, i) => (
                 <p
@@ -47,9 +52,9 @@ export function LegalPage({ doc }: { doc: { de: LegalDoc; en: LegalDoc } }) {
                   {renderParagraph(para)}
                 </p>
               ))}
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );
