@@ -14,24 +14,12 @@ export const IMPRESSUM: DocByLocale = {
       {
         heading: "Angaben gemäß § 5 DDG",
         body: [
-          "FPMC GbR\nVertreten durch die Gesellschafter: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\n[[Straße und Hausnummer]]\n[[PLZ]] [[Ort]] (Raum Köln / Bergisch Gladbach)\nDeutschland",
+          "FPMC GbR\nVertreten durch die Gesellschafter: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\nFrankenforster Straße 2\n51427 Bergisch Gladbach\nDeutschland",
         ],
       },
       {
         heading: "Kontakt",
-        body: ["E-Mail: hello@fpmc.house\nTelefon: [[optional — Telefonnummer]]"],
-      },
-      {
-        heading: "Umsatzsteuer-ID",
-        body: [
-          "Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:\n[[USt-IdNr. — oder diesen Abschnitt vor dem Go-Live entfernen, falls keine vorhanden ist]]",
-        ],
-      },
-      {
-        heading: "Redaktionell verantwortlich (§ 18 Abs. 2 MStV)",
-        body: [
-          "Hazem Hokan [[bitte bestätigen, falls ein anderer Gesellschafter verantwortlich sein soll]]\nAnschrift wie oben",
-        ],
+        body: ["E-Mail: hello@fpmc.house\nTelefon: +49 1556 7485270"],
       },
       {
         heading: "Haftung für Inhalte",
@@ -59,24 +47,12 @@ export const IMPRESSUM: DocByLocale = {
       {
         heading: "Information pursuant to § 5 DDG",
         body: [
-          "FPMC GbR\nRepresented by the partners: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\n[[street and number]]\n[[postal code]] [[city]] (Cologne / Bergisch Gladbach area)\nGermany",
+          "FPMC GbR\nRepresented by the partners: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\nFrankenforster Straße 2\n51427 Bergisch Gladbach\nGermany",
         ],
       },
       {
         heading: "Contact",
-        body: ["Email: hello@fpmc.house\nPhone: [[optional — phone number]]"],
-      },
-      {
-        heading: "VAT ID",
-        body: [
-          "VAT identification number pursuant to § 27 a German VAT Act:\n[[VAT ID — or remove this section before go-live if none exists]]",
-        ],
-      },
-      {
-        heading: "Responsible for content (§ 18 (2) MStV)",
-        body: [
-          "Hazem Hokan [[confirm if a different partner should be responsible]]\naddress as above",
-        ],
+        body: ["Email: hello@fpmc.house\nPhone: +49 1556 7485270"],
       },
       {
         heading: "Note",
@@ -96,7 +72,7 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Verantwortlicher",
         body: [
-          "Verantwortlich für die Datenverarbeitung auf dieser Website:\nFPMC GbR, vertreten durch die Gesellschafter (siehe Impressum), [[Anschrift]], [[Ort]].\nE-Mail: hello@fpmc.house",
+          "Verantwortlich für die Datenverarbeitung auf dieser Website:\nFPMC GbR, vertreten durch die Gesellschafter (siehe Impressum), Frankenforster Straße 2, 51427 Bergisch Gladbach.\nE-Mail: hello@fpmc.house",
         ],
       },
       {
@@ -156,7 +132,7 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Controller",
         body: [
-          "Controller for data processing on this website:\nFPMC GbR, represented by its partners (see legal notice), [[address]], [[city]].\nEmail: hello@fpmc.house",
+          "Controller for data processing on this website:\nFPMC GbR, represented by its partners (see legal notice), Frankenforster Straße 2, 51427 Bergisch Gladbach.\nEmail: hello@fpmc.house",
         ],
       },
       {
