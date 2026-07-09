@@ -24,3 +24,7 @@ dist-ssr/
 # logs
 *.log
 npm-debug.log*
+
+# python cache
+__pycache__/
+*.pyc
