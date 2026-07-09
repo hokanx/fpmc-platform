@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Logo } from "../components/Logo";
+import { Marquee } from "../components/Marquee";
 import { LangSwitcher } from "../components/LangSwitcher";
 import { studioContent } from "../content/studio.content";
 import { CONTACT_EMAIL, MAILTO, SOCIALS, WHATSAPP } from "../config";
@@ -32,7 +33,7 @@ function Section({
         className
       }
     >
-      <div className="mx-auto max-w-6xl">{children}</div>
+      <div className="reveal mx-auto max-w-6xl">{children}</div>
     </section>
   );
 }
@@ -436,6 +437,7 @@ export function Studio() {
       <StudioNav c={c} />
       <main className="flex-1">
         <Hero c={c} />
+        <Marquee text="Websites · Film · Sound · 7 Tage · KI · 48h" />
         <Why c={c} />
         <Crew c={c} />
         <Showreel c={c} />

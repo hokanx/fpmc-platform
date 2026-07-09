@@ -19,6 +19,32 @@ function ScrollToTop() {
   return null;
 }
 
+// Reveal .reveal elements as they scroll into view (re-scans on route change).
+function ScrollReveal() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+    );
+    const id = window.setTimeout(() => {
+      document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
+    }, 60);
+    return () => {
+      window.clearTimeout(id);
+      io.disconnect();
+    };
+  }, [pathname]);
+  return null;
+}
+
 // Standard site chrome (header + footer) for the main routes.
 function SiteLayout() {
   return (
@@ -32,6 +58,7 @@ export function App() {
   return (
     <>
       <ScrollToTop />
+      <ScrollReveal />
       <Routes>
         <Route element={<SiteLayout />}>
           <Route path="/" element={<Home />} />

@@ -1,6 +1,7 @@
 import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Hero } from "../components/Hero";
+import { Marquee } from "../components/Marquee";
 import { ServiceCard } from "../components/ServiceCard";
 import { CONTACT_EMAIL, MAILTO } from "../config";
 
@@ -14,12 +15,11 @@ export function Home() {
     <>
       <Hero />
 
+      <Marquee text="Film · Music · AI · DACH × MENA · Cinematic · 48h" />
+
       {/* Services */}
-      <section
-        id="services"
-        className="border-t border-dotted border-light/20 px-5 py-20 sm:py-28"
-      >
-        <div className="mx-auto max-w-6xl">
+      <section id="services" className="px-5 py-20 sm:py-28">
+        <div className="reveal mx-auto max-w-6xl">
           <h2 className="max-w-4xl">{t("services.title")}</h2>
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {SERVICE_KEYS.map((key) => (
@@ -40,7 +40,7 @@ export function Home() {
 
       {/* First-chapter teaser — poster statement */}
       <section className="border-t border-dotted border-light/20 px-5 py-24">
-        <div className="mx-auto max-w-6xl">
+        <div className="reveal mx-auto max-w-6xl">
           <span className="badge">{t("teaser.label")}</span>
           <p className="display-lg mt-6">
             {t("teaser.text")} <span aria-hidden="true">⏳</span>
@@ -50,7 +50,7 @@ export function Home() {
 
       {/* Contact */}
       <section className="border-t border-dotted border-light/20 px-5 py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl">
+        <div className="reveal mx-auto max-w-6xl">
           <h2>{t("contact.title")}</h2>
           <p className="mt-6 max-w-xl text-lg text-ash">{t("contact.body")}</p>
           <div className="mt-10 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
