@@ -9,6 +9,21 @@ sales partners, and admin.
 
 ---
 
+## Website V0 (live storefront)
+
+The public one-page site (`/`, `/connect`, `/links`, `/impressum`, `/datenschutz`) is built with
+React + Vite + Tailwind v4 on the achromatic **Lichtspiel v2** design system, self-hosted fonts,
+i18n DE/EN/AR (RTL). See **`docs/WEBSITE-V0-DEPLOY.md`** for dev + deploy/DNS steps and the QA gate.
+
+```bash
+npm install && npm run dev      # local dev
+npm run build && npm run preview
+```
+
+Database schema is versioned under **`supabase/migrations/`** (first migration: `leads` table).
+
+---
+
 ## Start here (read in this order)
 
 1. **`README.md`** (this file) — orientation, ground rules, build order.
