@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { Connect } from "./pages/Connect";
 import { Links } from "./pages/Links";
+import { Studio } from "./pages/Studio";
 import { Impressum } from "./pages/Impressum";
 import { Datenschutz } from "./pages/Datenschutz";
 import { NotFound } from "./pages/NotFound";
@@ -18,18 +19,31 @@ function ScrollToTop() {
   return null;
 }
 
-export function App() {
+// Standard site chrome (header + footer) for the main routes.
+function SiteLayout() {
   return (
     <Layout>
+      <Outlet />
+    </Layout>
+  );
+}
+
+export function App() {
+  return (
+    <>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/connect" element={<Connect />} />
-        <Route path="/links" element={<Links />} />
-        <Route path="/impressum" element={<Impressum />} />
-        <Route path="/datenschutz" element={<Datenschutz />} />
-        <Route path="*" element={<NotFound />} />
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/connect" element={<Connect />} />
+          <Route path="/links" element={<Links />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/datenschutz" element={<Datenschutz />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+        {/* /studio is a standalone landing page with its own nav + footer. */}
+        <Route path="/studio" element={<Studio />} />
       </Routes>
-    </Layout>
+    </>
   );
 }

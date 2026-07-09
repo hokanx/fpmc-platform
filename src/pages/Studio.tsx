@@ -1,0 +1,442 @@
+import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
+import { useI18n } from "../i18n";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { Logo } from "../components/Logo";
+import { LangSwitcher } from "../components/LangSwitcher";
+import { studioContent } from "../content/studio.content";
+import { CONTACT_EMAIL, MAILTO, SOCIALS, WHATSAPP } from "../config";
+
+type Copy = typeof studioContent.de;
+
+// Studio content only exists in DE/EN; AR falls back to DE (page renders LTR).
+// DE and EN share the exact shape, so the EN branch is treated as the DE type.
+function useStudioCopy(): Copy {
+  const { locale } = useI18n();
+  return (locale === "en" ? studioContent.en : studioContent.de) as unknown as Copy;
+}
+
+function Section({
+  id,
+  children,
+  className = "",
+}: {
+  id?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className={"scroll-mt-24 border-t border-graphite/60 px-5 py-20 sm:py-24 " + className}
+    >
+      <div className="mx-auto max-w-5xl">{children}</div>
+    </section>
+  );
+}
+
+function StudioNav({ c }: { c: Copy }) {
+  const link = "text-xs uppercase tracking-widest text-ash transition-colors hover:text-light";
+  return (
+    <header className="sticky top-0 z-40 border-b border-graphite/60 bg-void/85 backdrop-blur">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3">
+        <Link to="/" aria-label="FPMC — Home" className="shrink-0">
+          <Logo className="h-6 w-auto" />
+        </Link>
+        <nav className="flex items-center gap-5">
+          <a href="#how" className={"hidden sm:inline " + link}>{c.nav.services}</a>
+          <a href="#showreel" className={"hidden sm:inline " + link}>{c.nav.work}</a>
+          <a href="#pricing" className={"hidden sm:inline " + link}>{c.nav.pricing}</a>
+          <a href="#contact" className={"hidden sm:inline " + link}>{c.nav.contact}</a>
+          <span className="hidden h-4 w-px bg-graphite sm:block" aria-hidden />
+          <LangSwitcher />
+          <a href="#contact" className="btn !px-4 !py-2 !text-xs">{c.nav.cta}</a>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function Hero({ c }: { c: Copy }) {
+  return (
+    <section className="relative isolate overflow-hidden px-5 py-24 sm:py-28">
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <div className="hero-beam" />
+        <div className="hero-haze" />
+      </div>
+      <div className="mx-auto max-w-3xl text-center">
+        <h1 className="text-3xl leading-tight sm:text-5xl">{c.hero.headline}</h1>
+        <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-light/90 sm:text-lg">
+          {c.hero.subline}
+        </p>
+        <ul className="mt-8 flex flex-wrap justify-center gap-2">
+          {c.hero.badges.map((b) => (
+            <li
+              key={b}
+              className="border border-graphite px-3 py-1.5 text-[0.68rem] uppercase tracking-widest text-ash"
+            >
+              {b}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a href="#contact" className="btn">{c.hero.ctaPrimary}</a>
+          <a
+            href="#pricing"
+            className="text-xs uppercase tracking-widest text-ash transition-colors hover:text-light"
+          >
+            {c.hero.ctaSecondary} ↓
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Why({ c }: { c: Copy }) {
+  const [active, setActive] = useState(0);
+  return (
+    <Section id="why">
+      <h2 className="text-2xl sm:text-3xl">{c.why.headline}</h2>
+      <p className="mt-3 text-ash">{c.why.sub}</p>
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {c.why.reasons.map((r, i) => {
+          const on = i === active;
+          return (
+            <button
+              key={r.label}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-pressed={on}
+              className={
+                "border p-4 text-left transition-colors " +
+                (on
+                  ? "border-light bg-carbon"
+                  : "border-graphite hover:border-ash/60")
+              }
+            >
+              <span className="font-display text-sm uppercase tracking-wide">{r.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      <p className="mt-6 min-h-[1.5rem] text-lg text-light/90">{c.why.reasons[active].line}</p>
+    </Section>
+  );
+}
+
+function Crew({ c }: { c: Copy }) {
+  return (
+    <Section id="crew">
+      <h2 className="text-2xl sm:text-3xl">{c.crew.headline}</h2>
+      <p className="mt-3 text-ash">{c.crew.sub}</p>
+      <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        {c.crew.members.map((m) => (
+          <article key={m.name} className="border border-graphite bg-carbon p-6">
+            <h3 className="text-lg">{m.name}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-ash">{m.role}</p>
+            <p className="mt-3 text-[0.7rem] uppercase tracking-widest text-ash/70">{m.langs}</p>
+          </article>
+        ))}
+      </div>
+      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {c.crew.counters.map((k) => (
+          <div key={k.label} className="border border-graphite p-5 text-center">
+            <div className="font-display text-3xl tracking-wide">{k.value}</div>
+            <div className="mt-2 text-[0.68rem] uppercase tracking-widest text-ash">{k.label}</div>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function Showreel({ c }: { c: Copy }) {
+  return (
+    <Section id="showreel">
+      <h2 className="text-2xl sm:text-3xl">{c.showreel.headline}</h2>
+      <p className="mt-3 text-ash">{c.showreel.sub}</p>
+      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="flex aspect-video items-center justify-center border border-graphite bg-carbon"
+            aria-hidden="true"
+          >
+            <Logo className="w-20 opacity-10" />
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function How({ c }: { c: Copy }) {
+  return (
+    <Section id="how">
+      <h2 className="text-2xl sm:text-3xl">{c.how.headline}</h2>
+      <ol className="mt-10 space-y-5">
+        {c.how.steps.map((s, i) => (
+          <li key={s.title} className="flex gap-5">
+            <span className="font-display text-xl text-ash tabular-nums">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <div>
+              <h3 className="text-base sm:text-lg">{s.title}</h3>
+              <p className="mt-1 text-sm text-ash">{s.line}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  );
+}
+
+function Pricing({ c }: { c: Copy }) {
+  return (
+    <Section id="pricing">
+      <h2 className="text-2xl sm:text-3xl">{c.pricing.headline}</h2>
+      <p className="mt-3 text-ash">{c.pricing.sub}</p>
+
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        {c.pricing.tiers.map((t) => (
+          <article
+            key={t.name}
+            className={
+              "relative flex flex-col border bg-carbon p-6 " +
+              (t.highlight ? "border-light" : "border-graphite")
+            }
+          >
+            {"tag" in t && t.tag && (
+              <span className="absolute right-4 top-4 border border-light px-2 py-0.5 text-[0.6rem] uppercase tracking-widest">
+                {t.tag}
+              </span>
+            )}
+            <h3 className="text-lg">{t.name}</h3>
+            <p className="mt-2 font-display text-2xl tracking-wide">{t.price}</p>
+            <p className="mt-3 flex-1 text-sm leading-relaxed text-ash">{t.line}</p>
+            <a href="#contact" className="btn mt-6">
+              {c.nav.cta}
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        {c.pricing.addons.map((a) => (
+          <article key={a.name} className="border border-graphite p-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h3 className="text-base">{a.name}</h3>
+              <span className="font-display text-sm tracking-wide text-ash">{a.price}</span>
+            </div>
+            <p className="mt-2 text-sm text-ash">{a.line}</p>
+          </article>
+        ))}
+      </div>
+
+      <p className="mt-6 text-xs uppercase tracking-widest text-ash/70">{c.pricing.footnote}</p>
+    </Section>
+  );
+}
+
+function Entertainment({ c }: { c: Copy }) {
+  return (
+    <Section id="entertainment">
+      <h2 className="text-2xl sm:text-3xl">{c.entertainment.headline}</h2>
+      <p className="mt-5 max-w-xl text-ash">{c.entertainment.body}</p>
+      <a
+        href={SOCIALS.youtube}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn mt-8"
+      >
+        {c.entertainment.cta}
+      </a>
+    </Section>
+  );
+}
+
+function Proof({ c }: { c: Copy }) {
+  return (
+    <Section id="proof">
+      <h2 className="text-2xl sm:text-3xl">{c.proof.headline}</h2>
+      <p className="mt-5 max-w-xl text-ash">{c.proof.body}</p>
+    </Section>
+  );
+}
+
+function Faq({ c }: { c: Copy }) {
+  return (
+    <Section id="faq">
+      <h2 className="text-2xl sm:text-3xl">{c.faq.headline}</h2>
+      <div className="mt-8 divide-y divide-graphite/60 border-y border-graphite/60">
+        {c.faq.items.map((item) => (
+          <details key={item.q} className="group py-4">
+            <summary className="flex cursor-pointer items-center justify-between gap-4 list-none">
+              <span className="text-base">{item.q}</span>
+              <span className="text-ash transition-transform group-open:rotate-45" aria-hidden="true">
+                +
+              </span>
+            </summary>
+            <p className="mt-3 text-sm leading-relaxed text-ash">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+function Contact({ c }: { c: Copy }) {
+  const f = c.contact.form;
+  const [sent, setSent] = useState(false);
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const g = (k: string) => (data.get(k) as string) || "—";
+    const body = [
+      `${f.need.label} ${g("need")}`,
+      `${f.pkg.label} ${g("pkg")}`,
+      `${f.start.label} ${g("start")}`,
+      "",
+      `${f.name}: ${g("name")}`,
+      `${f.email}: ${g("email")}`,
+      `${f.phone}: ${g("phone")}`,
+      "",
+      `${g("message")}`,
+    ].join("\n");
+    const url = `${MAILTO}?subject=${encodeURIComponent("FPMC Studio — " + g("name"))}&body=${encodeURIComponent(body)}`;
+    window.location.href = url;
+    setSent(true);
+  };
+
+  const field = "w-full border border-graphite bg-carbon px-3 py-2.5 text-sm text-light";
+  const labelCls = "block text-[0.7rem] uppercase tracking-widest text-ash";
+
+  return (
+    <Section id="contact">
+      <h2 className="text-2xl sm:text-3xl">{c.contact.headline}</h2>
+      <p className="mt-3 max-w-xl text-ash">{c.contact.sub}</p>
+
+      <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="btn mt-8">
+        {c.contact.whatsapp}
+      </a>
+
+      {sent ? (
+        <p className="mt-10 border border-light bg-carbon p-6 text-light">{f.success}</p>
+      ) : (
+        <form onSubmit={onSubmit} className="mt-10 grid gap-5 sm:max-w-2xl">
+          <div className="grid gap-5 sm:grid-cols-3">
+            {([
+              ["need", f.need] as const,
+              ["pkg", f.pkg] as const,
+              ["start", f.start] as const,
+            ]).map(([name, group]) => (
+              <label key={name} className="space-y-2">
+                <span className={labelCls}>{group.label}</span>
+                <select name={name} defaultValue="" className={field}>
+                  <option value="" disabled>
+                    —
+                  </option>
+                  {group.options.map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ))}
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-3">
+            <label className="space-y-2">
+              <span className={labelCls}>{f.name}</span>
+              <input name="name" required className={field} autoComplete="name" />
+            </label>
+            <label className="space-y-2">
+              <span className={labelCls}>{f.email}</span>
+              <input name="email" type="email" required className={field} autoComplete="email" />
+            </label>
+            <label className="space-y-2">
+              <span className={labelCls}>{f.phone}</span>
+              <input name="phone" type="tel" className={field} autoComplete="tel" />
+            </label>
+          </div>
+
+          <label className="space-y-2">
+            <span className={labelCls}>{f.message}</span>
+            <textarea name="message" rows={4} className={field} />
+          </label>
+
+          <label className="flex items-start gap-3 text-sm text-ash">
+            <input type="checkbox" required className="mt-1 accent-light" />
+            <span>
+              {f.consent}{" "}
+              <Link to="/datenschutz" className="underline hover:text-light">
+                {c.contact.footer.datenschutz}
+              </Link>
+            </span>
+          </label>
+
+          <div>
+            <button type="submit" className="btn">
+              {f.submit}
+            </button>
+          </div>
+        </form>
+      )}
+
+      <p className="mt-8 text-sm text-ash">
+        <a href={MAILTO} className="hover:text-light">
+          {CONTACT_EMAIL}
+        </a>
+      </p>
+    </Section>
+  );
+}
+
+function StudioFooter({ c }: { c: Copy }) {
+  return (
+    <footer className="border-t border-graphite/60 px-5 py-8">
+      <div className="mx-auto flex max-w-5xl flex-col gap-4 text-sm text-ash sm:flex-row sm:items-center sm:justify-between">
+        <p className="tracking-wide">{c.contact.footer.legal}</p>
+        <nav className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <Link to="/impressum" className="hover:text-light">
+            {c.contact.footer.impressum}
+          </Link>
+          <Link to="/datenschutz" className="hover:text-light">
+            {c.contact.footer.datenschutz}
+          </Link>
+          <Link to="/" className="hover:text-light">
+            fpmc.house
+          </Link>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
+export function Studio() {
+  const c = useStudioCopy();
+  useDocumentTitle("Studio");
+
+  // Content is DE/EN only → force LTR even if the global locale is AR.
+  return (
+    <div dir="ltr" className="flex min-h-dvh flex-col">
+      <StudioNav c={c} />
+      <main className="flex-1">
+        <Hero c={c} />
+        <Why c={c} />
+        <Crew c={c} />
+        <Showreel c={c} />
+        <How c={c} />
+        <Pricing c={c} />
+        <Entertainment c={c} />
+        <Proof c={c} />
+        <Faq c={c} />
+        <Contact c={c} />
+      </main>
+      <StudioFooter c={c} />
+    </div>
+  );
+}
