@@ -5,6 +5,9 @@ import { Layout } from "./components/Layout";
 // Route-split: framer-motion (used by Home/Studio) stays out of the shared bundle,
 // keeping /links and the legal pages light (Lighthouse budget).
 const Home = lazy(() => import("./pages/Home").then((m) => ({ default: m.Home })));
+const CinematicHome = lazy(() =>
+  import("./pages/CinematicHome").then((m) => ({ default: m.CinematicHome })),
+);
 const Connect = lazy(() => import("./pages/Connect").then((m) => ({ default: m.Connect })));
 const Links = lazy(() => import("./pages/Links").then((m) => ({ default: m.Links })));
 const Studio = lazy(() => import("./pages/Studio").then((m) => ({ default: m.Studio })));
@@ -39,8 +42,11 @@ export function App() {
       <ScrollToTop />
       <Suspense fallback={<div className="min-h-dvh bg-void" />}>
         <Routes>
+          {/* Track 2 masterpiece — the cinematic one-pager owns "/" with its
+              own chrome. The v0 Home stays at /v0 as a verified fallback. */}
+          <Route path="/" element={<CinematicHome />} />
           <Route element={<SiteLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/v0" element={<Home />} />
             <Route path="/connect" element={<Connect />} />
             <Route path="/links" element={<Links />} />
             <Route path="/impressum" element={<Impressum />} />

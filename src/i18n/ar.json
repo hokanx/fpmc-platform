@@ -1,40 +1,72 @@
 {
   "_note": "AR is stubbed for V0: real strings where confirmed, otherwise the resolver falls back EN → DE. Full AR copy + review lands in a later block. RTL layout is already live.",
-
   "meta.skip": "تخطَّ إلى المحتوى",
-
   "nav.home": "الرئيسية",
   "nav.studio": "استوديو",
   "nav.connect": "تواصل",
   "nav.links": "روابط",
-
   "lang.label": "اللغة",
-
   "hero.kicker": "سينما · موسيقى · ذكاء اصطناعي",
   "hero.tagline": "نبني الجسر بين العالم الناطق بالألمانية والعالم العربي.",
   "hero.cta": "ابدأ مشروعًا",
   "hero.scroll": "ما نبنيه",
-
   "marquee.home": "مواقع سينمائية · فيديوهات إعلانية بالذكاء الاصطناعي · إنتاج موسيقي · DACH × MENA",
-
   "services.title": "ما نبنيه للشركات",
   "services.cta": "ابدأ مشروعًا",
-
   "teaser.label": "قريبًا",
   "teaser.text": "الفصل الأول: ٢٤ يوليو",
-
   "contact.title": "تواصل",
   "contact.cta": "ابدأ مشروعًا",
-
   "connect.kicker": "تواصل",
   "connect.title": "لنصنع شيئًا معًا.",
   "connect.cta": "تواصل معنا",
-
   "links.tagline": "سينما · موسيقى · ذكاء اصطناعي",
   "links.contact": "تواصل",
-
   "footer.impressum": "بيان قانوني",
   "footer.datenschutz": "الخصوصية",
-
-  "notfound.cta": "إلى الصفحة الرئيسية"
+  "notfound.cta": "إلى الصفحة الرئيسية",
+  "cin.nav.work": "الأعمال",
+  "cin.nav.folio": "مواقع",
+  "cin.nav.services": "الخدمات",
+  "cin.hero.subline": "سينما · موسيقى · ذكاء اصطناعي — من الفكرة إلى الشاشة.",
+  "cin.hero.scroll": "مرّر لتشغيل جهاز العرض",
+  "cin.manifesto.eyebrow": "البيان",
+  "cin.manifesto.l1": "نورٌ في مواجهة العتمة.",
+  "cin.manifesto.l2": "سينما وموسيقى وذكاء اصطناعي — بيت واحد.",
+  "cin.manifesto.l3": "في بيتنا عالمان: أوروبا الناطقة بالألمانية والعالم العربي.",
+  "cin.manifesto.l4": "من الفكرة إلى الشاشة.",
+  "cin.release.eyebrow": "الإصدار",
+  "cin.release.title": "الفصل الأول",
+  "cin.release.line": "٢٤.٠٧ — الستارة ما تزال مسدلة.",
+  "cin.release.u1": "يوم",
+  "cin.release.u2": "ساعة",
+  "cin.release.u3": "دقيقة",
+  "cin.release.u4": "ثانية",
+  "cin.release.email": "بريدك الإلكتروني للعرض الأول",
+  "cin.release.notify": "أعلمني",
+  "cin.release.done": "تمّ التسجيل. نلقاك في العرض الأول.",
+  "cin.release.error": "لم ينجح ذلك — حاول مرة أخرى.",
+  "cin.work.eyebrow": "الأعمال",
+  "cin.work.title": "الحِرفة",
+  "cin.work.body": "ثلاث حِرف وتوقيع واحد: صورة وصوت وذكاء اصطناعي — كل مشروع يمرّ بها جميعاً.",
+  "cin.work.hint": "المس فصلاً — تُجيبك الصورة.",
+  "cin.work.i1.title": "فيديوهات موسيقية",
+  "cin.work.i1.tag": "صوت",
+  "cin.work.i2.title": "إعلان بالذكاء الاصطناعي",
+  "cin.work.i2.tag": "ضوء",
+  "cin.work.i3.title": "توثيقي",
+  "cin.work.i3.tag": "صورة",
+  "cin.folio.eyebrow": "مواقع مختارة",
+  "cin.folio.title": "مواقع بنيناها",
+  "cin.folio.body": "ثلاثة أعمال، ثلاثة عوالم، معيار واحد: سينمائي، سريع، ومصمَّم لكسب العملاء.",
+  "cin.folio.visit": "افتح الموقع",
+  "cin.folio.tag1": "عقارات",
+  "cin.folio.tag2": "مطعم",
+  "cin.folio.tag3": "استوديو وشم",
+  "cin.services.eyebrow": "الخدمات",
+  "cin.numbers.eyebrow": "أرقام",
+  "cin.numbers.n1": "وصول / ٣٠ يوماً",
+  "cin.numbers.n2": "نافذة الإنتاج",
+  "cin.numbers.n3": "لغات",
+  "cin.numbers.n4": "عالمان — أوروبا والمنطقة العربية"
 }
