@@ -48,13 +48,14 @@ export function App() {
           <Route element={<SiteLayout />}>
             <Route path="/v0" element={<Home />} />
             <Route path="/connect" element={<Connect />} />
-            <Route path="/links" element={<Links />} />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/datenschutz" element={<Datenschutz />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          {/* /studio is a standalone landing page with its own nav + footer. */}
+          {/* /studio and /links are standalone cinematic pages with their own
+              chrome (Lichtspiel v2, same stage as the home). */}
           <Route path="/studio" element={<Studio />} />
+          <Route path="/links" element={<Links />} />
         </Routes>
       </Suspense>
     </>

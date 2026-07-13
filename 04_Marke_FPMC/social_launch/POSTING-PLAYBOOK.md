@@ -14,7 +14,7 @@ Assets referenced from: `04_Marke_FPMC/social_launch/` · video slots marked [AW
 - [ ] Batch-2 cleared (21 Jul) → unlocks podcast/long-form posts
 - [ ] Merch addendum signed + designs approved + T&C live + double-opt-in tested → unlocks 23 Jul merch + 24 Jul giveaway CTA
 - [ ] AR native QA (Saeed/Hazem) on all AR assets/captions
-- [ ] TikTok handle confirmed + aligned in config.ts/captions
+- [x] TikTok handle confirmed: @fpmc.club (12.07) — aligned in config.ts; tag TikTok-native only, sign-off stays fpmc.house
 
 ---
 

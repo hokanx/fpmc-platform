@@ -38,6 +38,7 @@ export function ScrubHero() {
   const barBottomRef = useRef<HTMLDivElement>(null);
   const timecodeRef = useRef<HTMLSpanElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const cueRef = useRef<HTMLDivElement>(null);
   const lastDrawn = useRef(-1);
   const [reduced, setReduced] = useState(false);
 
@@ -113,9 +114,16 @@ export function ScrubHero() {
       }
 
       if (overlayRef.current) {
+        // Subline fades out early so the frames own the screen …
         const fade = Math.min(1, Math.max(0, (p - 0.7) / 0.3));
         overlayRef.current.style.transform = `translateY(${(-fade * 26).toFixed(1)}px)`;
         overlayRef.current.style.opacity = String(1 - fade * 0.85);
+      }
+      if (cueRef.current) {
+        // … but the animated scroll cue stays alive INSIDE the scrub and only
+        // dissolves on the last stretch, when the section is nearly played out.
+        const cueFade = Math.min(1, Math.max(0, (p - 0.86) / 0.14));
+        cueRef.current.style.opacity = String(1 - cueFade);
       }
 
       rafId = requestAnimationFrame(render);
@@ -205,19 +213,38 @@ export function ScrubHero() {
           <p style={{ color: "var(--ash)", fontSize: "0.95rem", letterSpacing: "0.08em", margin: 0 }}>
             {t("cin.hero.subline")}
           </p>
-          <div
-            aria-hidden
-            style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}
-          >
-            <span className="fpmc-eyebrow">{t("cin.hero.scroll")}</span>
-            <span
-              style={{
-                width: 1,
-                height: 44,
-                background: "linear-gradient(to bottom, rgba(242,242,242,0.7), transparent)",
-              }}
-            />
-          </div>
+        </div>
+
+        {/* Animated scroll cue — separate layer so it survives the subline's
+            early fade and keeps guiding through the whole scrub. */}
+        <div
+          ref={cueRef}
+          className="fpmc-scrollcue"
+          aria-hidden
+          style={{
+            position: "absolute",
+            insetInline: 0,
+            bottom: "2.6vh",
+            zIndex: 6,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.55rem",
+            willChange: "opacity",
+          }}
+        >
+          <span className="fpmc-eyebrow">{t("cin.hero.scroll")}</span>
+          <span className="fpmc-scrollcue-track">
+            <span className="fpmc-scrollcue-drop" />
+          </span>
+          <span className="fpmc-scrollcue-chevrons">
+            <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+              <path d="M1 1l6 6 6-6" stroke="currentColor" strokeWidth="1.4" fill="none" />
+            </svg>
+            <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+              <path d="M1 1l6 6 6-6" stroke="currentColor" strokeWidth="1.4" fill="none" />
+            </svg>
+          </span>
         </div>
       </div>
     </section>

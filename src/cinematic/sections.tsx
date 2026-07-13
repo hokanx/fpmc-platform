@@ -39,6 +39,9 @@ export function Header() {
         <a href="#services" className="fpmc-eyebrow fpmc-nav-link">
           {t("cin.nav.services")}
         </a>
+        <Link to="/studio" className="fpmc-eyebrow fpmc-nav-link">
+          {t("nav.studio")}
+        </Link>
         <a href="#connect" className="fpmc-eyebrow fpmc-nav-link">
           {t("nav.connect")}
         </a>
@@ -373,6 +376,12 @@ const FOLIO_SITES = [
     href: "https://sacky-ink.higgsfield.app/",
     img: "/media/cinematic/portfolio/sacky.jpg",
   },
+  {
+    key: "lobby",
+    name: "Lobby Shishalounge",
+    href: "https://lobby-shishalounge.higgsfield.app/",
+    img: "/media/cinematic/portfolio/lobby.jpg",
+  },
 ] as const;
 
 function FolioCard({
@@ -702,6 +711,12 @@ export function Footer() {
             ))}
           </nav>
           <nav style={{ display: "flex", gap: "1.6rem", alignItems: "center", flexWrap: "wrap" }}>
+            <Link to="/studio" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
+              {t("nav.studio")}
+            </Link>
+            <Link to="/links" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
+              {t("nav.links")}
+            </Link>
             <Link to="/impressum" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
               {t("footer.impressum")}
             </Link>

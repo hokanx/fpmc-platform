@@ -751,3 +751,56 @@
     opacity: 0;
   }
 }
+
+/* ---------- animated scroll cue (hero + scrub) ---------- */
+
+.fpmc-scrollcue {
+  pointer-events: none;
+  color: rgba(242, 242, 242, 0.75);
+}
+.fpmc-scrollcue-track {
+  position: relative;
+  width: 1px;
+  height: 46px;
+  overflow: hidden;
+  background: rgba(242, 242, 242, 0.16);
+}
+.fpmc-scrollcue-drop {
+  position: absolute;
+  left: 0;
+  top: -40%;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(242, 242, 242, 0.9));
+  animation: fpmc-cue-drop 1.9s cubic-bezier(0.45, 0, 0.35, 1) infinite;
+}
+.fpmc-scrollcue-chevrons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: -2px;
+}
+.fpmc-scrollcue-chevrons svg {
+  display: block;
+  animation: fpmc-cue-chevron 1.9s ease-in-out infinite;
+}
+.fpmc-scrollcue-chevrons svg + svg {
+  animation-delay: 0.22s;
+  opacity: 0.55;
+}
+@keyframes fpmc-cue-drop {
+  0% { top: -40%; }
+  70% { top: 100%; }
+  100% { top: 100%; }
+}
+@keyframes fpmc-cue-chevron {
+  0%, 100% { transform: translateY(0); opacity: 0.45; }
+  45% { transform: translateY(3px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fpmc-scrollcue-drop,
+  .fpmc-scrollcue-chevrons svg {
+    animation: none;
+  }
+}
