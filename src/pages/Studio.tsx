@@ -767,6 +767,15 @@ export function Studio() {
   useDocumentTitle("Studio");
 
   useEffect(() => {
+    // Reduced-motion path has no Lenis — honour #hash deep links natively.
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const { hash } = window.location;
+    if (!hash) return;
+    const target = document.querySelector(hash);
+    if (target) target.scrollIntoView();
+  }, []);
+
+  useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let cleanup: (() => void) | undefined;
@@ -919,6 +928,18 @@ export function Studio() {
         lenis.scrollTo(target as HTMLElement, { offset: -20, duration: 1.6 });
       };
       document.addEventListener("click", onAnchorClick);
+
+      // Deep-link arrival (e.g. /studio#contact from the home funnel): the page
+      // is lazy-loaded, so the native anchor jump misses — scroll via Lenis.
+      const { hash } = window.location;
+      if (hash) {
+        const target = document.querySelector(hash);
+        if (target) {
+          window.setTimeout(() => {
+            lenis.scrollTo(target as HTMLElement, { offset: -20, duration: 1.4 });
+          }, 350);
+        }
+      }
 
       cleanup = () => {
         document.removeEventListener("click", onAnchorClick);

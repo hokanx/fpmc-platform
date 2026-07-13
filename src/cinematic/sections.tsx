@@ -308,6 +308,13 @@ export function WorkSection() {
               </li>
             ))}
           </ul>
+          <div style={{ marginTop: "2.6rem" }}>
+            <Magnetic>
+              <Link to="/studio" className="fpmc-cta-ghost">
+                {t("cin.studiogate.more")}
+              </Link>
+            </Magnetic>
+          </div>
         </div>
         <div
           data-parallax="-8"
@@ -541,11 +548,18 @@ export function Services() {
           </article>
         ))}
       </div>
-      <Magnetic>
-        <a href={MAILTO} className="fpmc-cta-primary">
-          {t("services.cta")}
-        </a>
-      </Magnetic>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1.1rem", alignItems: "center" }}>
+        <Magnetic>
+          <Link to="/studio" className="fpmc-cta-primary">
+            {t("cin.studiogate.enter")}
+          </Link>
+        </Magnetic>
+        <Magnetic>
+          <Link to="/studio#contact" className="fpmc-cta-ghost">
+            {t("cin.studiogate.enquire")}
+          </Link>
+        </Magnetic>
+      </div>
     </SectionShell>
   );
 }
