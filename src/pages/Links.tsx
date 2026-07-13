@@ -25,13 +25,29 @@ export function Links() {
 
   return (
     <div className="fpmc" style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+      {/* slim header — obvious way back out */}
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "1rem",
+          padding: "1.4rem 1.6rem",
+        }}
+      >
+        <Link to="/" className="fpmc-eyebrow fpmc-nav-link" style={{ textDecoration: "none" }}>
+          ← fpmc.house
+        </Link>
+        <LangSwitch />
+      </header>
+
       <main
         style={{
           flex: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "4.5rem 1.5rem 3rem",
+          padding: "1.5rem 1.5rem 3rem",
           position: "relative",
           overflow: "hidden",
         }}
@@ -120,7 +136,6 @@ export function Links() {
           <Link to="/datenschutz" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
             {t("footer.datenschutz")}
           </Link>
-          <LangSwitch />
         </nav>
       </footer>
 

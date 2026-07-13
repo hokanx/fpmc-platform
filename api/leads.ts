@@ -1,20 +1,20 @@
-/* Vercel serverless function — premiere notify list.
+/* Vercel serverless function — premiere notify list / email list capture.
  *
- * Two delivery channels, independent of each other:
- *   1. Supabase `public.leads` (service-role key, RLS deny-all by design) —
- *      the structured list for the double-opt-in / segment "Radi Launch".
- *      Only used when the env vars are configured.
- *   2. Email forwarding to hello@fpmc.house via FormSubmit (no account, no
- *      key) — every signup lands in the inbox even when Supabase is not
- *      configured. NOTE: the FIRST submission triggers a one-time activation
- *      email to hello@fpmc.house — click it once, then forwarding is live.
+ * Primary channel: Brevo (brevo.com) — the marketing email platform.
+ *   Every signup becomes a contact (attributes: LOCALE, SOURCE, CONSENT_AT)
+ *   in the configured list. Campaigns/newsletters are then sent from the
+ *   Brevo UI; double-opt-in can be switched on there later.
+ * Optional mirror: Supabase `public.leads` (service-role key, RLS deny-all).
  *
- * The request succeeds if AT LEAST ONE channel accepted the lead, so the
- * countdown form never silently swallows signups again.
+ * The request succeeds if AT LEAST ONE configured channel accepted the lead.
+ * With NOTHING configured it returns 503 not_configured so the failure is
+ * visible instead of silently swallowing signups.
  *
- * Optional Vercel env vars (Project Settings → Environment Variables):
- *   SUPABASE_URL               e.g. https://xyzcompany.supabase.co
- *   SUPABASE_SERVICE_ROLE_KEY  the service_role secret (server-only!)
+ * Vercel env vars (Project Settings → Environment Variables):
+ *   BREVO_API_KEY              xkeysib-…  (Brevo → Settings → SMTP & API → API keys)
+ *   BREVO_LIST_ID              numeric id of the list, e.g. 2 ("Radi Launch")
+ *   SUPABASE_URL               optional, e.g. https://xyzcompany.supabase.co
+ *   SUPABASE_SERVICE_ROLE_KEY  optional, the service_role secret (server-only!)
  */
 
 type Req = {
@@ -28,12 +28,41 @@ type Res = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const FORWARD_TO = "hello@fpmc.house";
 
-async function saveToSupabase(email: string, locale: string): Promise<boolean> {
+async function saveToBrevo(email: string, locale: string): Promise<boolean | null> {
+  const key = process.env.BREVO_API_KEY;
+  if (!key) return null; // not configured
+  const listId = Number(process.env.BREVO_LIST_ID || "0");
+  try {
+    const r = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: {
+        "api-key": key,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        updateEnabled: true, // resubmits update instead of failing
+        ...(listId > 0 ? { listIds: [listId] } : {}),
+        attributes: {
+          LOCALE: locale,
+          SOURCE: "fpmc.house countdown",
+          CONSENT_AT: new Date().toISOString(),
+        },
+      }),
+    });
+    // 201 created · 204 updated — both are success.
+    return r.status === 201 || r.status === 204 || r.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function saveToSupabase(email: string, locale: string): Promise<boolean | null> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return false;
+  if (!url || !key) return null; // not configured
   try {
     // Upsert on the unique email; consent_at = now (single opt-in capture;
     // the double-opt-in confirmation flow sets confirmed_at later).
@@ -48,29 +77,6 @@ async function saveToSupabase(email: string, locale: string): Promise<boolean> {
       body: JSON.stringify([{ email, locale, consent_at: new Date().toISOString() }]),
     });
     return r.ok;
-  } catch {
-    return false;
-  }
-}
-
-async function forwardByEmail(email: string, locale: string): Promise<boolean> {
-  try {
-    const r = await fetch(`https://formsubmit.co/ajax/${FORWARD_TO}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        _subject: "FPMC Launch — neue Premiere-Anmeldung",
-        _template: "table",
-        _captcha: "false",
-        lead_email: email,
-        locale,
-        source: "fpmc.house countdown",
-        timestamp: new Date().toISOString(),
-      }),
-    });
-    if (!r.ok) return false;
-    const data = (await r.json().catch(() => null)) as { success?: string | boolean } | null;
-    return data?.success === "true" || data?.success === true;
   } catch {
     return false;
   }
@@ -102,11 +108,16 @@ export default async function handler(req: Req, res: Res) {
     return;
   }
 
-  const [db, mail] = await Promise.all([saveToSupabase(email, locale), forwardByEmail(email, locale)]);
+  const [brevo, db] = await Promise.all([saveToBrevo(email, locale), saveToSupabase(email, locale)]);
 
-  if (!db && !mail) {
+  if (brevo === null && db === null) {
+    // No channel configured at all — surface it loudly.
+    res.status(503).json({ error: "not_configured" });
+    return;
+  }
+  if (brevo !== true && db !== true) {
     res.status(502).json({ error: "delivery_failed" });
     return;
   }
-  res.status(200).json({ ok: true, channels: { db, mail } });
+  res.status(200).json({ ok: true, channels: { brevo, db } });
 }

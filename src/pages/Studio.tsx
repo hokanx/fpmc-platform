@@ -53,12 +53,16 @@ function Shell({
 /* ---------- header ---------- */
 
 function StudioHeader({ c }: { c: Copy }) {
+  const { t } = useI18n();
   return (
     <header className="fpmc-header">
       <Link to="/" aria-label="FPMC — home" style={{ display: "inline-flex" }}>
         <img src={LOGO} alt="FPMC" style={{ height: 30, width: "auto" }} />
       </Link>
       <nav>
+        <Link to="/" className="fpmc-eyebrow fpmc-nav-link">
+          ← {t("nav.home")}
+        </Link>
         <a href="#how" className="fpmc-eyebrow fpmc-nav-link">
           {c.nav.services}
         </a>
@@ -737,14 +741,17 @@ function StudioFooter({ c }: { c: Copy }) {
           {c.contact.footer.legal}
         </p>
         <nav style={{ display: "flex", gap: "1.6rem", flexWrap: "wrap" }}>
+          <Link to="/" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
+            fpmc.house
+          </Link>
+          <Link to="/links" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
+            Links
+          </Link>
           <Link to="/impressum" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
             {c.contact.footer.impressum}
           </Link>
           <Link to="/datenschutz" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
             {c.contact.footer.datenschutz}
-          </Link>
-          <Link to="/" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
-            fpmc.house
           </Link>
         </nav>
       </div>
