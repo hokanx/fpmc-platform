@@ -17,6 +17,7 @@ const Datenschutz = lazy(() =>
   import("./pages/Datenschutz").then((m) => ({ default: m.Datenschutz })),
 );
 const NotFound = lazy(() => import("./pages/NotFound").then((m) => ({ default: m.NotFound })));
+const Terms = lazy(() => import("./pages/Terms").then((m) => ({ default: m.Terms })));
 
 // Reset scroll on route change (but honour in-page #anchor jumps).
 function ScrollToTop() {
@@ -52,6 +53,9 @@ export function App() {
             <Route path="/confirm" element={<Confirm />} />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/datenschutz" element={<Datenschutz />} />
+            {/* Giveaway T&C — flag-gated inside Terms (404 while off, unlinked) */}
+            <Route path="/teilnahmebedingungen" element={<Terms />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           {/* /studio and /links are standalone cinematic pages with their own

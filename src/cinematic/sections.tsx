@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { useI18n, LOCALES, type Locale } from "../i18n";
+import { FLAGS } from "../flags";
 import { LeadCapture } from "./lead-form";
 import { Magnetic, SplitWords, useTilt } from "./motion";
 import { SOCIALS, MAILTO, CONTACT_EMAIL } from "../config";
@@ -680,6 +681,11 @@ export function Footer() {
             <Link to="/datenschutz" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
               {t("footer.datenschutz")}
             </Link>
+            {FLAGS.giveawayTerms && (
+              <Link to="/teilnahmebedingungen" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
+                {t("footer.terms")}
+              </Link>
+            )}
             <LangSwitch />
           </nav>
         </div>

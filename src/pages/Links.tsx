@@ -4,6 +4,7 @@
 import { Link } from "react-router-dom";
 
 import { useI18n } from "../i18n";
+import { FLAGS } from "../flags";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Cursor, Magnetic } from "../cinematic/motion";
 import { LeadCapture } from "../cinematic/lead-form";
@@ -147,6 +148,11 @@ export function Links() {
           <Link to="/datenschutz" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
             {t("footer.datenschutz")}
           </Link>
+          {FLAGS.giveawayTerms && (
+            <Link to="/teilnahmebedingungen" className="fpmc-eyebrow" style={{ textDecoration: "none" }}>
+              {t("footer.terms")}
+            </Link>
+          )}
         </nav>
       </footer>
 

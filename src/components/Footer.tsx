@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { CONTACT_EMAIL, MAILTO } from "../config";
+import { FLAGS } from "../flags";
 
 // Impressum + Datenschutz are reachable from every page via this footer.
 export function Footer() {
@@ -21,6 +22,11 @@ export function Footer() {
           <Link to="/datenschutz" className="hover:text-light transition-colors">
             {t("footer.datenschutz")}
           </Link>
+          {FLAGS.giveawayTerms && (
+            <Link to="/teilnahmebedingungen" className="hover:text-light transition-colors">
+              {t("footer.terms")}
+            </Link>
+          )}
         </nav>
       </div>
     </footer>
