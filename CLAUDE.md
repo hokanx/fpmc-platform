@@ -1,42 +1,54 @@
-# FPMC Platform & Storefront
+# CLAUDE.md — FPMC Platform
 
-Cinematic public storefront + auth-gated platform for FPMC (Film Production Music Crew).
-Built **from scratch** — simple and clean, without compromising quality or functionality.
+Conventions for every Claude Code session in this repo. Keep this file lean — details live in `/docs`.
 
-## Read order (every session / every new contributor)
-1. `CLAUDE.md` — project rules, locked decisions, v1 module set, phases.
-2. `FPMC_Website-Blueprint.md` — the stakeholder spec (German): what and why.
-3. `db/schema.sql` — the complete v1 data layer (DDL + RLS notes).
-4. `BUILD-SESSION-KICKOFF.md` — how build sessions run, phase gates, P0 prompt.
+## What this repo is
+One codebase: a cinematic public **storefront** plus (later) an auth-gated **platform**.
+**Status: v0 site is LIVE on `fpmc.house`.** Next work builds on top of it.
 
-## Ground rules (short version)
-- **From scratch.** No code ported from earlier projects.
-- **v1 scope is locked** (see CLAUDE.md): storefront · auth/roles · client portal with
-  signature/PDF · member area · digital shop (entitlements) · partner (invite-only) ·
-  crew workspace. Invoicing lives **outside** this platform (Köfman).
-- **EU + DSGVO from P0:** EU Supabase, RLS everywhere, no secrets in the repo,
-  self-hosted fonts, data minimization.
-- **Languages:** DE (default) / EN / AR with full RTL — built in from P0.
-- **Design:** achromatic cinematic UI. Navy `#1F3A5F` / Gold `#C8A24B` are
-  **logo & print tokens only**, never UI colors.
-- **Phases P0–P6**, one per working block; each ends committed → tagged → backed up
-  (3-2-1, Datentresor SSD) before the next begins.
+## 🚨 NAMING — non-negotiable
+The brand is **FPMC — Film Production Music CLUB**. Never "Crew".
+- Any file, asset, string, alt-text, or copy that says "Crew" is **stale and must be corrected**.
+- Legal entity: FPMC – Film Production Music Club (GbR), Bergisch Gladbach, Germany.
+- Handles: `@fpmc.club` (Instagram, TikTok, YouTube). Domain: `fpmc.house`. Email: `hello@fpmc.house`.
 
-## Stack
-React + Vite · Supabase (EU: Auth, Postgres + RLS, Storage, Edge Functions) ·
-Stripe + Stripe Tax (digital products, idempotent webhook) · self-hosted OFL fonts.
+## 🚨 LOGO — known trap
+- **Use `assets/FPMC_Logo_Club.png`** (white logo on black, RGB — composite with a *lighten/screen* blend so the black drops out).
+- The old files named `*_transparent.png` have **no alpha channel** (they are RGB, not RGBA). Pasting them with an alpha mask produces a **white box**. Do not use them until real RGBA versions exist.
+- Delete/replace any Crew-era logo still in the repo.
 
-## Structure (target)
-```
-fpmc-platform/
-├── CLAUDE.md
-├── README.md
-├── BUILD-SESSION-KICKOFF.md
-├── FPMC_Website-Blueprint.md
-├── db/
-│   └── schema.sql
-├── src/                 (created in P0)
-└── supabase/            (migrations + edge functions, from P1)
-```
+## Current phase & priorities
+The Radi release is **Friday 24 July 2026, 18:00 CEST** (YouTube Premiere). Campaign starts 16 July.
+Repo work, in order:
+1. **Audit & fix**: purge any "Crew" strings and stale logos across the codebase.
+2. **Email capture** (Supabase `leads` table, double opt-in via branded sender) — not yet live.
+3. **Giveaway section** — must be live **before 23 July** (Countdown 2 post). Ships behind a feature flag; only enable when the merch addendum is signed and the T&C page is published.
+4. **T&C page** (`/teilnahmebedingungen` + `/terms`) — content exists as a draft, needs placeholders filled and legal review before publishing.
+5. Cinematic scroll-scrub upgrade (Track 2) — **after** the release, per `docs/FPMC_Cinematic-Website-Handoff.md`.
 
-*Confidential — internal use only.*
+## Tease rule (hard, affects site copy)
+Before **22 July**: no "Radi" name, no release date, no artist face anywhere public — including the website. From 22 July: name + date go live everywhere.
+
+## Stack (locked)
+- React + Vite · Tailwind
+- Supabase, **EU region**
+- Transactional email via branded domain — **never a sandbox sender**
+- i18n: DE (default) / EN / AR with full RTL. Flat keys, kept in sync.
+- Deploy: Vercel on `fpmc.house` (GoDaddy DNS)
+
+## Design system: Lichtspiel v2 — see `docs/DESIGN-SYSTEM-LICHTSPIEL-V2.md`
+- **Fully achromatic web UI**: void black `#0A0A0A`, carbon, graphite, ash, light `#F2F2F2`. **No accent hue.** Navy/Gold are logo/print only — never web UI.
+- Type: **Cinzel** (display, uppercase, cap 96px) · **Inter 300** (body) · **Pinyon Script** (rare) · **Amiri / Noto Naskh Arabic** (RTL). All **self-hosted, OFL** — no Google Fonts CDN (GDPR).
+- Motion: slow, confident. Respect `prefers-reduced-motion`.
+
+## Rules
+- Secrets only in `.env` (gitignored) — never in code or commits.
+- One branch + commit per building block; tag releases.
+- GDPR by default: cookie-light, no third-party trackers, EU data residency.
+- Plan mode before any multi-file build; get the plan approved first.
+- Read files from the repo instead of asking for pastes.
+- After each completed block: commit with a clear message, then context can be cleared.
+
+## What Claude Code does NOT do here
+- No video generation or editing (that's Higgsfield / the cutter).
+- No access to the Datentresor (iCloud/SSD file vault) — repo only.
