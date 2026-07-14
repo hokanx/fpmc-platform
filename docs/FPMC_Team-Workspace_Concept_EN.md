@@ -1,4 +1,4 @@
-# FPMC Crew Workspace — Concept Document (App)
+# FPMC Team Workspace — Concept Document (App)
 
 As of: 06.07.2026 · v0.1 (draft, ready to refine) · Start no earlier than post-release 24.07. + retro
 
@@ -8,7 +8,7 @@ As of: 06.07.2026 · v0.1 (draft, ready to refine) · Start no earlier than post
 
 An internal FPMC app connecting the team, all projects, the plan, the context and the files in one place — with Claude integrated directly. Everyone on the team sees live where the project stands; agents run in the background and report results back. The app replaces the interim setup (Datentresor + Claude project + calendar + WhatsApp) with a single surface.
 
-**Not a separate product:** the Crew Workspace is a module of the FPMC Legacy platform (already in the blueprint) and runs on the same stack. Nothing gets built twice.
+**Not a separate product:** the Team Workspace is a module of the FPMC Legacy platform (already in the blueprint) and runs on the same stack. Nothing gets built twice.
 
 ---
 
@@ -17,7 +17,7 @@ An internal FPMC app connecting the team, all projects, the plan, the context an
 | Role | Who | Rights |
 |---|---|---|
 | Admin | Hazem | Everything: projects, agents, settings, members |
-| Crew | Saeed, Dilara, Jasper | Own tasks, files, chat, approvals in their area |
+| Team | Saeed, Dilara, Jasper | Own tasks, files, chat, approvals in their area |
 | Artist (later) | e.g. Radi | Own project only: review links, approvals, dates |
 
 Auth: Supabase Auth, invite-only. Row-level security per role (reuse the pattern from the commerce/partner schema).
@@ -43,14 +43,14 @@ Auth: Supabase Auth, invite-only. Row-level security per role (reuse the pattern
 
 ## 4 · Architecture
 
-- **Stack:** React/Vite + Supabase (EU) — identical to the platform; workspace as a protected `/crew` area behind auth
+- **Stack:** React/Vite + Supabase (EU) — identical to the platform; workspace as a protected `/team` area behind auth
 - **Mobile-first as a PWA** (home-screen install, push via Web Push) — no app-store dependency in v1
 - **Claude integration:** Anthropic API (Messages), system prompt with project context from the DB; agents as scheduled edge functions (Supabase Cron) making API calls
 - **Design:** Lichtspiel v2 (achromatic), components from the platform kit
 
 ## 5 · Data Model (sketch)
 
-`crew_members` (role, contact) · `projects` · `milestones` (date, status, hard/soft) · `tasks` (owner, deadline, checklist JSON) · `approvals` (item, status, approver_1, approver_2) · `files_meta` (path/reference, version, signed) · `messages` (channel, author incl. "claude") · `agent_runs` (agent, input, output, status, feedback)
+`team_members` (role, contact) · `projects` · `milestones` (date, status, hard/soft) · `tasks` (owner, deadline, checklist JSON) · `approvals` (item, status, approver_1, approver_2) · `files_meta` (path/reference, version, signed) · `messages` (channel, author incl. "claude") · `agent_runs` (agent, input, output, status, feedback)
 
 ---
 

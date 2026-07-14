@@ -12,10 +12,10 @@ The brand is **FPMC — Film Production Music CLUB**. Never "Crew".
 - Legal entity: FPMC – Film Production Music Club (GbR), Bergisch Gladbach, Germany.
 - Handles: `@fpmc.club` (Instagram, TikTok, YouTube). Domain: `fpmc.house`. Email: `hello@fpmc.house`.
 
-## 🚨 LOGO — known trap
-- **Use `assets/FPMC_Logo_Club.png`** (white logo on black, RGB — composite with a *lighten/screen* blend so the black drops out).
-- The old files named `*_transparent.png` have **no alpha channel** (they are RGB, not RGBA). Pasting them with an alpha mask produces a **white box**. Do not use them until real RGBA versions exist.
-- Delete/replace any Crew-era logo still in the repo.
+## LOGO
+- **Use `assets/FPMC_Logo_Club.png`** (white logo on black, RGB — composite with a *lighten/screen* blend so the black drops out). The site itself ships the SVG wordmarks (`public/fpmc-logo.svg`, `assets/FPMC_LOGO_vector_white.svg`).
+- The `assets/FPMC_LOGO_4K_{white,black}_transparent.png` files are **genuine RGBA** (verified 14.07.2026: real alpha channel, transparent background). The old "no alpha / white box" trap files were replaced — normal alpha compositing works.
+- No Crew-era logos remain in the repo (audit 14.07.2026).
 
 ## Current phase & priorities
 The Radi release is **Friday 24 July 2026, 18:00 CEST** (YouTube Premiere). Campaign starts 16 July.

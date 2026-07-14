@@ -5,14 +5,14 @@
  * VOICE (enforce when editing):
  *  - short, powerful sentences · benefit before feature · no fluff
  *  - no superlatives without proof · one voice everywhere
- *  - confident · warm · real. A crew, not an agency.
+ *  - confident · warm · real. A team, not an agency.
  *  - AI shows up as speed + price, never as a buzzword.
  *  - Hero limits: headline ≤7 words · subline ≤15 · CTA ≤3.
  *  - Banned: innovativ, maßgeschneiderte Lösungen, ganzheitlich, Synergien,
  *    "Ihr zuverlässiger Partner", "Qualität die überzeugt", exclamation-hype, emoji.
  *
  * NOTE: "4 Sprachen" counter is a client-serving claim (DE/EN/AR/TR).
- *       The crew collectively also covers FR/NL/SQ — adjust if useful.
+ *       The team collectively also covers FR/NL/SQ — adjust if useful.
  */
 
 export const studioContent = {
@@ -40,7 +40,7 @@ export const studioContent = {
       ],
     },
 
-    crew: {
+    team: {
       headline: "Vier Leute. Ein Team. Keine Agentur.",
       sub: "Film, Sound, Business und KI — alles im Haus.",
       members: [
@@ -155,7 +155,7 @@ export const studioContent = {
       ],
     },
 
-    crew: {
+    team: {
       headline: "Four people. One team. Not an agency.",
       sub: "Film, sound, business and AI — all in-house.",
       members: [

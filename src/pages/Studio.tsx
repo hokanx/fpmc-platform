@@ -233,17 +233,17 @@ function Why({ c }: { c: Copy }) {
   );
 }
 
-/* ---------- crew + counters ---------- */
+/* ---------- team + counters ---------- */
 
-function Crew({ c }: { c: Copy }) {
+function Team({ c }: { c: Copy }) {
   return (
-    <Shell id="crew" eyebrow={c.crew.sub} wide>
+    <Shell id="team" eyebrow={c.team.sub} wide>
       <h2
         className="fpmc-display"
         data-split-title="flip"
         style={{ fontSize: "clamp(2.2rem, 5.5vw, 4.4rem)", margin: "0 0 3.6rem", color: "var(--light)" }}
       >
-        <SplitWords text={c.crew.headline} />
+        <SplitWords text={c.team.headline} />
       </h2>
       <div
         style={{
@@ -253,7 +253,7 @@ function Crew({ c }: { c: Copy }) {
           marginBottom: "3.2rem",
         }}
       >
-        {c.crew.members.map((m) => (
+        {c.team.members.map((m) => (
           <article key={m.name} data-service-card className="fpmc-card" style={{ padding: "2rem 1.7rem" }}>
             <h3
               style={{
@@ -283,7 +283,7 @@ function Crew({ c }: { c: Copy }) {
           paddingTop: "2.6rem",
         }}
       >
-        {c.crew.counters.map((k) => (
+        {c.team.counters.map((k) => (
           <div key={k.label} data-number-cell>
             <p
               className="fpmc-display"
@@ -964,7 +964,7 @@ export function Studio() {
         <BeamRule />
         <Why c={c} />
         <BeamRule />
-        <Crew c={c} />
+        <Team c={c} />
         <BeamRule />
         <Showreel c={c} />
         <BeamRule />

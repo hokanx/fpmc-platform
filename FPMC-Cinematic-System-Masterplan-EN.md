@@ -1,5 +1,5 @@
 # FPMC CINEMATIC SYSTEM — MASTER PLAN
-**Film Production Music Crew · Agency system based on the Doc Mo model, extended with FPMC services**
+**Film Production Music Club · Agency system based on the Doc Mo model, extended with FPMC services**
 Status: July 2026 · Confidential · To be approved before implementation
 
 ---
@@ -89,13 +89,13 @@ Every niche site in the Doc Mo portfolio follows the same construction. This is 
 
 ### 3.1 Positioning (the sentence above everything)
 
-> **"We come from real film production — and build with AI what agencies can't deliver in weeks. Website live in 7 days. Changes in hours. Sound, film and web from one crew."**
+> **"We come from real film production — and build with AI what agencies can't deliver in weeks. Website live in 7 days. Changes in hours. Sound, film and web from one team."**
 
 The villain remains the classic agency. But the story beats Doc Mo: not "dentist learns websites," but **SAE diplomas, real productions, Cologne media scene, four language worlds (DE/AR/TR/EN)**.
 
 ### 3.2 Face & story
 
-Doc Mo works because ONE person tells the story. Recommendation: **one frontman for camera & social** (suggested by profile: Hazem — acting experience, marketing, AI specialist, Arabic/German; alternatively Saeed as the film authority), with the other three visible as "the crew" in the team section. Narrative: *"Four people from film, music and business. A crew instead of an agency."*
+Doc Mo works because ONE person tells the story. Recommendation: **one frontman for camera & social** (suggested by profile: Hazem — acting experience, marketing, AI specialist, Arabic/German; alternatively Saeed as the film authority), with the other three visible as "the team" in the team section. Narrative: *"Four people from film, music and business. A team instead of an agency."*
 
 ### 3.3 Service architecture (Doc Mo structure + FPMC services)
 
@@ -139,7 +139,7 @@ Template: Niche 09 "The Manifesto," extended with Doc Mo mechanics. Language: DE
 [2] WHY-A-WEBSITE DIAGRAM — interactive node wheel (Doc Mo mechanic):
     6 tappable reasons (visibility, trust, bookings, Google,
     social hub, selling while you sleep).
-[3] CREW STORY — "We know both sides." 4 founder cards with
+[3] TEAM STORY — "We know both sides." 4 founder cards with
     real photos, skills, languages. Counters: 0 hidden costs ·
     100% in-house · 4 languages · 48h video delivery.
 [4] SHOWREEL — draggable carousel, auto-plays, each project
@@ -170,7 +170,7 @@ Template: Niche 09 "The Manifesto," extended with Doc Mo mechanics. Language: DE
 Separate deployment (e.g. `fpmc-portfolio.pages.dev`, later `work.fpmc.de`), the link-in-bio destination.
 
 ```
-[1] HERO — "Here is our work." + 1 paragraph crew story.
+[1] HERO — "Here is our work." + 1 paragraph team story.
 [2] FILTER GRID — cards with hover video previews, categories:
     All · Cinematic · Food · Medical · Luxury · Auto · Business ·
     Music (unique!) — every card opens the live site.
@@ -221,7 +221,7 @@ All fictional but locally anchored (Cologne / Bergisch Gladbach — names marked
 
 ## 8. Funnel & content (sales, operationalized from business plan 6.x)
 
-1. **IG/TikTok:** behind-the-scenes of the builds ("Website in 7 days — day 3"), before/after of local websites, speedruns, spec ad premieres. Frontman speaks, crew visible.
+1. **IG/TikTok:** behind-the-scenes of the builds ("Website in 7 days — day 3"), before/after of local websites, speedruns, spec ad premieres. Frontman speaks, team visible.
 2. **Link in bio → portfolio hub** (with UTM tracking like Doc Mo).
 3. **WhatsApp Business as the main CTA** everywhere ("replies in minutes").
 4. **Cold outreach door opener:** free AI teaser clip for the target business — built before the meeting, shown in the meeting. Then the matching spec-site demo from the hub.

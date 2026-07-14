@@ -14,7 +14,7 @@ export const IMPRESSUM: DocByLocale = {
       {
         heading: "Angaben gemäß § 5 DDG",
         body: [
-          "FPMC GbR\nVertreten durch die Gesellschafter: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\nFrankenforster Straße 2\n51427 Bergisch Gladbach\nDeutschland",
+          "FPMC – Film Production Music Club GbR\nVertreten durch die Gesellschafter: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\nFrankenforster Straße 2\n51427 Bergisch Gladbach\nDeutschland",
         ],
       },
       {
@@ -47,7 +47,7 @@ export const IMPRESSUM: DocByLocale = {
       {
         heading: "Information pursuant to § 5 DDG",
         body: [
-          "FPMC GbR\nRepresented by the partners: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\nFrankenforster Straße 2\n51427 Bergisch Gladbach\nGermany",
+          "FPMC – Film Production Music Club GbR\nRepresented by the partners: Jasper Beckmann, Saeed Marwush, Dilara Yurdadönen, Hazem Hokan\nFrankenforster Straße 2\n51427 Bergisch Gladbach\nGermany",
         ],
       },
       {
@@ -72,7 +72,7 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Verantwortlicher",
         body: [
-          "Verantwortlich für die Datenverarbeitung auf dieser Website:\nFPMC GbR, vertreten durch die Gesellschafter (siehe Impressum), Frankenforster Straße 2, 51427 Bergisch Gladbach.\nE-Mail: hello@fpmc.house",
+          "Verantwortlich für die Datenverarbeitung auf dieser Website:\nFPMC – Film Production Music Club GbR, vertreten durch die Gesellschafter (siehe Impressum), Frankenforster Straße 2, 51427 Bergisch Gladbach.\nE-Mail: hello@fpmc.house",
         ],
       },
       {
@@ -132,7 +132,7 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Controller",
         body: [
-          "Controller for data processing on this website:\nFPMC GbR, represented by its partners (see legal notice), Frankenforster Straße 2, 51427 Bergisch Gladbach.\nEmail: hello@fpmc.house",
+          "Controller for data processing on this website:\nFPMC – Film Production Music Club GbR, represented by its partners (see legal notice), Frankenforster Straße 2, 51427 Bergisch Gladbach.\nEmail: hello@fpmc.house",
         ],
       },
       {

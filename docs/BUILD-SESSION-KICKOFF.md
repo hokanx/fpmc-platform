@@ -26,4 +26,4 @@ Paste-ready opening prompt for each session, plus the block list. One session = 
 - Spec: docs/FPMC_Website-Blueprint.md (DE) · docs/FPMC_Website-Engineering-Handoff.md (EN)
 - Design: docs/DESIGN-SYSTEM-LICHTSPIEL-V2.md
 - Assets & video prompts: docs/FPMC_WS2_Asset-Kit_EN.md · assets/
-- Future module (do NOT build yet): docs/FPMC_Crew-Workspace_Concept_EN.md
+- Future module (do NOT build yet): docs/FPMC_Team-Workspace_Concept_EN.md
