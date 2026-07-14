@@ -1,24 +1,14 @@
 /* FPMC cinematic storefront — page sections (Lichtspiel v2, achromatic).
  * Ported from the preview build; wired to the platform i18n and /api/leads. */
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { useI18n, LOCALES, type Locale } from "../i18n";
+import { LeadCapture } from "./lead-form";
 import { Magnetic, SplitWords, useTilt } from "./motion";
 import { SOCIALS, MAILTO, CONTACT_EMAIL } from "../config";
 
 const LOGO = "/fpmc-logo.svg";
-
-/* ---------- leads (Supabase via /api/leads, service-role server-side) ---------- */
-
-async function submitLead(email: string, locale: string): Promise<boolean> {
-  const res = await fetch("/api/leads", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, locale }),
-  });
-  return res.ok;
-}
 
 /* ---------- header ---------- */
 
@@ -152,22 +142,8 @@ function Countdown({ units }: { units: string[] }) {
 }
 
 export function ReleaseTeaser() {
-  const { t, locale } = useI18n();
-  const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
-  const [email, setEmail] = useState("");
+  const { t } = useI18n();
   const units = [1, 2, 3, 4].map((n) => t(`cin.release.u${n}`));
-
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!email || state === "busy") return;
-    setState("busy");
-    try {
-      const ok = await submitLead(email, locale);
-      setState(ok ? "done" : "error");
-    } catch {
-      setState("error");
-    }
-  };
 
   return (
     <SectionShell eyebrow={t("cin.release.eyebrow")}>
@@ -199,40 +175,7 @@ export function ReleaseTeaser() {
 
         <Countdown units={units} />
 
-        {state === "done" ? (
-          <p style={{ color: "var(--light)", margin: 0 }}>{t("cin.release.done")}</p>
-        ) : (
-          <form
-            onSubmit={submit}
-            style={{
-              display: "flex",
-              gap: "0.8rem",
-              maxWidth: 460,
-              margin: "0 auto",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-          >
-            <input
-              className="fpmc-input"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder={t("cin.release.email")}
-              aria-label={t("cin.release.email")}
-              style={{ flex: "1 1 240px" }}
-            />
-            <button type="submit" className="fpmc-cta-ghost" disabled={state === "busy"}>
-              {t("cin.release.notify")}
-            </button>
-            {state === "error" ? (
-              <p style={{ color: "var(--ash)", fontSize: "0.85rem", width: "100%", margin: 0 }}>
-                {t("cin.release.error")}
-              </p>
-            ) : null}
-          </form>
-        )}
+        <LeadCapture />
       </div>
     </SectionShell>
   );

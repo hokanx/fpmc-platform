@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Cursor, Magnetic } from "../cinematic/motion";
+import { LeadCapture } from "../cinematic/lead-form";
 import { LangSwitch } from "../cinematic/sections";
 import { MAILTO, SOCIALS } from "../config";
 import "../cinematic/cinematic.css";
@@ -105,9 +106,19 @@ export function Links() {
             ))}
           </nav>
 
+          <div
+            className="rise-in"
+            style={{ marginTop: "2.6rem", width: "100%", animationDelay: `${0.16 + buttons.length * 0.07}s` }}
+          >
+            <p className="fpmc-eyebrow" style={{ marginBottom: "1rem" }}>
+              {t("links.notify.eyebrow")}
+            </p>
+            <LeadCapture compact />
+          </div>
+
           <p
             className="fpmc-eyebrow rise-in"
-            style={{ marginTop: "2.2rem", animationDelay: `${0.16 + buttons.length * 0.07}s` }}
+            style={{ marginTop: "2.2rem", animationDelay: `${0.23 + buttons.length * 0.07}s` }}
           >
             {t("links.soon")}
           </p>

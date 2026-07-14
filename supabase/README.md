@@ -9,11 +9,20 @@ supabase/
     └── 20260709120000_create_leads_table.sql   # 0001 — email-capture leads table
 ```
 
-## Status (Website V0)
+## Status
 
-Schema only. No live Supabase project is linked yet, and **nothing writes to
-`leads` today** — email capture is Block 3 (tomorrow). This migration exists so
-that flow has a versioned target already in the repo.
+Email capture is **wired** (double opt-in):
+
+- `POST /api/leads` upserts the lead (`consent_at = now`, `confirmed_at` stays
+  null) and sends the confirmation mail via Brevo transactional (branded sender).
+- `POST /api/confirm` (called by the `/confirm` page after a human click)
+  verifies the stateless HMAC token and sets `confirmed_at`; only then is the
+  contact added to the Brevo marketing list.
+
+No live Supabase project is linked yet — until `SUPABASE_URL` +
+`SUPABASE_SERVICE_ROLE_KEY` are set in Vercel, the flow runs Brevo-only and the
+`leads` mirror simply stays empty. Once linked + migrated, rows appear
+automatically (writes are service-role only; RLS stays deny-all).
 
 ## Conventions
 

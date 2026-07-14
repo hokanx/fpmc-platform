@@ -11,6 +11,7 @@ const CinematicHome = lazy(() =>
 const Connect = lazy(() => import("./pages/Connect").then((m) => ({ default: m.Connect })));
 const Links = lazy(() => import("./pages/Links").then((m) => ({ default: m.Links })));
 const Studio = lazy(() => import("./pages/Studio").then((m) => ({ default: m.Studio })));
+const Confirm = lazy(() => import("./pages/Confirm").then((m) => ({ default: m.Confirm })));
 const Impressum = lazy(() => import("./pages/Impressum").then((m) => ({ default: m.Impressum })));
 const Datenschutz = lazy(() =>
   import("./pages/Datenschutz").then((m) => ({ default: m.Datenschutz })),
@@ -48,6 +49,7 @@ export function App() {
           <Route element={<SiteLayout />}>
             <Route path="/v0" element={<Home />} />
             <Route path="/connect" element={<Connect />} />
+            <Route path="/confirm" element={<Confirm />} />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/datenschutz" element={<Datenschutz />} />
             <Route path="*" element={<NotFound />} />

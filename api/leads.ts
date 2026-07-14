@@ -1,21 +1,27 @@
-/* Vercel serverless function — premiere notify list / email list capture.
+/* Vercel serverless function — email capture, step 1 of the double opt-in.
  *
- * Primary channel: Brevo (brevo.com) — the marketing email platform.
- *   Every signup becomes a contact (attributes: LOCALE, SOURCE, CONSENT_AT)
- *   in the configured list. Campaigns/newsletters are then sent from the
- *   Brevo UI; double-opt-in can be switched on there later.
- * Optional mirror: Supabase `public.leads` (service-role key, RLS deny-all).
+ * Flow (GDPR double opt-in):
+ *   POST /api/leads  → validate + consent required
+ *                    → mirror to Supabase `leads` (consent_at=now, confirmed_at stays null)
+ *                    → send confirmation email via Brevo TRANSACTIONAL API from the
+ *                      branded sender (hello@fpmc.house — never a sandbox sender)
+ *   The mail links to /confirm?token=… (SPA page); confirming POSTs to /api/confirm,
+ *   which sets confirmed_at and only THEN adds the contact to the Brevo marketing list.
+ *   Nobody enters the list unconfirmed.
  *
- * The request succeeds if AT LEAST ONE configured channel accepted the lead.
- * With NOTHING configured it returns 503 not_configured so the failure is
- * visible instead of silently swallowing signups.
+ * Token: stateless HMAC (api/_lib/token.ts) — no extra table, works Brevo-only.
  *
- * Vercel env vars (Project Settings → Environment Variables):
- *   BREVO_API_KEY              xkeysib-…  (Brevo → Settings → SMTP & API → API keys)
- *   BREVO_LIST_ID              numeric id of the list, e.g. 2 ("Radi Launch")
- *   SUPABASE_URL               optional, e.g. https://xyzcompany.supabase.co
- *   SUPABASE_SERVICE_ROLE_KEY  optional, the service_role secret (server-only!)
+ * Vercel env vars:
+ *   BREVO_API_KEY              xkeysib-…  (required)
+ *   LEADS_TOKEN_SECRET         HMAC secret, e.g. `openssl rand -hex 32` (required)
+ *   BREVO_LIST_ID              marketing list id — used by /api/confirm
+ *   SITE_URL                   default https://fpmc.house
+ *   LEADS_FROM_EMAIL           default hello@fpmc.house (must be Brevo-verified)
+ *   SUPABASE_URL               optional mirror
+ *   SUPABASE_SERVICE_ROLE_KEY  optional mirror (server-only!)
  */
+import { signToken } from "./_lib/token";
+import { emailFor } from "./_lib/email";
 
 type Req = {
   method?: string;
@@ -29,43 +35,12 @@ type Res = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-async function saveToBrevo(email: string, locale: string): Promise<boolean | null> {
-  const key = process.env.BREVO_API_KEY;
-  if (!key) return null; // not configured
-  const listId = Number(process.env.BREVO_LIST_ID || "0");
-  try {
-    const r = await fetch("https://api.brevo.com/v3/contacts", {
-      method: "POST",
-      headers: {
-        "api-key": key,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        updateEnabled: true, // resubmits update instead of failing
-        ...(listId > 0 ? { listIds: [listId] } : {}),
-        attributes: {
-          LOCALE: locale,
-          SOURCE: "fpmc.house countdown",
-          CONSENT_AT: new Date().toISOString(),
-        },
-      }),
-    });
-    // 201 created · 204 updated — both are success.
-    return r.status === 201 || r.status === 204 || r.ok;
-  } catch {
-    return false;
-  }
-}
-
 async function saveToSupabase(email: string, locale: string): Promise<boolean | null> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null; // not configured
   try {
-    // Upsert on the unique email; consent_at = now (single opt-in capture;
-    // the double-opt-in confirmation flow sets confirmed_at later).
+    // Upsert on the unique email; consent_at = now. confirmed_at is set by /api/confirm.
     const r = await fetch(`${url}/rest/v1/leads?on_conflict=email`, {
       method: "POST",
       headers: {
@@ -82,6 +57,33 @@ async function saveToSupabase(email: string, locale: string): Promise<boolean | 
   }
 }
 
+async function sendConfirmEmail(email: string, locale: string, confirmUrl: string): Promise<boolean> {
+  const key = process.env.BREVO_API_KEY as string;
+  const from = process.env.LEADS_FROM_EMAIL || "hello@fpmc.house";
+  const { subject, html, text } = emailFor(locale, confirmUrl);
+  try {
+    const r = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": key,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender: { name: "FPMC", email: from },
+        to: [{ email }],
+        subject,
+        htmlContent: html,
+        textContent: text,
+        tags: ["doi"],
+      }),
+    });
+    return r.status === 201 || r.ok;
+  } catch {
+    return false;
+  }
+}
+
 export default async function handler(req: Req, res: Res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -91,33 +93,56 @@ export default async function handler(req: Req, res: Res) {
 
   let email = "";
   let locale = "de";
+  let consent = false;
+  let honeypot = "";
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body ?? {});
-    email = String((body as Record<string, unknown>).email ?? "")
+    const b = body as Record<string, unknown>;
+    email = String(b.email ?? "")
       .trim()
       .toLowerCase();
-    const loc = String((body as Record<string, unknown>).locale ?? "de");
+    const loc = String(b.locale ?? "de");
     if (["de", "en", "ar"].includes(loc)) locale = loc;
+    consent = b.consent === true;
+    honeypot = String(b.website ?? "");
   } catch {
     res.status(400).json({ error: "bad_json" });
     return;
   }
 
+  // Honeypot filled = bot. Pretend success, send nothing.
+  if (honeypot) {
+    res.status(200).json({ ok: true });
+    return;
+  }
   if (!EMAIL_RE.test(email) || email.length > 320) {
     res.status(400).json({ error: "bad_email" });
     return;
   }
+  if (!consent) {
+    res.status(400).json({ error: "consent_required" });
+    return;
+  }
 
-  const [brevo, db] = await Promise.all([saveToBrevo(email, locale), saveToSupabase(email, locale)]);
-
-  if (brevo === null && db === null) {
-    // No channel configured at all — surface it loudly.
+  const secret = process.env.LEADS_TOKEN_SECRET;
+  if (!secret || !process.env.BREVO_API_KEY) {
+    // Double opt-in cannot work — surface it loudly instead of swallowing signups.
     res.status(503).json({ error: "not_configured" });
     return;
   }
-  if (brevo !== true && db !== true) {
+
+  const siteUrl = (process.env.SITE_URL || "https://fpmc.house").replace(/\/$/, "");
+  const confirmUrl = `${siteUrl}/confirm?token=${encodeURIComponent(signToken(email, locale, secret))}`;
+
+  const [sent, db] = await Promise.all([
+    sendConfirmEmail(email, locale, confirmUrl),
+    saveToSupabase(email, locale),
+  ]);
+
+  if (!sent) {
+    // The confirmation mail is the flow — a failed Supabase mirror alone is not fatal.
     res.status(502).json({ error: "delivery_failed" });
     return;
   }
-  res.status(200).json({ ok: true, channels: { brevo, db } });
+  res.status(200).json({ ok: true, channels: { email: sent, db } });
 }

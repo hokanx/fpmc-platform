@@ -114,7 +114,9 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Newsletter / E-Mail-Anmeldung",
         body: [
-          "Eine E-Mail-Anmeldung ist derzeit noch nicht aktiv. Sobald sie eingeführt wird, erfolgt sie im Double-Opt-in-Verfahren mit ausdrücklicher Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Diese Datenschutzerklärung wird vorher entsprechend ergänzt.",
+          "Auf dieser Website können Sie sich mit Ihrer E-Mail-Adresse für Updates zur Premiere anmelden. Die Anmeldung erfolgt im Double-Opt-in-Verfahren auf Grundlage Ihrer ausdrücklichen Einwilligung (Art. 6 Abs. 1 lit. a DSGVO): Nach dem Eintrag erhalten Sie eine Bestätigungs-E-Mail; erst mit Klick auf den Bestätigungslink werden Sie in den Verteiler aufgenommen. Ohne Bestätigung erfolgt kein weiterer Versand.",
+          "Verarbeitete Daten: E-Mail-Adresse, gewählte Sprache sowie die Zeitpunkte von Einwilligung und Bestätigung (Nachweiszwecke). Für den Versand setzen wir den Dienstleister Brevo (Sendinblue GmbH, Köpenicker Straße 126, 10179 Berlin, Deutschland) als Auftragsverarbeiter ein; eine Vereinbarung zur Auftragsverarbeitung besteht. Die Daten können zusätzlich in unserer Datenbank (Supabase, EU-Region) gespeichert werden.",
+          "Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen — über den Abmeldelink in jeder E-Mail oder per Nachricht an hello@fpmc.house. Nicht bestätigte Anmeldungen werden nicht in den Verteiler aufgenommen.",
         ],
       },
       {
@@ -174,7 +176,9 @@ export const DATENSCHUTZ: DocByLocale = {
       {
         heading: "Newsletter / email sign-up",
         body: [
-          "Email sign-up is not yet active. Once introduced it will use a double-opt-in with explicit consent (Art. 6(1)(a) GDPR), and this policy will be updated beforehand.",
+          "You can sign up with your email address for premiere updates on this website. Sign-up uses a double opt-in based on your explicit consent (Art. 6(1)(a) GDPR): after signing up you receive a confirmation email, and only clicking the confirmation link adds you to the list. Without confirmation, no further emails are sent.",
+          "Data processed: email address, chosen language, and the timestamps of consent and confirmation (for verification purposes). We use Brevo (Sendinblue GmbH, Köpenicker Straße 126, 10179 Berlin, Germany) as our email processor under a data processing agreement. Data may additionally be stored in our database (Supabase, EU region).",
+          "You can withdraw your consent at any time with future effect — via the unsubscribe link in every email or by writing to hello@fpmc.house. Unconfirmed sign-ups are never added to the list.",
         ],
       },
       {
