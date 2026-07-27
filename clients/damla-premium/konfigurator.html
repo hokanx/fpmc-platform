@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Premium · Baklava-Box Konfigurator</title>
+<style>
+  :root{
+    --void:#160F09; --panel:#1E1610; --panel-2:#251B12; --line:#3A2C1D;
+    --gold:#D4AF57; --gold-lite:#EBD79A; --pist:#8FB25E; --pist-deep:#5E7C39;
+    --cream:#F3E9D8; --muted:#B8A98F; --danger:#c76b4a;
+    --serif:"Cormorant Garamond","Playfair Display",Georgia,"Times New Roman",serif;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(212,175,87,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(143,178,94,.08), transparent 60%),
+      var(--void);
+    color:var(--cream); font-family:var(--sans);
+    min-height:100vh; line-height:1.5; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 90px}
+
+  /* Header */
+  header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;flex-direction:column;line-height:1}
+  .brand .logo{font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:.06em;
+    background:linear-gradient(180deg,var(--gold-lite),var(--gold) 55%,#9c7b32);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand .logo span{font-style:italic;font-weight:500}
+  .brand .sub{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+  .head-note{font-size:12px;color:var(--muted);text-align:right;max-width:260px}
+  .head-note b{color:var(--gold-lite);font-weight:600}
+
+  .hero{padding:34px 0 20px;text-align:center}
+  .hero .kicker{font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:var(--pist);margin-bottom:14px}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,6vw,60px);line-height:1.02;letter-spacing:.01em}
+  .hero h1 em{font-style:italic;color:var(--gold-lite)}
+  .hero p{color:var(--muted);max-width:600px;margin:16px auto 0;font-size:16px}
+
+  /* Layout */
+  .grid{display:grid;grid-template-columns:1fr 400px;gap:28px;margin-top:34px;align-items:start}
+  @media (max-width:940px){.grid{grid-template-columns:1fr}}
+
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:18px;padding:22px}
+  .card + .card{margin-top:20px}
+  .step-label{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .step-num{width:30px;height:30px;flex:0 0 30px;border-radius:50%;border:1px solid var(--gold);color:var(--gold-lite);
+    display:grid;place-items:center;font-family:var(--serif);font-size:16px}
+  .step-label h2{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.02em}
+  .step-label .hint{margin-left:auto;font-size:12px;color:var(--muted)}
+
+  /* Size selector */
+  .sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .size{position:relative;border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;
+    background:rgba(0,0,0,.15);transition:.25s}
+  .size:hover{border-color:var(--gold)}
+  .size.active{border-color:var(--gold);background:linear-gradient(180deg,rgba(212,175,87,.16),rgba(212,175,87,.04));
+    box-shadow:0 0 0 1px var(--gold) inset, 0 10px 30px -18px var(--gold)}
+  .size .w{font-family:var(--serif);font-size:26px;color:var(--cream)}
+  .size .pc{font-size:12px;color:var(--muted);margin-top:2px}
+  .size .pr{font-size:13px;color:var(--gold-lite);margin-top:8px;font-weight:600}
+
+  /* Sorten grid */
+  .sorts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  @media (max-width:520px){.sorts{grid-template-columns:1fr}}
+  .sort{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;
+    background:rgba(0,0,0,.14);transition:.2s;user-select:none}
+  .sort:hover{border-color:var(--pist)}
+  .sort.on{border-color:var(--pist);background:linear-gradient(180deg,rgba(143,178,94,.14),transparent)}
+  .swatch{width:46px;height:46px;flex:0 0 46px;border-radius:10px;position:relative;overflow:hidden;
+    border:1px solid rgba(255,255,255,.08)}
+  .sort .nm{font-family:var(--serif);font-size:19px;line-height:1.1}
+  .sort .tr{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+  .sort .qty{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .qbtn{width:26px;height:26px;border-radius:7px;border:1px solid var(--line);background:transparent;color:var(--cream);
+    font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.15s}
+  .qbtn:hover{border-color:var(--gold);color:var(--gold-lite)}
+  .qnum{min-width:18px;text-align:center;font-variant-numeric:tabular-nums;font-size:15px;color:var(--gold-lite)}
+
+  /* Extras */
+  .extras{display:flex;flex-direction:column;gap:10px}
+  .extra{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.2s;background:rgba(0,0,0,.12)}
+  .extra:hover{border-color:var(--gold)}
+  .extra.on{border-color:var(--gold);background:linear-gradient(180deg,rgba(212,175,87,.12),transparent)}
+  .check{width:22px;height:22px;flex:0 0 22px;border-radius:6px;border:1px solid var(--line);display:grid;place-items:center;color:var(--void);font-size:14px}
+  .extra.on .check{background:var(--gold);border-color:var(--gold)}
+  .extra .ex-nm{font-size:15px}
+  .extra .ex-tr{font-size:11.5px;color:var(--muted)}
+  .extra .ex-pr{margin-left:auto;color:var(--gold-lite);font-size:14px;font-weight:600}
+
+  /* Preview panel (sticky) */
+  .panel-wrap{position:sticky;top:20px}
+  .box-visual{position:relative;border:1px solid var(--line);border-radius:16px;padding:18px;background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0 12px,transparent 12px 24px), rgba(0,0,0,.25);}
+  .box-title{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .box-title .t{font-family:var(--serif);font-size:20px;color:var(--gold-lite)}
+  .box-title .c{font-size:12px;color:var(--muted)}
+  .tray{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:150px}
+  @media (max-width:520px){.tray{grid-template-columns:repeat(5,1fr)}}
+  .piece{aspect-ratio:1/.72;border-radius:7px;position:relative;overflow:hidden;
+    animation:pop .38s cubic-bezier(.2,.9,.3,1.3) both;box-shadow:0 6px 14px -8px rgba(0,0,0,.7)}
+  .piece::after{content:"";position:absolute;inset:0;background:
+    linear-gradient(115deg,rgba(255,255,255,.28),transparent 42%),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.10) 0 3px,transparent 3px 7px)}
+  @keyframes pop{from{opacity:0;transform:scale(.4) rotate(-8deg)}to{opacity:1;transform:none}}
+  .tray .empty{grid-column:1/-1;display:grid;place-items:center;color:var(--muted);font-style:italic;font-family:var(--serif);font-size:17px;min-height:150px;text-align:center;padding:0 12px}
+  .fill-bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);margin-top:14px;overflow:hidden}
+  .fill-bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--pist-deep),var(--pist),var(--gold));transition:width .4s}
+  .fill-cap{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:7px}
+
+  .summary{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+  .sum-row{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;color:var(--cream)}
+  .sum-row .s-l{color:var(--muted)}
+  .sum-row.head{font-family:var(--serif);color:var(--gold-lite);font-size:16px;padding-top:2px}
+  .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:14px;border-top:1px solid var(--line)}
+  .total .lbl{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .total .val{font-family:var(--serif);font-size:38px;color:var(--gold-lite);font-variant-numeric:tabular-nums}
+  .total .val small{font-size:20px;opacity:.7}
+
+  .cta{display:block;width:100%;margin-top:16px;text-align:center;text-decoration:none;
+    background:linear-gradient(180deg,var(--gold-lite),var(--gold));color:#2a1e08;font-weight:700;
+    padding:15px;border-radius:12px;font-size:15px;letter-spacing:.02em;border:none;cursor:pointer;transition:.2s;
+    box-shadow:0 14px 30px -14px var(--gold)}
+  .cta:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .cta.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);box-shadow:none;font-weight:500;font-size:13px;margin-top:10px;padding:11px}
+  .cta.ghost:hover{border-color:var(--gold);color:var(--gold-lite);transform:none}
+
+  .foot{margin-top:44px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
+  .foot b{color:var(--gold-lite);font-weight:600}
+  .demo-flag{display:inline-block;margin-top:22px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--pist);
+    border:1px solid var(--line);border-radius:30px;padding:7px 16px}
+
+  /* Confetti + unlock toast */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
+  .toast{position:fixed;left:50%;top:26px;transform:translateX(-50%) translateY(-140%);z-index:50;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--gold);border-radius:14px;
+    padding:14px 22px;display:flex;gap:12px;align-items:center;box-shadow:0 20px 50px -20px #000;transition:transform .5s cubic-bezier(.2,.9,.3,1.2)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast .medal{font-family:var(--serif);font-size:26px;color:var(--gold-lite)}
+  .toast .tx b{color:var(--gold-lite);font-family:var(--serif);font-size:16px;display:block}
+  .toast .tx span{font-size:12px;color:var(--muted)}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast"><div class="medal">✦</div><div class="tx"><b id="toast-t">Freigeschaltet</b><span id="toast-s"></span></div></div>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">Damla <span>Premium</span></div>
+      <div class="sub">Baklava · Künefe · Buchheim Köln</div>
+    </div>
+    <div class="head-note">Stelle deine eigene Box zusammen — <b>live Vorschau &amp; Preis</b>. Ein Konzept-Demo für Damla Premium.</div>
+  </header>
+
+  <section class="hero">
+    <div class="kicker">El yapımı · Gaziantep geleneği</div>
+    <h1>Deine <em>Baklava-Box</em>,<br>Stück für Stück verfeinert.</h1>
+    <p>Wähle Größe, Sorten und Extras — die Box füllt sich in Echtzeit und der Preis rechnet live mit. Am Ende: ein Klick zur Bestellung.</p>
+  </section>
+
+  <div class="grid">
+    <!-- LEFT: choices -->
+    <div>
+      <div class="card">
+        <div class="step-label"><span class="step-num">1</span><h2>Box-Größe</h2><span class="hint">bestimmt die Stückzahl</span></div>
+        <div class="sizes" id="sizes"></div>
+      </div>
+
+      <div class="card">
+        <div class="step-label"><span class="step-num">2</span><h2>Sorten wählen</h2><span class="hint" id="sort-hint">0 Stück gewählt</span></div>
+        <div class="sorts" id="sorts"></div>
+      </div>
+
+      <div class="card">
+        <div class="step-label"><span class="step-num">3</span><h2>Feine Extras</h2><span class="hint">optional</span></div>
+        <div class="extras" id="extras"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: live preview -->
+    <div class="panel-wrap">
+      <div class="card">
+        <div class="box-visual">
+          <div class="box-title"><span class="t" id="box-name">Deine Box</span><span class="c" id="box-count">0 / 0</span></div>
+          <div class="tray" id="tray"><div class="empty">Wähle links deine Sorten — sie erscheinen hier in deiner Box.</div></div>
+          <div class="fill-bar"><i id="fill"></i></div>
+          <div class="fill-cap"><span id="fill-label">Box noch leer</span><span id="fill-pct">0 %</span></div>
+        </div>
+
+        <div class="summary" id="summary"></div>
+
+        <div class="total">
+          <span class="lbl">Gesamt</span>
+          <span class="val"><span id="total">0,00</span> <small>€</small></span>
+        </div>
+
+        <button class="cta" id="order">Bestellung anfragen →</button>
+        <button class="cta ghost" id="reset">Demo zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span class="demo-flag">Interaktives Konzept-Demo · Fable-5 Marken-Workflow</span>
+    <p style="margin-top:18px">Damla Premium Buchheim · Modemannstraße 3, 51065 Köln · <b>@damlapremiumkoeln</b><br>
+    Preise sind Beispielwerte für dieses Demo. Eine Idee für <b>damlakoeln.de</b> — von Konzept bis Bestell-CTA in einer Datei.</p>
+  </div>
+</div>
+
+<script>
+/* ---------- Data ---------- */
+const SIZES = [
+  {id:'s', w:'500 g', pieces:12, price:16.90, label:'Küçük'},
+  {id:'m', w:'1 kg',  pieces:24, price:29.90, label:'Klassik'},
+  {id:'l', w:'2 kg',  pieces:48, price:54.90, label:'Ziyafet'}
+];
+const SORTS = [
+  {id:'fis', nm:'Fıstıklı',      tr:'Pistazie, klassisch',      c1:'#8FB25E',c2:'#5E7C39'},
+  {id:'sob', nm:'Şöbiyet',       tr:'Sahne & Pistazie',         c1:'#E9D9A6',c2:'#C9A24B'},
+  {id:'sut', nm:'Sütlü Nuriye',  tr:'Milch-Baklava, zart',      c1:'#F0E6CE',c2:'#D8C79A'},
+  {id:'kad', nm:'Kadayıf',       tr:'Engelshaar & Pistazie',    c1:'#D9A24B',c2:'#9c7326'},
+  {id:'hav', nm:'Havuç Dilimi',  tr:'„Karottenschnitte“',       c1:'#C98B4B',c2:'#7d5426'},
+  {id:'cev', nm:'Cevizli',       tr:'Walnuss',                  c1:'#B98A5E',c2:'#6e4d2c'},
+  {id:'cik', nm:'Çikolatalı',    tr:'Schokolade & Pistazie',    c1:'#8a5a3a',c2:'#4a2c19'},
+  {id:'kar', nm:'Karışık',       tr:'Sortiment gemischt',       c1:'#D4AF57',c2:'#7FA653'}
+];
+const EXTRAS = [
+  {id:'kun', nm:'Künefe für 2', tr:'frisch & warm, mit Kaymak', pr:9.90},
+  {id:'gift',nm:'Geschenk-Verpackung', tr:'Goldband & Siegel', pr:4.90},
+  {id:'card',nm:'Handschriftliche Karte', tr:'deine Grußbotschaft', pr:2.50},
+  {id:'tea', nm:'Türkischer Tee-Set', tr:'2 Gläser + losem Tee', pr:7.90}
+];
+const PER_PIECE_PREMIUM = {fis:0, sob:.25, sut:.15, kad:.20, hav:.10, cev:.05, cik:.30, kar:.10}; // surcharge per piece
+
+/* ---------- State ---------- */
+const SAVE_KEY='damla_box_v1';
+let state = loadState() || { size:'m', sorts:{}, extras:{} };
+
+function loadState(){ try{return JSON.parse(localStorage.getItem(SAVE_KEY))}catch(e){return null} }
+function saveState(){ try{localStorage.setItem(SAVE_KEY, JSON.stringify(state))}catch(e){} }
+
+/* ---------- Render: sizes ---------- */
+const sizesEl=document.getElementById('sizes');
+SIZES.forEach(s=>{
+  const d=document.createElement('div');
+  d.className='size'+(state.size===s.id?' active':'');
+  d.dataset.id=s.id;
+  d.innerHTML=`<div class="w">${s.w}</div><div class="pc">${s.label} · ${s.pieces} Stück</div><div class="pr">ab ${eur(s.price)}</div>`;
+  d.onclick=()=>{ state.size=s.id; clampSorts(); render(); pulseCheck(); };
+  sizesEl.appendChild(d);
+});
+
+/* ---------- Render: sorts ---------- */
+const sortsEl=document.getElementById('sorts');
+SORTS.forEach(s=>{
+  const d=document.createElement('div');
+  d.className='sort'; d.dataset.id=s.id;
+  d.innerHTML=`
+    <span class="swatch" style="background:linear-gradient(135deg,${s.c1},${s.c2})"></span>
+    <span><span class="nm">${s.nm}</span><br><span class="tr">${s.tr}</span></span>
+    <span class="qty">
+      <button class="qbtn" data-a="minus">–</button>
+      <span class="qnum" data-q>0</span>
+      <button class="qbtn" data-a="plus">+</button>
+    </span>`;
+  d.querySelector('[data-a=plus]').onclick=e=>{e.stopPropagation();changeQty(s.id,+1)};
+  d.querySelector('[data-a=minus]').onclick=e=>{e.stopPropagation();changeQty(s.id,-1)};
+  d.onclick=()=>changeQty(s.id,+1);
+  sortsEl.appendChild(d);
+});
+
+/* ---------- Render: extras ---------- */
+const extrasEl=document.getElementById('extras');
+EXTRAS.forEach(x=>{
+  const d=document.createElement('div');
+  d.className='extra'; d.dataset.id=x.id;
+  d.innerHTML=`<span class="check">✓</span><span><span class="ex-nm">${x.nm}</span><br><span class="ex-tr">${x.tr}</span></span><span class="ex-pr">+ ${eur(x.pr)}</span>`;
+  d.onclick=()=>{ state.extras[x.id]=!state.extras[x.id]; render(); };
+  extrasEl.appendChild(d);
+});
+
+/* ---------- Logic ---------- */
+function sizeObj(){ return SIZES.find(s=>s.id===state.size); }
+function totalPieces(){ return Object.values(state.sorts).reduce((a,b)=>a+b,0); }
+function changeQty(id,delta){
+  const cap=sizeObj().pieces;
+  const cur=state.sorts[id]||0;
+  if(delta>0 && totalPieces()>=cap){ flashFull(); return; }
+  const next=Math.max(0,cur+delta);
+  if(next===0) delete state.sorts[id]; else state.sorts[id]=next;
+  render();
+}
+function clampSorts(){
+  let cap=sizeObj().pieces, tp=totalPieces();
+  while(tp>cap){
+    const k=Object.keys(state.sorts).sort((a,b)=>state.sorts[b]-state.sorts[a])[0];
+    if(!k)break; state.sorts[k]--; if(state.sorts[k]<=0)delete state.sorts[k]; tp--;
+  }
+}
+function priceOf(){
+  let p=sizeObj().price;
+  for(const [id,q] of Object.entries(state.sorts)) p += (PER_PIECE_PREMIUM[id]||0)*q;
+  for(const x of EXTRAS) if(state.extras[x.id]) p += x.pr;
+  return p;
+}
+
+/* ---------- Render main ---------- */
+function render(){
+  // sizes active
+  [...sizesEl.children].forEach(c=>c.classList.toggle('active',c.dataset.id===state.size));
+  // sorts qty + on
+  [...sortsEl.children].forEach(c=>{
+    const q=state.sorts[c.dataset.id]||0;
+    c.querySelector('[data-q]').textContent=q;
+    c.classList.toggle('on',q>0);
+  });
+  // extras
+  [...extrasEl.children].forEach(c=>c.classList.toggle('on',!!state.extras[c.dataset.id]));
+
+  const cap=sizeObj().pieces, tp=totalPieces();
+  document.getElementById('sort-hint').textContent=`${tp} / ${cap} Stück gewählt`;
+  document.getElementById('box-name').textContent='Box · '+sizeObj().w;
+  document.getElementById('box-count').textContent=`${tp} / ${cap}`;
+
+  // tray pieces
+  const tray=document.getElementById('tray'); tray.innerHTML='';
+  if(tp===0){ tray.innerHTML='<div class="empty">Wähle links deine Sorten — sie erscheinen hier in deiner Box.</div>'; }
+  else{
+    for(const s of SORTS){
+      const q=state.sorts[s.id]||0;
+      for(let i=0;i<q;i++){
+        const pc=document.createElement('span'); pc.className='piece';
+        pc.style.background=`linear-gradient(135deg,${s.c1},${s.c2})`;
+        pc.title=s.nm; tray.appendChild(pc);
+      }
+    }
+  }
+  const pct=Math.round(tp/cap*100);
+  document.getElementById('fill').style.width=pct+'%';
+  document.getElementById('fill-pct').textContent=pct+' %';
+  document.getElementById('fill-label').textContent = tp===0?'Box noch leer' : tp>=cap?'Box perfekt gefüllt ✦':`Noch ${cap-tp} Stück frei`;
+
+  // summary
+  const sum=document.getElementById('summary'); sum.innerHTML='';
+  const head=document.createElement('div'); head.className='sum-row head';
+  head.innerHTML=`<span>${sizeObj().label} · ${sizeObj().w}</span><span>${eur(sizeObj().price)}</span>`;
+  sum.appendChild(head);
+  for(const s of SORTS){ const q=state.sorts[s.id]||0; if(!q)continue;
+    const r=document.createElement('div'); r.className='sum-row';
+    const extra=(PER_PIECE_PREMIUM[s.id]||0)*q;
+    r.innerHTML=`<span class="s-l">${q}× ${s.nm}</span><span>${extra>0?'+ '+eur(extra):'—'}</span>`;
+    sum.appendChild(r);
+  }
+  for(const x of EXTRAS){ if(!state.extras[x.id])continue;
+    const r=document.createElement('div'); r.className='sum-row';
+    r.innerHTML=`<span class="s-l">${x.nm}</span><span>+ ${eur(x.pr)}</span>`; sum.appendChild(r);
+  }
+  document.getElementById('total').textContent=eur(priceOf(),true);
+
+  checkMilestones(tp,cap);
+  saveState();
+}
+
+/* ---------- Milestones / celebration ---------- */
+let reached={full:false,tea:false,feast:false};
+function checkMilestones(tp,cap){
+  if(tp>=cap && !reached.full){ reached.full=true; celebrate('Box perfekt gefüllt','Frische Garantie: an deinem Wunschtag gebacken.'); }
+  if(tp<cap) reached.full=false;
+  if(sizeObj().id==='l' && !reached.feast){ reached.feast=true; celebrate('Ziyafet-Modus','2 kg Box — ideal für Feiern & Bayram.'); }
+  if(sizeObj().id!=='l') reached.feast=false;
+}
+function flashFull(){ celebrate('Box ist voll','Wähle eine größere Box für mehr Stücke.'); }
+
+/* ---------- CTA ---------- */
+document.getElementById('order').onclick=()=>{
+  const cap=sizeObj().pieces, tp=totalPieces();
+  const lines=SORTS.filter(s=>state.sorts[s.id]).map(s=>`${state.sorts[s.id]}× ${s.nm}`);
+  const ex=EXTRAS.filter(x=>state.extras[x.id]).map(x=>x.nm);
+  let msg=`Meine Damla Baklava-Box (${sizeObj().w}, ${tp}/${cap} Stück):\n`;
+  msg+= lines.length?('• '+lines.join('\n• ')):'• (noch keine Sorten gewählt)';
+  if(ex.length) msg+='\nExtras: '+ex.join(', ');
+  msg+=`\nGesamt: ${eur(priceOf())} €`;
+  celebrate('Anfrage bereit ✦','So würde die Bestellung an Damla gehen:');
+  setTimeout(()=>alert(msg+'\n\n(Demo — in der Live-Version geht dies direkt an WhatsApp / das Bestellsystem.)'),450);
+};
+document.getElementById('reset').onclick=()=>{
+  state={size:'m',sorts:{},extras:{}}; reached={full:false,tea:false,feast:false};
+  try{localStorage.removeItem(SAVE_KEY)}catch(e){} render();
+};
+
+/* ---------- Helpers ---------- */
+function eur(n,plain){ const s=n.toFixed(2).replace('.',','); return plain?s:s+' €'; }
+function pulseCheck(){}
+
+/* ---------- Toast + confetti ---------- */
+const toast=document.getElementById('toast'); let toastT;
+function celebrate(t,s){
+  document.getElementById('toast-t').textContent=t;
+  document.getElementById('toast-s').textContent=s;
+  toast.classList.add('show'); confetti();
+  clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2600);
+}
+const cvs=document.getElementById('confetti'), ctx=cvs.getContext('2d');
+let parts=[]; function resize(){cvs.width=innerWidth;cvs.height=innerHeight;} resize(); addEventListener('resize',resize);
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function confetti(){
+  if(reduce)return;
+  const cols=['#D4AF57','#EBD79A','#8FB25E','#F3E9D8','#9c7326'];
+  for(let i=0;i<90;i++) parts.push({x:innerWidth/2+(Math.random()-.5)*160,y:70,
+    vx:(Math.random()-.5)*7,vy:Math.random()*-9-3,g:.28+Math.random()*.15,
+    s:4+Math.random()*6,c:cols[i%cols.length],r:Math.random()*6,vr:(Math.random()-.5)*.4,life:0});
+}
+function tick(){
+  ctx.clearRect(0,0,cvs.width,cvs.height);
+  parts=parts.filter(p=>p.life<160 && p.y<innerHeight+40);
+  for(const p of parts){ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.life++;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.globalAlpha=Math.max(0,1-p.life/160);
+    ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6); ctx.restore(); }
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ---------- Init ---------- */
+render();
+</script>
+</body>
+</html>
