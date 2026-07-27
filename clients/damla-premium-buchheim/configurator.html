@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Premium — Baklava-Teller Konfigurator</title>
+<style>
+  :root{
+    --void:#0A0908; --coal:#141210; --card:#1B1815; --card2:#221E19;
+    --line:rgba(243,237,226,.12); --cream:#F3EDE2; --dim:rgba(243,237,226,.6);
+    --gold:#C9A44C; --gold-soft:rgba(201,164,76,.4); --pist:#A3B18A;
+    --serif:Georgia,'Times New Roman',ui-serif,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(1100px 750px at 50% -10%,#1D1913 0%,var(--void) 62%);
+       color:var(--cream);font-family:var(--sans);font-weight:300;min-height:100svh;padding:34px 5vw 140px}
+  img{display:block}
+  .top{max-width:1080px;margin:0 auto 34px;display:flex;align-items:center;gap:14px}
+  .top img{width:52px;height:52px;border-radius:50%;border:1px solid var(--line)}
+  .top .t{font-family:var(--serif);font-size:20px;letter-spacing:.1em}
+  .top .t small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase;margin-top:3px}
+
+  .intro{max-width:1080px;margin:0 auto 40px}
+  .kicker{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4.6vw,48px);margin-top:12px;line-height:1.1}
+  .intro p{color:var(--dim);margin-top:14px;max-width:60ch}
+
+  .grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+  h2{font-family:var(--serif);font-weight:400;font-size:20px;margin-bottom:16px}
+  .step-num{display:inline-flex;width:26px;height:26px;border:1px solid var(--gold-soft);color:var(--gold);
+      align-items:center;justify-content:center;font-size:12px;font-family:var(--serif);margin-right:10px;transform:rotate(45deg)}
+  .step-num i{font-style:normal;transform:rotate(-45deg)}
+  .panel{background:var(--card);border:1px solid var(--line);padding:26px;margin-bottom:22px}
+
+  /* sizes */
+  .sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .size{border:1px solid var(--line);background:var(--card2);padding:18px 14px;text-align:center;cursor:pointer;transition:.3s}
+  .size:hover{border-color:var(--gold-soft)}
+  .size.sel{border-color:var(--gold);background:rgba(201,164,76,.08)}
+  .size h3{font-family:var(--serif);font-weight:400;font-size:17px}
+  .size small{display:block;color:var(--dim);font-size:11.5px;margin-top:4px;letter-spacing:.06em}
+  .size b{display:block;font-family:var(--serif);color:var(--gold);font-weight:400;margin-top:10px;font-size:17px}
+  @media(max-width:520px){.sizes{grid-template-columns:1fr}}
+
+  /* sorts */
+  .sorts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:520px){.sorts{grid-template-columns:repeat(2,1fr)}}
+  .sort{position:relative;border:1px solid var(--line);background:var(--card2);cursor:pointer;transition:.3s;overflow:hidden}
+  .sort:hover{border-color:var(--gold-soft);transform:translateY(-2px)}
+  .sort img{width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.92)}
+  .sort .nm{padding:10px 12px 4px;font-size:13px;letter-spacing:.03em}
+  .sort .sub{padding:0 12px 12px;font-size:11px;color:var(--dim)}
+  .sort .count{position:absolute;top:8px;right:8px;min-width:26px;height:26px;background:var(--gold);color:var(--void);
+      display:none;align-items:center;justify-content:center;font-size:13px;font-family:var(--serif);padding:0 8px}
+  .sort.picked .count{display:inline-flex}
+  .sort.picked{border-color:var(--gold)}
+  .sort .minus{position:absolute;top:8px;left:8px;width:26px;height:26px;background:rgba(10,9,8,.72);color:var(--cream);
+      border:1px solid var(--line);display:none;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+  .sort.picked .minus{display:inline-flex}
+  .sort.disabled{opacity:.45;pointer-events:none}
+
+  /* extras */
+  .extras{display:flex;flex-direction:column;gap:10px}
+  .extra{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:13px 16px;cursor:pointer;transition:.3s;background:var(--card2)}
+  .extra:hover{border-color:var(--gold-soft)}
+  .extra.sel{border-color:var(--gold);background:rgba(201,164,76,.08)}
+  .extra .box{width:16px;height:16px;border:1px solid var(--gold-soft);flex:none;position:relative}
+  .extra.sel .box::after{content:'';position:absolute;inset:3px;background:var(--gold)}
+  .extra h4{font-weight:400;font-size:14px}
+  .extra small{display:block;color:var(--dim);font-size:11.5px}
+  .extra b{margin-left:auto;font-family:var(--serif);font-weight:400;color:var(--gold);white-space:nowrap}
+
+  /* summary / preview */
+  .summary{position:sticky;top:26px}
+  .plate{background:var(--card);border:1px solid var(--gold-soft);padding:26px}
+  .plate h2{display:flex;align-items:baseline;justify-content:space-between}
+  .plate h2 small{font-family:var(--sans);font-size:11px;color:var(--dim);letter-spacing:.2em;text-transform:uppercase}
+  .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+  .slot{aspect-ratio:1;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--void)}
+  .slot.filled{border-style:solid;border-color:var(--gold-soft)}
+  .slot img{width:100%;height:100%;object-fit:cover;animation:popIn .5s cubic-bezier(.16,1,.3,1)}
+  .slot span{color:rgba(243,237,226,.22);font-size:18px}
+  @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+  .sum-lines{border-top:1px solid var(--line);margin-top:8px;padding-top:14px;display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+  .sum-lines div{display:flex;justify-content:space-between;gap:12px;color:var(--dim)}
+  .sum-lines b{font-weight:400;color:var(--cream)}
+  .sum-lines .money{font-family:var(--serif);color:var(--cream)}
+  .total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--gold-soft);margin-top:14px;padding-top:16px}
+  .total span{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+  .total b{font-family:var(--serif);font-size:34px;font-weight:400;color:var(--gold);transition:transform .25s}
+  .total b.pop{transform:scale(1.08)}
+  .hintline{margin-top:10px;font-size:12px;color:var(--pist)}
+  .cta{display:block;text-align:center;margin-top:18px;padding:16px;background:var(--gold);color:var(--void);
+      text-decoration:none;font-size:11px;letter-spacing:.26em;text-transform:uppercase;transition:.3s}
+  .cta:hover{background:#d9b662}
+  .cta.disabled{opacity:.4;pointer-events:none}
+  .cta-sub{text-align:center;font-size:11.5px;color:var(--dim);margin-top:10px}
+  .demo-note{text-align:center;font-size:10.5px;color:var(--dim);letter-spacing:.14em;margin-top:16px;text-transform:uppercase}
+  @media(prefers-reduced-motion:reduce){.slot img{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <img src="https://damlakoeln.de/wp-content/uploads/2024/10/cropped-cropped-512x512-1.webp" alt="" onerror="this.style.display='none'">
+  <span class="t">DAMLA PREMIUM<small>Baklava-Atelier · Buchheim</small></span>
+</div>
+
+<div class="intro">
+  <span class="kicker">Konfigurator</span>
+  <h1>Stellen Sie Ihren<br>Baklava-Teller zusammen.</h1>
+  <p>Wählen Sie die Größe, füllen Sie den Teller mit Ihren Lieblingssorten aus der Backstube von Kazım Usta
+     und runden Sie mit Extras ab. Der Preis rechnet live mit.</p>
+</div>
+
+<div class="grid">
+  <div>
+    <div class="panel">
+      <h2><span class="step-num"><i>1</i></span>Tellergröße wählen</h2>
+      <div class="sizes" id="sizes"></div>
+    </div>
+    <div class="panel">
+      <h2><span class="step-num"><i>2</i></span>Sorten wählen <span id="slotInfo" style="color:var(--dim);font-size:13px;font-family:var(--sans)"></span></h2>
+      <div class="sorts" id="sorts"></div>
+    </div>
+    <div class="panel">
+      <h2><span class="step-num"><i>3</i></span>Extras</h2>
+      <div class="extras" id="extras"></div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="plate">
+      <h2>Ihr Teller <small id="sizeLabel"></small></h2>
+      <div class="slots" id="slots"></div>
+      <div class="sum-lines" id="sumLines"></div>
+      <div class="total"><span>Gesamt</span><b id="totalEl">0,00 €</b></div>
+      <p class="hintline" id="hint"></p>
+      <a class="cta" id="orderBtn" href="#">Jetzt bestellen — 0175 2354282</a>
+      <p class="cta-sub">Abholung: Modemannstraße 3, 51065 Köln · täglich ab 09:00</p>
+    </div>
+    <p class="demo-note">Demo-Konfigurator · Preise Stand Juli 2026, Änderungen vorbehalten</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var U='https://damlakoeln.de/wp-content/uploads/2024/10/';
+  var SIZES=[
+    {id:'s4', name:'Klein',   pieces:4, price:8.50,  sub:'4 Teile · für den Moment'},
+    {id:'s6', name:'Mittel',  pieces:6, price:12.50, sub:'6 Teile · zum Teilen'},
+    {id:'s9', name:'Groß',    pieces:9, price:17.90, sub:'9 Teile · für die Tafel'}
+  ];
+  var SORTS=[
+    {id:'kuru',    name:'Kuru Baklava',        sub:'Pistazie, klassisch',      img:U+'fistikli-baklava.png'},
+    {id:'walnuss', name:'Walnuss Baklava',     sub:'Mit Walnüssen',            img:U+'cevizli-baklava.png'},
+    {id:'sobiyet', name:'Söbiyet',             sub:'Sahne & Pistazie',         img:U+'sobiyet.png'},
+    {id:'midye',   name:'Midye Baklava',       sub:'Muschelform, Sahne',       img:U+'midye.png'},
+    {id:'sultan',  name:'Sultan Baklava',      sub:'Reich an Pistazien',       img:U+'sultan.png'},
+    {id:'havuc',   name:'Havuç Dilim',         sub:'Karotten-Schnitt, Sahne',  img:U+'Tatli-7-1.png'},
+    {id:'kalt',    name:'Kalte Baklava',       sub:'Milch & Kakao',            img:U+'soguk-baklava.png'},
+    {id:'schoko',  name:'Schoko-Baklava',      sub:'Zartbitter & Pistazie',    img:U+'cikolatali-midye.png'},
+    {id:'kadayif', name:'Kadayıf',             sub:'Engelshaar, Pistazie',     img:U+'Yeni-Proje-2022-11-24T001522.png'}
+  ];
+  var EXTRAS=[
+    {id:'sahne', name:'Extra Sahne',        sub:'Frisch aufgeschlagen',            price:1.70},
+    {id:'eis',   name:'Extra Eiscreme',     sub:'Maraş-Art, dehnbar & cremig',     price:3.30},
+    {id:'tee',   name:'Teekanne (Porzellan)',sub:'Çay für die ganze Runde',        price:6.00},
+    {id:'mokka', name:'Türkischer Mokka',   sub:'Stark, mit feiner Schaumkrone',   price:3.20}
+  ];
+
+  var state={ size:SIZES[1], picks:[], extras:{} };
+  var $=function(id){return document.getElementById(id)};
+
+  function money(n){ return n.toFixed(2).replace('.',',')+' €'; }
+  function count(id){ return state.picks.filter(function(p){return p===id;}).length; }
+
+  // build size cards
+  SIZES.forEach(function(s){
+    var d=document.createElement('div'); d.className='size'; d.id='size-'+s.id;
+    d.innerHTML='<h3>'+s.name+'</h3><small>'+s.sub+'</small><b>'+money(s.price)+'</b>';
+    d.addEventListener('click',function(){
+      state.size=s;
+      if(state.picks.length>s.pieces) state.picks=state.picks.slice(0,s.pieces);
+      render();
+    });
+    $('sizes').appendChild(d);
+  });
+
+  // build sort cards
+  SORTS.forEach(function(s){
+    var d=document.createElement('div'); d.className='sort'; d.id='sort-'+s.id;
+    d.innerHTML='<span class="minus" title="Eines entfernen">−</span><span class="count"></span>'+
+      '<img loading="lazy" src="'+s.img+'" alt="'+s.name+'" onerror="this.style.visibility=\'hidden\'">'+
+      '<div class="nm">'+s.name+'</div><div class="sub">'+s.sub+'</div>';
+    d.addEventListener('click',function(e){
+      if(e.target.classList.contains('minus')){
+        var i=state.picks.lastIndexOf(s.id); if(i>-1) state.picks.splice(i,1);
+      } else {
+        if(state.picks.length>=state.size.pieces){ flashHint(); return; }
+        state.picks.push(s.id);
+      }
+      render();
+    });
+    $('sorts').appendChild(d);
+  });
+
+  // build extras
+  EXTRAS.forEach(function(x){
+    var d=document.createElement('div'); d.className='extra'; d.id='extra-'+x.id;
+    d.innerHTML='<span class="box"></span><div><h4>'+x.name+'</h4><small>'+x.sub+'</small></div><b>+'+money(x.price)+'</b>';
+    d.addEventListener('click',function(){ state.extras[x.id]=!state.extras[x.id]; render(); });
+    $('extras').appendChild(d);
+  });
+
+  var hintTimer=null;
+  function flashHint(){
+    var h=$('hint'); h.textContent='Der Teller ist voll — entfernen Sie eine Sorte oder wählen Sie eine größere Größe.';
+    h.style.color='#b8563e';
+    clearTimeout(hintTimer); hintTimer=setTimeout(function(){ h.style.color=''; setHint(); },2200);
+  }
+  function setHint(){
+    var left=state.size.pieces-state.picks.length;
+    $('hint').textContent = left>0
+      ? 'Noch '+left+' '+(left===1?'Platz':'Plätze')+' frei — mischen ist ausdrücklich erlaubt.'
+      : 'Perfekt gefüllt. Afiyet olsun!';
+  }
+
+  function render(){
+    SIZES.forEach(function(s){ $('size-'+s.id).classList.toggle('sel', state.size.id===s.id); });
+    $('sizeLabel').textContent=state.size.name+' · '+state.size.pieces+' Teile';
+    $('slotInfo').textContent='('+state.picks.length+' / '+state.size.pieces+')';
+
+    SORTS.forEach(function(s){
+      var el=$('sort-'+s.id), c=count(s.id);
+      el.classList.toggle('picked', c>0);
+      el.querySelector('.count').textContent='×'+c;
+      el.classList.toggle('disabled', c===0 && state.picks.length>=state.size.pieces);
+    });
+
+    // slots preview
+    var slots=$('slots'); slots.innerHTML='';
+    slots.style.gridTemplateColumns='repeat(3,1fr)';
+    for(var i=0;i<state.size.pieces;i++){
+      var sl=document.createElement('div'); sl.className='slot';
+      if(state.picks[i]){
+        var sort=SORTS.filter(function(x){return x.id===state.picks[i];})[0];
+        sl.classList.add('filled');
+        sl.innerHTML='<img src="'+sort.img+'" alt="'+sort.name+'" onerror="this.parentNode.innerHTML=\'<span>◆</span>\'">';
+      } else {
+        sl.innerHTML='<span>◆</span>';
+      }
+      slots.appendChild(sl);
+    }
+
+    EXTRAS.forEach(function(x){ $('extra-'+x.id).classList.toggle('sel', !!state.extras[x.id]); });
+
+    // summary lines + total
+    var lines=[], total=state.size.price;
+    lines.push('<div><b>Teller „'+state.size.name+'“ ('+state.size.pieces+' Teile)</b><span class="money">'+money(state.size.price)+'</span></div>');
+    var agg={};
+    state.picks.forEach(function(p){ agg[p]=(agg[p]||0)+1; });
+    Object.keys(agg).forEach(function(id){
+      var s=SORTS.filter(function(x){return x.id===id;})[0];
+      lines.push('<div><span>'+agg[id]+'× '+s.name+'</span><span>inkl.</span></div>');
+    });
+    EXTRAS.forEach(function(x){
+      if(state.extras[x.id]){ total+=x.price;
+        lines.push('<div><span>'+x.name+'</span><span class="money">'+money(x.price)+'</span></div>');
+      }
+    });
+    $('sumLines').innerHTML=lines.join('');
+    var t=$('totalEl');
+    if(t.textContent!==money(total)){ t.textContent=money(total); t.classList.add('pop'); setTimeout(function(){t.classList.remove('pop');},260); }
+
+    setHint();
+
+    // CTA
+    var full = state.picks.length===state.size.pieces;
+    var btn=$('orderBtn');
+    btn.classList.toggle('disabled', state.picks.length===0);
+    var summary='Merhaba! Ich möchte einen Baklava-Teller "'+state.size.name+'" bestellen: '+
+      Object.keys(agg).map(function(id){var s=SORTS.filter(function(x){return x.id===id;})[0];return agg[id]+'x '+s.name;}).join(', ')+
+      (Object.keys(state.extras).filter(function(k){return state.extras[k];}).length
+        ? ' — Extras: '+EXTRAS.filter(function(x){return state.extras[x.id];}).map(function(x){return x.name;}).join(', ') : '')+
+      '. Gesamt: '+money(total);
+    btn.href='tel:+4901752354282';
+    btn.title=summary;
+    btn.textContent = full ? 'Jetzt bestellen — 0175 2354282' : 'Teller füllen ('+state.picks.length+'/'+state.size.pieces+')';
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

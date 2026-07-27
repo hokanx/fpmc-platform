@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Premium Buchheim — Türkische Küche & Premium Baklava in Köln</title>
+<meta name="description" content="Damla Premium Buchheim: Türkisches Frühstück, Grill-Spezialitäten, Künefe und Premium Baklava von Kazım Usta — seit 1993. Modemannstraße 3, 51065 Köln.">
+<style>
+  :root{
+    --void:#0A0908;
+    --coal:#131210;
+    --card:#1B1815;
+    --line:rgba(243,237,226,.10);
+    --cream:#F3EDE2;
+    --cream-dim:rgba(243,237,226,.60);
+    --gold:#C9A44C;
+    --gold-soft:rgba(201,164,76,.35);
+    --pist:#A3B18A;
+    --serif:Georgia,'Times New Roman',ui-serif,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--cream);font-family:var(--sans);font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--gold);color:var(--void)}
+
+  .label{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:400}
+  .display{font-family:var(--serif);font-weight:400;letter-spacing:.02em}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 6vw}
+
+  /* ---------- nav ---------- */
+  nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+      padding:20px 5vw;transition:background .5s,padding .5s,border-color .5s;border-bottom:1px solid transparent}
+  nav.solid{background:rgba(10,9,8,.88);backdrop-filter:blur(14px);padding:12px 5vw;border-color:var(--line)}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{width:46px;height:46px;border-radius:50%;border:1px solid var(--line)}
+  .brand-name{font-family:var(--serif);font-size:19px;letter-spacing:.14em}
+  .brand-name small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase;margin-top:2px}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-dim);transition:color .3s}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-cta{border:1px solid var(--gold-soft);padding:10px 22px;color:var(--gold)!important;transition:background .3s,color .3s}
+  .nav-cta:hover{background:var(--gold);color:var(--void)!important}
+  @media(max-width:860px){.nav-links a:not(.nav-cta){display:none}}
+
+  /* ---------- hero ---------- */
+  header{position:relative;height:100svh;min-height:640px;display:flex;align-items:flex-end;overflow:hidden}
+  .hero-media{position:absolute;inset:0;overflow:hidden}
+  .hero-media img{width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(1.05);
+      animation:kenburns 26s ease-in-out infinite alternate}
+  @keyframes kenburns{from{transform:scale(1.02)}to{transform:scale(1.14) translateY(-2%)}}
+  .hero-media::after{content:'';position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(10,9,8,.55) 0%,rgba(10,9,8,.12) 40%,rgba(10,9,8,.92) 92%)}
+  .hero-inner{position:relative;z-index:2;width:100%;padding:0 6vw 11vh}
+  .hero-inner .label{display:inline-block;margin-bottom:22px}
+  h1{font-family:var(--serif);font-size:clamp(44px,7.4vw,104px);line-height:1.04;font-weight:400;max-width:13ch}
+  h1 em{font-style:italic;color:var(--gold)}
+  .hero-sub{margin-top:26px;max-width:52ch;color:var(--cream-dim);font-size:17px}
+  .hero-ctas{margin-top:38px;display:flex;gap:18px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:16px 36px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;
+      border:1px solid var(--gold-soft);color:var(--gold);transition:.35s}
+  .btn:hover{background:var(--gold);color:var(--void)}
+  .btn.ghost{border-color:var(--line);color:var(--cream-dim)}
+  .btn.ghost:hover{background:var(--cream);color:var(--void);border-color:var(--cream)}
+  .scroll-hint{position:absolute;bottom:34px;right:5vw;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--cream-dim)}
+  .scroll-hint span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;writing-mode:vertical-rl}
+  .scroll-hint i{width:1px;height:56px;background:linear-gradient(var(--gold),transparent);display:block;animation:drip 2.2s ease-in-out infinite}
+  @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* ---------- ribbon ---------- */
+  .ribbon{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:var(--coal)}
+  .ribbon-track{display:flex;gap:64px;white-space:nowrap;padding:16px 0;width:max-content;animation:marquee 36s linear infinite}
+  .ribbon-track span{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--cream-dim)}
+  .ribbon-track b{color:var(--gold);font-weight:400}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* ---------- sections ---------- */
+  section{padding:120px 0}
+  .sec-head{margin-bottom:64px}
+  .sec-head h2{font-family:var(--serif);font-size:clamp(30px,4vw,54px);font-weight:400;margin-top:16px;line-height:1.15}
+  .sec-head p{margin-top:16px;max-width:58ch;color:var(--cream-dim)}
+
+  /* story */
+  .story{display:grid;grid-template-columns:1.1fr .9fr;gap:7vw;align-items:center}
+  .story-media{position:relative}
+  .story-media img{aspect-ratio:4/5;object-fit:cover;filter:saturate(1.05)}
+  .story-media::after{content:'';position:absolute;inset:18px;border:1px solid var(--gold-soft);pointer-events:none}
+  .story-year{position:absolute;left:-26px;bottom:34px;background:var(--gold);color:var(--void);
+      font-family:var(--serif);font-size:26px;padding:14px 22px;letter-spacing:.05em}
+  .story p+p{margin-top:18px}
+  .story .drop{margin-bottom:28px}
+  blockquote{font-family:var(--serif);font-size:clamp(20px,2vw,26px);font-style:italic;color:var(--cream);
+      border-left:2px solid var(--gold);padding-left:24px;margin:34px 0 0;line-height:1.5}
+  @media(max-width:860px){.story{grid-template-columns:1fr}.story-year{left:12px}}
+
+  /* signature dishes */
+  .dishes{display:grid;grid-template-columns:repeat(12,1fr);gap:22px}
+  .dish{position:relative;overflow:hidden;background:var(--card);grid-column:span 6;cursor:default}
+  .dish.wide{grid-column:span 6}
+  .dish img{width:100%;height:380px;object-fit:cover;transition:transform 1.2s cubic-bezier(.16,1,.3,1),filter 1.2s;filter:brightness(.82)}
+  .dish:hover img{transform:scale(1.05);filter:brightness(1)}
+  .dish-meta{position:absolute;inset:auto 0 0 0;padding:26px 28px;background:linear-gradient(transparent,rgba(10,9,8,.92));display:flex;justify-content:space-between;align-items:flex-end;gap:16px}
+  .dish-meta h3{font-family:var(--serif);font-size:23px;font-weight:400}
+  .dish-meta small{display:block;color:var(--cream-dim);font-size:13px;margin-top:6px;max-width:40ch}
+  .price{font-family:var(--serif);color:var(--gold);font-size:21px;white-space:nowrap}
+  .tag{position:absolute;top:18px;left:18px;background:var(--gold);color:var(--void);font-size:10px;letter-spacing:.24em;text-transform:uppercase;padding:6px 12px}
+  @media(max-width:760px){.dish,.dish.wide{grid-column:span 12}.dish img{height:300px}}
+
+  /* kahvalti */
+  .kahvalti{background:var(--coal);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .kahvalti-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
+  .kahvalti-media img{aspect-ratio:1/1;object-fit:cover}
+  .k-list{margin-top:40px;display:flex;flex-direction:column}
+  .k-item{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}
+  .k-item:first-child{border-top:1px solid var(--line)}
+  .k-item h4{font-family:var(--serif);font-size:19px;font-weight:400}
+  .k-item small{display:block;color:var(--cream-dim);font-size:13px;margin-top:4px}
+  .k-item .dots{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-6px)}
+  .k-note{margin-top:22px;font-size:13px;color:var(--pist);letter-spacing:.06em}
+  @media(max-width:860px){.kahvalti-grid{grid-template-columns:1fr}}
+
+  /* baklava gallery */
+  .sweet-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .sweet{position:relative;overflow:hidden;background:var(--card)}
+  .sweet img{aspect-ratio:1/1;object-fit:cover;transition:transform 1s cubic-bezier(.16,1,.3,1)}
+  .sweet:hover img{transform:scale(1.07)}
+  .sweet figcaption{position:absolute;inset:auto 0 0 0;padding:14px 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+      background:linear-gradient(transparent,rgba(10,9,8,.88));display:flex;justify-content:space-between;gap:8px}
+  .sweet figcaption b{color:var(--gold);font-weight:400}
+  @media(max-width:860px){.sweet-grid{grid-template-columns:repeat(2,1fr)}}
+  .sweet-cta{margin-top:44px;text-align:center}
+
+  /* mocktails */
+  .mock-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .mock{background:var(--card);border:1px solid var(--line);padding:0 0 24px;text-align:center;transition:border-color .4s,transform .4s}
+  .mock:hover{border-color:var(--gold-soft);transform:translateY(-6px)}
+  .mock img{aspect-ratio:4/5;object-fit:cover;filter:brightness(.9);margin-bottom:20px}
+  .mock h4{font-family:var(--serif);font-size:20px;font-weight:400}
+  .mock span{color:var(--gold);font-family:var(--serif);display:block;margin-top:6px}
+  @media(max-width:760px){.mock-strip{grid-template-columns:1fr}}
+
+  /* menu overview */
+  .menu-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 7vw}
+  .m-item{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding:15px 0;border-bottom:1px solid var(--line)}
+  .m-item h5{font-weight:400;font-size:15.5px;letter-spacing:.02em}
+  .m-item h5 small{display:block;font-size:12.5px;color:var(--cream-dim);margin-top:3px;font-weight:300}
+  .m-item .dots{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-5px)}
+  .m-item .price{font-size:16px}
+  .m-cat{margin:44px 0 6px;font-family:var(--serif);font-size:22px;color:var(--gold)}
+  @media(max-width:760px){.menu-cols{grid-template-columns:1fr}}
+
+  /* info */
+  .info{background:var(--coal);border-top:1px solid var(--line)}
+  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5vw}
+  .info h3{font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:22px}
+  .hours{width:100%;font-size:14.5px;color:var(--cream-dim)}
+  .hours td{padding:7px 0;border-bottom:1px solid var(--line)}
+  .hours td:last-child{text-align:right;color:var(--cream)}
+  .hours tr.today td{color:var(--gold)}
+  .info p{color:var(--cream-dim);font-size:15px}
+  .info a.link{color:var(--gold);border-bottom:1px solid var(--gold-soft);padding-bottom:2px}
+  .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .badge{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--line);padding:7px 14px;color:var(--pist)}
+  @media(max-width:860px){.info-grid{grid-template-columns:1fr;gap:48px}}
+
+  footer{padding:44px 0;border-top:1px solid var(--line)}
+  .foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center;color:var(--cream-dim);font-size:12.5px;letter-spacing:.06em}
+  .foot .drop-mini{color:var(--gold)}
+
+  /* reveal animation */
+  .rv{opacity:0;transform:translateY(34px);transition:opacity 1s ease,transform 1s cubic-bezier(.16,1,.3,1)}
+  .rv.on{opacity:1;transform:none}
+  .rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="brand" href="#top">
+    <img src="https://damlakoeln.de/wp-content/uploads/2024/10/cropped-cropped-512x512-1.webp" alt="Damla Premium Logo" onerror="this.style.display='none'">
+    <span class="brand-name">DAMLA<small>Premium · Buchheim</small></span>
+  </a>
+  <div class="nav-links">
+    <a href="#kueche">Küche</a>
+    <a href="#kahvalti">Kahvaltı</a>
+    <a href="#baklava">Baklava</a>
+    <a href="#karte">Karte</a>
+    <a href="#besuch">Besuch</a>
+    <a class="nav-cta" href="tel:+4901752354282">Anrufen</a>
+  </div>
+</nav>
+
+<header id="top">
+  <div class="hero-media">
+    <img src="https://damlakoeln.de/wp-content/uploads/2024/10/DAMLA-lux.png" alt="Damla Premium Frühstückstafel">
+  </div>
+  <div class="hero-inner">
+    <span class="label rv">Türkisches Restaurant · Köln-Buchheim</span>
+    <h1 class="rv d1">Gastfreundschaft,<br>Tropfen für <em>Tropfen.</em></h1>
+    <p class="hero-sub rv d2">Damla — das türkische Wort für „Tropfen“. Seit 1993 steht der Name für Baklava-Handwerk
+      aus Meisterhand. In Buchheim servieren wir dazu Serpme Kahvaltı, Grill-Spezialitäten und Künefe —
+      halal, herzlich und bis spät in die Nacht.</p>
+    <div class="hero-ctas rv d3">
+      <a class="btn" href="#kahvalti">Frühstück entdecken</a>
+      <a class="btn ghost" href="#karte">Speisekarte</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scrollen</span><i></i></div>
+</header>
+
+<div class="ribbon" aria-hidden="true">
+  <div class="ribbon-track">
+    <span>Seit 1993 <b>·</b> Kazım Usta</span><span>100 % Halal <b>·</b> Alkoholfrei</span>
+    <span>Frühstück ab 09:00</span><span>Fr &amp; Sa bis 01:00</span><span>Premium Baklava aus eigener Backstube</span>
+    <span>Künefe <b>·</b> Kadayıf <b>·</b> Katmer</span>
+    <span>Seit 1993 <b>·</b> Kazım Usta</span><span>100 % Halal <b>·</b> Alkoholfrei</span>
+    <span>Frühstück ab 09:00</span><span>Fr &amp; Sa bis 01:00</span><span>Premium Baklava aus eigener Backstube</span>
+    <span>Künefe <b>·</b> Kadayıf <b>·</b> Katmer</span>
+  </div>
+</div>
+
+<section id="story">
+  <div class="wrap story">
+    <div class="story-media rv">
+      <img src="https://damlakoeln.de/wp-content/uploads/2024/10/4-kisilik-kahvalti.png" alt="Festliche Frühstückstafel bei Damla Premium">
+      <span class="story-year">Est. 1993</span>
+    </div>
+    <div>
+      <svg class="drop rv" width="34" height="46" viewBox="0 0 34 46" fill="none" aria-hidden="true">
+        <path d="M17 2C17 2 32 22 32 32a15 15 0 0 1-30 0C2 22 17 2 17 2Z" stroke="#C9A44C" stroke-width="1.6"/>
+        <path d="M17 14c0 0 8 10.5 8 16a8 8 0 0 1-16 0c0-5.5 8-16 8-16Z" fill="#C9A44C" opacity=".85"/>
+      </svg>
+      <span class="label rv">Unsere Geschichte</span>
+      <h2 class="display rv d1" style="font-size:clamp(30px,3.6vw,48px);margin-top:14px">Vom Ofen in Gaziantep<br>nach Köln-Buchheim.</h2>
+      <p class="rv d2" style="margin-top:24px;color:var(--cream-dim)">Mit zwölf Jahren begann Kazım Özarıcı seine Ausbildung
+        an den Baklava-Öfen von Gaziantep. 1993 brachte er sein Handwerk nach Köln — heute entstehen in der eigenen
+        Backstube die Baklava, die unser Haus tragen.</p>
+      <p class="rv d2" style="color:var(--cream-dim)">Damla Premium Buchheim ist die Fortsetzung dieser Geschichte als
+        Restaurant: ein Ort, an dem Jung und Alt zusammenkommen — vom ersten Çay am Morgen bis zum letzten Künefe nach Mitternacht.</p>
+      <blockquote class="rv d3">„Ein Tropfen Sirup, im richtigen Moment — das ist der Unterschied zwischen gut und unvergesslich.“</blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="kueche" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Vom Grill &amp; aus der Pfanne</span>
+      <h2>Signature-Gerichte</h2>
+      <p>Zarte Filetstreifen, offenes Feuer, Saucen mit Charakter — unsere Küche verbindet anatolische
+         Klassiker mit modernen Handschriften.</p>
+    </div>
+    <div class="dishes">
+      <figure class="dish rv">
+        <span class="tag">Neu</span>
+        <img src="https://damlakoeln.de/wp-content/uploads/2024/10/58._Lammkoteletts.webp" alt="Lammkoteletts" loading="lazy">
+        <figcaption class="dish-meta">
+          <div><h3>Lammkoteletts</h3><small>Vier zarte Koteletts, Fettuccine in köstlicher Sauce, gemischter Salat</small></div>
+          <span class="price">23,50&nbsp;€</span>
+        </figcaption>
+      </figure>
+      <figure class="dish rv d1">
+        <img src="https://damlakoeln.de/wp-content/uploads/2024/10/60._Coekertme-Kebab.webp" alt="Çökertme Kebab" loading="lazy">
+        <figcaption class="dish-meta">
+          <div><h3>Çökertme Kebab</h3><small>Filetstreifen auf knusprigen Pommes mit Joghurt-Tomatensauce</small></div>
+          <span class="price">16,00&nbsp;€</span>
+        </figcaption>
+      </figure>
+      <figure class="dish rv">
+        <img src="https://damlakoeln.de/wp-content/uploads/2024/10/Cafe-de-Paris-1.png" alt="Café de Paris Filet" loading="lazy">
+        <figcaption class="dish-meta">
+          <div><h3>Café de Paris Filet</h3><small>Zarte Filetstreifen in Café-de-Paris-Sauce, Pommes, Salat</small></div>
+          <span class="price">21,50&nbsp;€</span>
+        </figcaption>
+      </figure>
+      <figure class="dish rv d1">
+        <img src="https://damlakoeln.de/wp-content/uploads/2024/10/71._Damla-Burger_.webp" alt="Damla Burger" loading="lazy">
+        <figcaption class="dish-meta">
+          <div><h3>Damla Burger</h3><small>Gegrilltes Filetsteak, geheime Burgersauce, karamellisierte Zwiebeln</small></div>
+          <span class="price">19,90&nbsp;€</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="kahvalti" class="kahvalti">
+  <div class="wrap kahvalti-grid">
+    <div>
+      <span class="label rv">Serpme Kahvaltı · täglich ab 09:00</span>
+      <h2 class="display rv d1" style="font-size:clamp(30px,3.6vw,48px);margin-top:14px">Der Morgen deckt<br>den Tisch.</h2>
+      <p class="rv d2" style="margin-top:22px;color:var(--cream-dim)">Bis zu 28 Sorten auf einmal: Sucuk aus der Pfanne, Menemen,
+        Simit, Honig, Kaymak — und Çay, so viel das Herz begehrt.</p>
+      <div class="k-list rv d2">
+        <div class="k-item"><div><h4>Frühstück für 1 Person</h4><small>Eierpfanne nach Wahl · 1 großer Tee</small></div><i class="dots"></i><span class="price">16,00&nbsp;€</span></div>
+        <div class="k-item"><div><h4>Damla Double Lux</h4><small>28 Sorten für 2 Personen · Tee unbegrenzt</small></div><i class="dots"></i><span class="price">39,90&nbsp;€</span></div>
+        <div class="k-item"><div><h4>Frühstück für 3 Personen</h4><small>inkl. zwei warmer Pfannen · Tee unbegrenzt</small></div><i class="dots"></i><span class="price">59,90&nbsp;€</span></div>
+        <div class="k-item"><div><h4>Frühstück für 4 Personen</h4><small>festlich gedeckt · Tee unbegrenzt</small></div><i class="dots"></i><span class="price">79,90&nbsp;€</span></div>
+      </div>
+      <p class="k-note rv d3">Am Wochenende empfehlen wir eine Reservierung: 0175&nbsp;2354282</p>
+    </div>
+    <div class="kahvalti-media rv d1">
+      <img src="https://damlakoeln.de/wp-content/uploads/2024/10/FRUeSCHTUeCK-2.png" alt="Serpme Kahvaltı — türkisches Frühstück" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="baklava">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Premium Baklava · Eigene Backstube</span>
+      <h2>Das süße Finale</h2>
+      <p>Hauchdünner Teig, Pistazien aus Gaziantep, Sirup im Tropfen-Takt. Dazu Künefe, frisch aus dem Ofen,
+         mit Maraş-Eis serviert.</p>
+    </div>
+    <div class="sweet-grid">
+      <figure class="sweet rv"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/fistikli-baklava.png" alt="Kuru Baklava mit Pistazien" loading="lazy"><figcaption>Kuru Baklava<b>8,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv d1"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/sobiyet.png" alt="Söbiyet" loading="lazy"><figcaption>Söbiyet<b>8,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv d2"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/sultan.png" alt="Sultan Baklava" loading="lazy"><figcaption>Sultan Baklava<b>8,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv d3"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/soguk-baklava.png" alt="Kalte Baklava" loading="lazy"><figcaption>Kalte Baklava<b>8,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/Tatli-7.png" alt="Klassik Künefe" loading="lazy"><figcaption>Klassik Künefe<b>9,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv d1"><img src="https://damlakoeln.de/wp-content/uploads/2024/12/kunefe-fistik.png" alt="Fıstıklı Künefe" loading="lazy"><figcaption>Fıstıklı Künefe<b>10,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv d2"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/Tatli-6.png" alt="San Sebastian Cheesecake" loading="lazy"><figcaption>San Sebastian<b>7,50&nbsp;€</b></figcaption></figure>
+      <figure class="sweet rv d3"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/Tatli-4.png" alt="Trileçe" loading="lazy"><figcaption>Trileçe<b>7,00&nbsp;€</b></figcaption></figure>
+    </div>
+    <div class="sweet-cta rv"><a class="btn" href="configurator.html">Baklava-Teller zusammenstellen</a></div>
+  </div>
+</section>
+
+<section id="mocktails" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Ohne Alkohol · Voller Geschmack</span>
+      <h2>Mocktails &amp; Shakes</h2>
+    </div>
+    <div class="mock-strip">
+      <figure class="mock rv"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/Rainbow-damlapremium.png" alt="Paradise Rainbow Mocktail" loading="lazy"><h4>Paradise (Rainbow)</h4><span>9,00&nbsp;€</span></figure>
+      <figure class="mock rv d1"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/Summenight-damlapremium.png" alt="Summer Night Mocktail" loading="lazy"><h4>Summer Night</h4><span>9,00&nbsp;€</span></figure>
+      <figure class="mock rv d2"><img src="https://damlakoeln.de/wp-content/uploads/2024/10/AVATAR-damlapremium.png" alt="Avatar Mocktail" loading="lazy"><h4>Avatar</h4><span>9,00&nbsp;€</span></figure>
+    </div>
+  </div>
+</section>
+
+<section id="karte" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="label">Auszug aus der Karte</span>
+      <h2>Die Speisekarte</h2>
+      <p>Ein Überblick unserer Küche — die vollständige Karte mit allen Sorten und Allergenen erhalten Sie im Haus
+         oder auf <a href="https://damlakoeln.de" style="color:var(--gold)">damlakoeln.de</a>.</p>
+    </div>
+    <div class="menu-cols">
+      <div class="rv">
+        <h3 class="m-cat">Hähnchengerichte</h3>
+        <div class="m-item"><h5>Curry-Hähnchen<small>Aromatische Currysauce, Penne, Salat</small></h5><i class="dots"></i><span class="price">13,90&nbsp;€</span></div>
+        <div class="m-item"><h5>Hähnchen auf Auberginenpüree<small>Vom Grill, geröstetes Püree, Paprika</small></h5><i class="dots"></i><span class="price">14,90&nbsp;€</span></div>
+        <div class="m-item"><h5>Fajita-Hähnchen<small>Avocado-Sauce, Salsa, Tortilla-Fladen</small></h5><i class="dots"></i><span class="price">14,90&nbsp;€</span></div>
+        <div class="m-item"><h5>Damla Chef’s Pfanne<small>Champignons, Kirschtomaten, cremige Soja-Sauce</small></h5><i class="dots"></i><span class="price">13,90&nbsp;€</span></div>
+        <h3 class="m-cat">Lammgerichte</h3>
+        <div class="m-item"><h5>Lammkoteletts<small>Vier zarte Koteletts · NEU</small></h5><i class="dots"></i><span class="price">23,50&nbsp;€</span></div>
+        <div class="m-item"><h5>Çökertme Kebab<small>Filetstreifen, Joghurt-Tomatensauce</small></h5><i class="dots"></i><span class="price">16,00&nbsp;€</span></div>
+        <div class="m-item"><h5>Fajita mit Bonfile<small>Gegrillte Filetstreifen, mexikanische Gewürze</small></h5><i class="dots"></i><span class="price">19,90&nbsp;€</span></div>
+        <div class="m-item"><h5>Café de Paris Filet<small>Pommes, gemischter Salat</small></h5><i class="dots"></i><span class="price">21,50&nbsp;€</span></div>
+        <h3 class="m-cat">Lahmacun &amp; Pide</h3>
+        <div class="m-item"><h5>Sade Lahmacun<small>Klassisch, dünner Teig, würziges Hackfleisch</small></h5><i class="dots"></i><span class="price">5,00&nbsp;€</span></div>
+        <div class="m-item"><h5>Kaşarlı Pide<small>Reichlich Käse, frisch aus dem Ofen</small></h5><i class="dots"></i><span class="price">8,50&nbsp;€</span></div>
+        <div class="m-item"><h5>Karışık Pide<small>Hackfleisch, gewürfeltes Fleisch &amp; Käse</small></h5><i class="dots"></i><span class="price">11,50&nbsp;€</span></div>
+        <div class="m-item"><h5>Kuşbaşılı Pide<small>Mit gewürfeltem Fleisch</small></h5><i class="dots"></i><span class="price">10,50&nbsp;€</span></div>
+      </div>
+      <div class="rv d1">
+        <h3 class="m-cat">Pasta &amp; Hausgemachtes</h3>
+        <div class="m-item"><h5>Hausgemachte Mantı<small>Teigtaschen, Knoblauchjoghurt, würzige Sauce</small></h5><i class="dots"></i><span class="price">12,00&nbsp;€</span></div>
+        <div class="m-item"><h5>Damla Penne<small>Filetstreifen in cremiger Sauce, Parmesan</small></h5><i class="dots"></i><span class="price">13,00&nbsp;€</span></div>
+        <div class="m-item"><h5>Fettuccine Chicken Alfredo<small>Champignons, Parmesan</small></h5><i class="dots"></i><span class="price">12,00&nbsp;€</span></div>
+        <h3 class="m-cat">Salate</h3>
+        <div class="m-item"><h5>Damla Spezial Salat<small>Filetstreifen, Salatmix, cremige Soja-Sauce</small></h5><i class="dots"></i><span class="price">16,90&nbsp;€</span></div>
+        <div class="m-item"><h5>Caesar Salat<small>Gegrillte Hähnchenstreifen, Croutons, Parmesan</small></h5><i class="dots"></i><span class="price">13,50&nbsp;€</span></div>
+        <div class="m-item"><h5>Falafel-Salat<small>Knusprige Falafel, Kirschtomaten, Zitrone</small></h5><i class="dots"></i><span class="price">12,00&nbsp;€</span></div>
+        <h3 class="m-cat">Desserts</h3>
+        <div class="m-item"><h5>Klassik Künefe<small>Frisch aus dem Ofen</small></h5><i class="dots"></i><span class="price">9,50&nbsp;€</span></div>
+        <div class="m-item"><h5>Katmer<small>Mit Maraş-Eis (türkisches Eis)</small></h5><i class="dots"></i><span class="price">12,50&nbsp;€</span></div>
+        <div class="m-item"><h5>San Sebastian<small>Schokolade, Karamell oder Pistaziensauce</small></h5><i class="dots"></i><span class="price">7,50&nbsp;€</span></div>
+        <div class="m-item"><h5>Sütlaç<small>Traditioneller Milchreis</small></h5><i class="dots"></i><span class="price">6,50&nbsp;€</span></div>
+        <h3 class="m-cat">Heißgetränke</h3>
+        <div class="m-item"><h5>Türkischer Mokka</h5><i class="dots"></i><span class="price">3,20&nbsp;€</span></div>
+        <div class="m-item"><h5>Teekanne (Porzellan)</h5><i class="dots"></i><span class="price">6,00&nbsp;€</span></div>
+        <div class="m-item"><h5>Latte Macchiato</h5><i class="dots"></i><span class="price">4,00&nbsp;€</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="besuch" class="info">
+  <div class="wrap info-grid">
+    <div class="rv">
+      <h3>Öffnungszeiten</h3>
+      <table class="hours" id="hoursTable">
+        <tr data-day="1"><td>Montag</td><td>09:00 – 23:00</td></tr>
+        <tr data-day="2"><td>Dienstag</td><td>09:00 – 23:00</td></tr>
+        <tr data-day="3"><td>Mittwoch</td><td>09:00 – 23:00</td></tr>
+        <tr data-day="4"><td>Donnerstag</td><td>09:00 – 23:00</td></tr>
+        <tr data-day="5"><td>Freitag</td><td>09:00 – 01:00</td></tr>
+        <tr data-day="6"><td>Samstag</td><td>09:00 – 01:00</td></tr>
+        <tr data-day="0"><td>Sonntag</td><td>09:00 – 23:00</td></tr>
+      </table>
+    </div>
+    <div class="rv d1">
+      <h3>Hier finden Sie uns</h3>
+      <p>Modemannstraße 3<br>51065 Köln (Buchheim/Mülheim)</p>
+      <p style="margin-top:16px"><a class="link" href="https://www.google.com/maps/search/?api=1&query=Damla+Premium+Buchheim+Modemannstra%C3%9Fe+3+51065+K%C3%B6ln" target="_blank" rel="noopener">Route in Google Maps öffnen ↗</a></p>
+      <p style="margin-top:16px">Telefon: <a class="link" href="tel:+4901752354282">0175&nbsp;2354282</a></p>
+      <div class="badges">
+        <span class="badge">100 % Halal</span>
+        <span class="badge">Alkoholfrei</span>
+        <span class="badge">Familienfreundlich</span>
+      </div>
+    </div>
+    <div class="rv d2">
+      <h3>Bleiben Sie in Kontakt</h3>
+      <p>Folgen Sie uns für neue Sorten, Aktionen und Momente aus der Backstube.</p>
+      <p style="margin-top:16px"><a class="link" href="https://www.instagram.com/damlapremiumkoeln/" target="_blank" rel="noopener">Instagram @damlapremiumkoeln ↗</a></p>
+      <p style="margin-top:10px"><a class="link" href="https://damlakoeln.de" target="_blank" rel="noopener">damlakoeln.de ↗</a></p>
+      <p style="margin-top:26px;font-size:13px">Alle Preise in Euro, inkl. MwSt. &amp; Bedienung.<br>Allergenkarte im Haus erhältlich.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Damla Premium Buchheim · Royal Baklava e.K. · Claudiastr. 8, 51149 Köln · HRB 33831 (AG Köln)</span>
+    <span class="drop-mini">Damla — jeder Tropfen zählt. ◆</span>
+  </div>
+</footer>
+
+<script>
+  var nav = document.getElementById('nav');
+  addEventListener('scroll', function(){ nav.classList.toggle('solid', scrollY > 40); }, {passive:true});
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target);} });
+  }, {threshold:.14});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  var today = new Date().getDay();
+  var row = document.querySelector('#hoursTable tr[data-day="'+today+'"]');
+  if(row) row.classList.add('today');
+</script>
+</body>
+</html>

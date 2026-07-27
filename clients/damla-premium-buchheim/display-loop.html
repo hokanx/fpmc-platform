@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Premium — In-Store Display</title>
+<style>
+  :root{
+    --void:#0A0908; --coal:#131210;
+    --line:rgba(243,237,226,.12); --cream:#F3EDE2; --dim:rgba(243,237,226,.6);
+    --gold:#C9A44C; --pist:#A3B18A;
+    --serif:Georgia,'Times New Roman',ui-serif,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--void);color:var(--cream);font-family:var(--sans);font-weight:300;overflow:hidden;cursor:none}
+
+  .stage{position:relative;width:100vw;height:100vh;display:flex}
+
+  /* ambient background from the product photo, heavily blurred */
+  .bg{position:absolute;inset:-6%;background-size:cover;background-position:center;
+      filter:blur(60px) brightness(.30) saturate(1.2);opacity:0;transition:opacity 2.4s ease}
+  .bg.on{opacity:1}
+  .grain{position:absolute;inset:0;pointer-events:none;opacity:.5;
+      background-image:radial-gradient(rgba(243,237,226,.028) 1px,transparent 1px);background-size:4px 4px}
+
+  /* fixed chrome */
+  .chrome-top{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;
+      align-items:center;padding:3.2vh 4vw}
+  .brandline{display:flex;align-items:center;gap:1.2vw}
+  .brandline img{width:5.6vh;height:5.6vh;border-radius:50%;border:1px solid var(--line)}
+  .brandline .t{font-family:var(--serif);font-size:2.6vh;letter-spacing:.14em}
+  .brandline .t small{display:block;font-family:var(--sans);font-size:1.05vh;letter-spacing:.44em;color:var(--gold);text-transform:uppercase;margin-top:.4vh}
+  .clock{font-family:var(--serif);font-size:2.4vh;color:var(--dim);letter-spacing:.1em}
+  .chrome-bottom{position:absolute;bottom:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;
+      align-items:center;padding:3vh 4vw;font-size:1.4vh;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+  .chrome-bottom b{color:var(--pist);font-weight:400}
+
+  /* slide */
+  .slide{position:absolute;inset:0;display:grid;grid-template-columns:48% 52%;align-items:center;
+      padding:10vh 4vw 9vh;opacity:0;pointer-events:none}
+  .slide.active{opacity:1;pointer-events:auto}
+
+  .media{position:relative;height:66vh;display:flex;align-items:center;justify-content:center}
+  .media::before{content:'';position:absolute;inset:4vh;border:1px solid rgba(201,164,76,.28)}
+  .media img{max-width:88%;max-height:60vh;object-fit:contain;
+      filter:drop-shadow(0 40px 70px rgba(0,0,0,.6))}
+  .slide.active .media img{animation:mediaIn 1.6s cubic-bezier(.16,1,.3,1) both, floaty 7s ease-in-out 1.6s infinite alternate}
+  @keyframes mediaIn{from{opacity:0;transform:translateY(7vh) scale(.94)}to{opacity:1;transform:none}}
+  @keyframes floaty{from{transform:translateY(0)}to{transform:translateY(-1.6vh)}}
+
+  .copy{padding-left:3vw}
+  .copy>*{opacity:0}
+  .slide.active .copy>*{animation:copyIn 1.1s cubic-bezier(.16,1,.3,1) both}
+  .slide.active .copy>*:nth-child(1){animation-delay:.25s}
+  .slide.active .copy>*:nth-child(2){animation-delay:.42s}
+  .slide.active .copy>*:nth-child(3){animation-delay:.6s}
+  .slide.active .copy>*:nth-child(4){animation-delay:.78s}
+  .slide.active .copy>*:nth-child(5){animation-delay:.95s}
+  @keyframes copyIn{from{opacity:0;transform:translateY(3.4vh)}to{opacity:1;transform:none}}
+
+  .cat{font-size:1.5vh;letter-spacing:.42em;text-transform:uppercase;color:var(--gold)}
+  .name{font-family:var(--serif);font-size:7vh;line-height:1.06;font-weight:400;margin-top:2vh}
+  .desc{margin-top:2.6vh;font-size:2.2vh;color:var(--dim);max-width:44ch;line-height:1.6}
+  .details{margin-top:3vh;display:flex;gap:1.2vw;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);padding:1vh 1.6vw;font-size:1.4vh;letter-spacing:.22em;text-transform:uppercase;color:var(--pist)}
+  .price-row{margin-top:4vh;display:flex;align-items:baseline;gap:1.6vw}
+  .price-big{font-family:var(--serif);font-size:6vh;color:var(--gold)}
+  .price-note{font-size:1.6vh;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+
+  /* progress */
+  .progress{position:absolute;bottom:8.6vh;left:4vw;right:4vw;z-index:10;display:flex;gap:.5vw}
+  .pbar{flex:1;height:2px;background:rgba(243,237,226,.14);position:relative;overflow:hidden}
+  .pbar i{position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left}
+  .pbar.done i{transform:scaleX(1)}
+  .pbar.running i{animation:load linear forwards}
+  @keyframes load{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+  /* interstitial (brand card between chapters) */
+  .inter{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:var(--void);opacity:0;pointer-events:none;transition:opacity 1.6s ease;text-align:center;padding:0 8vw}
+  .inter.show{opacity:1}
+  .inter .dropmark{font-size:7vh;color:var(--gold)}
+  .inter h2{font-family:var(--serif);font-size:8vh;font-weight:400;letter-spacing:.04em;margin-top:2vh}
+  .inter p{margin-top:2vh;font-size:2vh;color:var(--dim);letter-spacing:.3em;text-transform:uppercase}
+
+  @media(orientation:portrait){
+    .slide{grid-template-columns:1fr;grid-template-rows:52% 48%;padding:12vh 8vw 12vh}
+    .media{height:auto}
+    .media img{max-height:38vh}
+    .copy{padding-left:0;text-align:center}
+    .details,.price-row{justify-content:center}
+    .name{font-size:5.4vh}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .slide.active .media img,.slide.active .copy>*{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="bg" id="bgA"></div>
+  <div class="bg" id="bgB"></div>
+  <div class="grain"></div>
+
+  <div class="chrome-top">
+    <div class="brandline">
+      <img src="https://damlakoeln.de/wp-content/uploads/2024/10/cropped-cropped-512x512-1.webp" alt="" onerror="this.style.display='none'">
+      <span class="t">DAMLA<small>Premium · Buchheim</small></span>
+    </div>
+    <span class="clock" id="clock"></span>
+  </div>
+
+  <div class="progress" id="progress"></div>
+
+  <div class="chrome-bottom">
+    <span>Modemannstraße 3 · 51065 Köln</span>
+    <span><b>100 % Halal</b> · Alkoholfrei · Täglich ab 09:00</span>
+  </div>
+
+  <div class="inter" id="inter">
+    <div class="dropmark">◆</div>
+    <h2 id="interTitle"></h2>
+    <p id="interSub"></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SLIDE_MS = 9000, INTER_MS = 4200;
+
+  var CHAPTERS = [
+    {title:'Kahvaltı', sub:'Der Morgen deckt den Tisch — täglich ab 09:00', items:[
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/DAMLA-lux.png', cat:'Frühstück', name:'Damla Double Lux', desc:'28 Sorten luxuriöses Frühstück für zwei — mit Sucuk aus der Pfanne, Menemen, Simit und Honig.', price:'39,90 €', note:'für 2 Personen', chips:['Tee unbegrenzt','Für 2 Personen']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/4-kisilik-kahvalti.png', cat:'Frühstück', name:'Frühstück für Vier', desc:'Eine festliche Tafel für die ganze Familie, inklusive zwei warmer Pfannen nach Wahl.', price:'79,90 €', note:'für 4 Personen', chips:['Tee unbegrenzt','2 warme Pfannen']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/damlapremiumYumartalisimit.png', cat:'Frühstück', name:'Sucuk-Ei-Simit', desc:'Sucuk, Ei und Simit mit Salat, Tomaten und Pommes — der schnelle Klassiker.', price:'12,90 €', note:'Extra-Portion', chips:['Herzhaft','Klassiker']}
+    ]},
+    {title:'Vom Grill', sub:'Signature-Gerichte aus Pfanne und Feuer', items:[
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/58._Lammkoteletts.webp', cat:'Lammgerichte', name:'Lammkoteletts', desc:'Vier zarte Koteletts, serviert mit Fettuccine in köstlicher Sauce und gemischtem Salat.', price:'23,50 €', note:'Neu auf der Karte', chips:['Neu','Vom Grill']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/60._Coekertme-Kebab.webp', cat:'Lammgerichte', name:'Çökertme Kebab', desc:'Zarte Filetstreifen auf knusprigen Pommes mit sautierter Paprika und Joghurt-Tomatensauce.', price:'16,00 €', note:'Hausempfehlung', chips:['Anatolisch','Beliebt']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/Cafe-de-Paris-1.png', cat:'Lammgerichte', name:'Café de Paris Filet', desc:'Filetstreifen in Café-de-Paris-Sauce, dazu Pommes und ein gemischter Salat.', price:'21,50 €', note:'Premium-Filet', chips:['Filet','Kräuterbutter-Sauce']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/71._Damla-Burger_.webp', cat:'Burger', name:'Damla Burger', desc:'Gegrilltes Filetsteak in geheimer Burgersauce, mit karamellisierten Zwiebeln und Pommes.', price:'19,90 €', note:'mit Filetsteak', chips:['Filetsteak','Hausgemachte Sauce']}
+    ]},
+    {title:'Pide & Lahmacun', sub:'Frisch aus dem Steinofen', items:[
+      {img:'https://damlakoeln.de/wp-content/uploads/2026/05/karisik-pide.jpg', cat:'Aus dem Ofen', name:'Karışık Pide', desc:'Dünner Teig, belegt mit Hackfleisch, gewürfeltem Fleisch und Käse — frisch gebacken.', price:'11,50 €', note:'auch für 2 · 22,00 €', chips:['Ofenfrisch','Für 2 erhältlich']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2026/04/sade.jpg', cat:'Aus dem Ofen', name:'Sade Lahmacun', desc:'Die traditionelle Spezialität: hauchdünner Teig mit würziger Hackfleischmasse und feinen Gewürzen.', price:'5,00 €', note:'Klassisch', chips:['Traditionell','Hauchdünn']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2026/05/sucuklu-pide.jpg', cat:'Aus dem Ofen', name:'Kaşarlı Sucuklu Pide', desc:'Würzige Sucuk und reichlich geschmolzener Käse auf dünnem Teig.', price:'9,50 €', note:'Ofenfrisch', chips:['Sucuk','Käse']}
+    ]},
+    {title:'Tatlı', sub:'Premium Baklava & Desserts — seit 1993', items:[
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/fistikli-baklava.png', cat:'Baklava', name:'Kuru Baklava', desc:'Hauchdünner Teig und Pistazien aus Gaziantep — das Handwerk von Kazım Usta.', price:'8,50 €', note:'4 Stück', chips:['Eigene Backstube','Pistazie']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/12/kunefe-fistik.png', cat:'Künefe', name:'Fıstıklı Künefe', desc:'Warm aus dem Ofen: knusprige Engelshaar-Fäden, geschmolzener Käse, Pistazien.', price:'10,50 €', note:'frisch gebacken', chips:['Warm serviert','Signature']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/Tatli-6.png', cat:'Desserts', name:'San Sebastian', desc:'Der dekadente Cheesecake — mit Schokolade, Karamell oder Pistaziensauce.', price:'7,50 €', note:'Hausgemacht', chips:['Cremig','3 Saucen zur Wahl']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/soguk-baklava.png', cat:'Baklava', name:'Kalte Baklava', desc:'Mit Milch getränkt und Kakao veredelt — die moderne Seite der Tradition.', price:'8,50 €', note:'4 Stück', chips:['Gekühlt','Trend']}
+    ]},
+    {title:'Mocktails', sub:'Ohne Alkohol · Voller Geschmack', items:[
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/Rainbow-damlapremium.png', cat:'Mocktails', name:'Paradise (Rainbow)', desc:'Unser buntester Drink — fruchtig, frisch und komplett ohne Alkohol.', price:'9,00 €', note:'alkoholfrei', chips:['Fruchtig','Instagram-Liebling']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/oreo-milkshake-damlapremium.png', cat:'Shakes', name:'Oreo Milkshake', desc:'Cremig, kalt und großzügig — der Favorit der jüngeren Gäste.', price:'8,00 €', note:'Shake', chips:['Cremig','Kalt']},
+      {img:'https://damlakoeln.de/wp-content/uploads/2024/10/buzlu-kahve.png', cat:'Kaffee', name:'Eis Café', desc:'Kalter Kaffee-Genuss für heiße Tage — dazu ein Stück Baklava empfohlen.', price:'5,00 €', note:'Eisgekühlt', chips:['Koffein','Sommer']}
+    ]}
+  ];
+
+  var stage = document.getElementById('stage'),
+      progress = document.getElementById('progress'),
+      inter = document.getElementById('inter'),
+      interTitle = document.getElementById('interTitle'),
+      interSub = document.getElementById('interSub'),
+      bgs=[document.getElementById('bgA'),document.getElementById('bgB')], bgFlip=0;
+
+  // flatten
+  var FLAT=[]; CHAPTERS.forEach(function(ch,ci){ ch.items.forEach(function(it,ii){ FLAT.push({ch:ci,first:ii===0,it:it}); }); });
+
+  // build slides + progress bars
+  FLAT.forEach(function(f){
+    var s=document.createElement('div'); s.className='slide';
+    s.innerHTML =
+      '<div class="media"><img loading="lazy" src="'+f.it.img+'" alt=""></div>'+
+      '<div class="copy">'+
+        '<div class="cat">'+f.it.cat+'</div>'+
+        '<h2 class="name">'+f.it.name+'</h2>'+
+        '<p class="desc">'+f.it.desc+'</p>'+
+        '<div class="details">'+f.it.chips.map(function(c){return '<span class="chip">'+c+'</span>';}).join('')+'</div>'+
+        '<div class="price-row"><span class="price-big">'+f.it.price+'</span><span class="price-note">'+f.it.note+'</span></div>'+
+      '</div>';
+    stage.appendChild(s);
+    var p=document.createElement('div'); p.className='pbar'; p.innerHTML='<i></i>';
+    progress.appendChild(p);
+  });
+  var slides=[].slice.call(stage.querySelectorAll('.slide')),
+      pbars=[].slice.call(progress.children);
+
+  var idx=-1;
+  function setBg(url){
+    var next=bgs[bgFlip^=1], prev=bgs[bgFlip^1];
+    next.style.backgroundImage="url('"+url+"')";
+    next.classList.add('on'); prev.classList.remove('on');
+  }
+
+  function show(i){
+    var f=FLAT[i];
+    slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    pbars.forEach(function(p,k){
+      p.classList.remove('running');
+      p.classList.toggle('done', k<i);
+      if(k===i){ p.querySelector('i').style.animationDuration=SLIDE_MS+'ms'; void p.offsetWidth; p.classList.add('running'); }
+      if(k>i){ p.querySelector('i').style.animation=''; }
+    });
+    setBg(f.it.img);
+    // preload next
+    var n=FLAT[(i+1)%FLAT.length]; var im=new Image(); im.src=n.it.img;
+  }
+
+  function next(){
+    var i=(idx+1)%FLAT.length;
+    if(i===0){ pbars.forEach(function(p){p.classList.remove('done','running');}); }
+    var f=FLAT[i];
+    if(f.first){
+      interTitle.textContent=CHAPTERS[f.ch].title;
+      interSub.textContent=CHAPTERS[f.ch].sub;
+      inter.classList.add('show');
+      setTimeout(function(){ inter.classList.remove('show'); idx=i; show(i); setTimeout(next, SLIDE_MS); }, INTER_MS);
+    } else {
+      idx=i; show(i); setTimeout(next, SLIDE_MS);
+    }
+  }
+
+  function tick(){
+    var d=new Date();
+    document.getElementById('clock').textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  }
+  tick(); setInterval(tick, 15000);
+
+  next();
+})();
+</script>
+</body>
+</html>

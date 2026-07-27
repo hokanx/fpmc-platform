@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Premium — Das Baklava-Puzzle</title>
+<style>
+  :root{
+    --void:#0A0908; --coal:#141210; --card:#1C1916;
+    --line:rgba(243,237,226,.12); --cream:#F3EDE2; --dim:rgba(243,237,226,.6);
+    --gold:#C9A44C; --gold-soft:rgba(201,164,76,.4);
+    --serif:Georgia,'Times New Roman',ui-serif,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(1200px 800px at 50% -10%,#1E1A14 0%,var(--void) 60%);
+       color:var(--cream);font-family:var(--sans);font-weight:300;min-height:100svh;
+       display:flex;flex-direction:column;align-items:center;padding:28px 16px 48px}
+  .logo{width:64px;height:64px;border-radius:50%;border:1px solid var(--line);margin-bottom:14px}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(26px,5vw,38px);letter-spacing:.02em;text-align:center}
+  .sub{color:var(--dim);font-size:13.5px;margin-top:8px;text-align:center;max-width:42ch}
+  .kicker{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+
+  .hud{display:flex;gap:14px;margin:22px 0 18px}
+  .stat{background:var(--card);border:1px solid var(--line);padding:10px 22px;text-align:center;min-width:96px}
+  .stat b{font-family:var(--serif);font-size:22px;font-weight:400;display:block}
+  .stat span{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim)}
+
+  .board-shell{position:relative;padding:10px;background:var(--card);border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+  .board{position:relative;width:min(78vw,420px);height:min(78vw,420px);touch-action:manipulation}
+  .tile{position:absolute;width:calc(100%/3 - 4px);height:calc(100%/3 - 4px);margin:2px;cursor:pointer;
+        background-size:300% 300%;background-color:#26211b;border:1px solid rgba(243,237,226,.08);
+        transition:top .18s cubic-bezier(.2,.9,.3,1.2),left .18s cubic-bezier(.2,.9,.3,1.2),opacity .6s;
+        display:flex;align-items:flex-end;justify-content:flex-end}
+  .tile i{font-style:normal;font-size:10px;color:rgba(243,237,226,.55);background:rgba(10,9,8,.55);padding:2px 7px;letter-spacing:.08em}
+  .tile.nine{opacity:0;pointer-events:none}
+  .board.peek .tile, .board.solvedState .tile{border-color:transparent}
+  .board.peek .tile i{opacity:0}
+  .board.peek .tile.nine{opacity:1}
+
+  .caption{margin-top:14px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);text-align:center}
+  .caption b{color:var(--gold);font-weight:400}
+
+  .controls{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;justify-content:center}
+  button{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+         padding:13px 24px;background:none;border:1px solid var(--line);color:var(--cream);cursor:pointer;transition:.3s}
+  button:hover{border-color:var(--gold);color:var(--gold)}
+  button.primary{background:var(--gold);border-color:var(--gold);color:var(--void)}
+  button.primary:hover{background:#d9b662;color:var(--void)}
+
+  .drop-hint{margin-top:18px;font-size:12px;color:var(--dim);text-align:center;border:1px dashed var(--line);padding:12px 20px}
+  body.dragover .drop-hint{border-color:var(--gold);color:var(--gold)}
+
+  /* win overlay */
+  .win{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+       background:rgba(10,9,8,.86);backdrop-filter:blur(4px);text-align:center;padding:24px;z-index:5}
+  .win.show{display:flex;animation:fadeIn .8s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .win h2{font-family:var(--serif);font-weight:400;font-size:30px}
+  .win p{color:var(--dim);font-size:14px;max-width:34ch}
+  .win .price-line{color:var(--gold);font-family:var(--serif);font-size:19px}
+  .win a{display:inline-block;margin-top:6px;padding:14px 30px;background:var(--gold);color:var(--void);
+         text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+
+  .confetti{position:fixed;top:-14px;pointer-events:none;z-index:60;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+
+  @media(prefers-reduced-motion:reduce){
+    .tile{transition:none}.win.show{animation:none}.confetti{display:none}
+  }
+</style>
+</head>
+<body>
+  <img class="logo" src="https://damlakoeln.de/wp-content/uploads/2024/10/cropped-cropped-512x512-1.webp" alt="Damla Premium" onerror="this.style.display='none'">
+  <div class="kicker">Damla Premium Buchheim</div>
+  <h1>Das Baklava-Puzzle</h1>
+  <p class="sub">Schiebe die Teile, bis das Gericht komplett ist. Ein Tipp pro Zug — die Pfeiltasten funktionieren auch.</p>
+
+  <div class="hud">
+    <div class="stat"><b id="moves">0</b><span>Züge</span></div>
+    <div class="stat"><b id="time">0:00</b><span>Zeit</span></div>
+    <div class="stat"><b id="best">–</b><span>Bestzeit</span></div>
+  </div>
+
+  <div class="board-shell">
+    <div class="board" id="board"></div>
+    <div class="win" id="win">
+      <h2 id="winTitle">Afiyet olsun!</h2>
+      <p id="winText"></p>
+      <div class="price-line" id="winPrice"></div>
+      <a href="tel:+4901752354282">Jetzt probieren — anrufen</a>
+    </div>
+  </div>
+  <div class="caption" id="caption"></div>
+
+  <div class="controls">
+    <button class="primary" id="shuffleBtn">Neu mischen</button>
+    <button id="peekBtn">Gedrückt halten: Vorschau</button>
+    <button id="nextBtn">Anderes Gericht</button>
+  </div>
+  <p class="drop-hint">Eigenes Foto? Einfach ein Bild hierher ziehen — das Puzzle baut sich darum neu auf.</p>
+
+<script>
+(function(){
+  var IMAGES = [
+    {src:'https://damlakoeln.de/wp-content/uploads/2024/10/fistikli-baklava.png', name:'Kuru Baklava mit Pistazien', price:'4 Stk. · 8,50 €', text:'Hauchdünner Teig, Pistazien aus Gaziantep — seit 1993 von Kazım Usta.'},
+    {src:'https://damlakoeln.de/wp-content/uploads/2024/10/Tatli-7.png', name:'Klassik Künefe', price:'9,50 €', text:'Frisch aus dem Ofen, außen knusprig, innen zart schmelzend.'},
+    {src:'https://damlakoeln.de/wp-content/uploads/2024/10/58._Lammkoteletts.webp', name:'Lammkoteletts', price:'23,50 €', text:'Vier zarte Koteletts mit Fettuccine — unser Neuzugang.'},
+    {src:'https://damlakoeln.de/wp-content/uploads/2024/10/DAMLA-lux.png', name:'Damla Double Lux', price:'für 2 · 39,90 €', text:'28 Sorten Frühstück, Tee unbegrenzt.'},
+    {src:'https://damlakoeln.de/wp-content/uploads/2024/10/Rainbow-damlapremium.png', name:'Paradise (Rainbow)', price:'9,00 €', text:'Unser buntester Mocktail — ganz ohne Alkohol.'},
+    {src:'https://damlakoeln.de/wp-content/uploads/2024/10/71._Damla-Burger_.webp', name:'Damla Burger', price:'19,90 €', text:'Gegrilltes Filetsteak mit unserer geheimen Burgersauce.'}
+  ];
+  var N = 3, EMPTY = N*N-1;
+  var board = document.getElementById('board'),
+      movesEl = document.getElementById('moves'),
+      timeEl = document.getElementById('time'),
+      bestEl = document.getElementById('best'),
+      capEl = document.getElementById('caption'),
+      win = document.getElementById('win');
+
+  var imgIndex = 0, customURL = null,
+      pos = [],            // pos[tileId] = current slot (0..8)
+      moves = 0, secs = 0, timer = null, running = false, solvedFlag = false;
+
+  var bestKey = 'damla-puzzle-best';
+  function fmt(s){ return Math.floor(s/60)+':'+('0'+s%60).slice(-2); }
+  function showBest(){ var b = localStorage.getItem(bestKey); bestEl.textContent = b ? fmt(+b) : '–'; }
+
+  function currentImage(){ return customURL ? {src:customURL,name:'Dein Bild',price:'',text:'Sieht gut aus! Das Original gibt es bei uns im Haus.'} : IMAGES[imgIndex]; }
+
+  function buildTiles(){
+    board.innerHTML = '';
+    var img = currentImage();
+    capEl.innerHTML = img.name + (img.price ? ' — <b>'+img.price+'</b>' : '');
+    for(var id=0; id<N*N; id++){
+      var t = document.createElement('div');
+      t.className = 'tile' + (id===EMPTY ? ' nine' : '');
+      t.dataset.id = id;
+      t.style.backgroundImage = "url('"+img.src+"')";
+      t.style.backgroundPosition = (id%N)*50+'% '+Math.floor(id/N)*50+'%';
+      if(id!==EMPTY){ var i=document.createElement('i'); i.textContent=id+1; t.appendChild(i); }
+      t.addEventListener('click', function(){ tryMove(+this.dataset.id, true); });
+      board.appendChild(t);
+    }
+    render();
+  }
+
+  function render(){
+    for(var id=0; id<N*N; id++){
+      var slot = pos[id], t = board.children[id];
+      t.style.left = (slot%N)*(100/N)+'%';
+      t.style.top  = Math.floor(slot/N)*(100/N)+'%';
+    }
+  }
+
+  // solvable shuffle: random walk from solved state = always solvable
+  function shuffle(){
+    pos = []; for(var i=0;i<N*N;i++) pos[i]=i;
+    var last=-1;
+    for(var k=0;k<140;k++){
+      var empty = pos[EMPTY], opts=[];
+      [empty-N, empty+N, (empty%N>0?empty-1:-9), (empty%N<N-1?empty+1:-9)].forEach(function(s){
+        if(s>=0 && s<N*N && s!==last) opts.push(s);
+      });
+      var target = opts[Math.floor(Math.random()*opts.length)];
+      var tileId = pos.indexOf(target);
+      pos[tileId]=empty; pos[EMPTY]=target; last=empty;
+    }
+    if(isSolved()) return shuffle();
+    moves=0; secs=0; movesEl.textContent='0'; timeEl.textContent='0:00';
+    solvedFlag=false; running=false; clearInterval(timer);
+    win.classList.remove('show');
+    board.classList.remove('solvedState');
+    board.children[EMPTY] && board.children[EMPTY].classList.add('nine');
+    render();
+  }
+
+  function isSolved(){ for(var i=0;i<N*N;i++) if(pos[i]!==i) return false; return true; }
+
+  function tryMove(tileId, user){
+    if(solvedFlag || board.dataset.save) return;
+    var slot = pos[tileId], empty = pos[EMPTY];
+    var adj = (slot===empty-N)||(slot===empty+N)||(slot===empty-1&&empty%N>0)||(slot===empty+1&&empty%N<N-1);
+    if(!adj) return;
+    pos[tileId]=empty; pos[EMPTY]=slot; render();
+    if(user){
+      if(!running){ running=true; timer=setInterval(function(){secs++; timeEl.textContent=fmt(secs);},1000); }
+      moves++; movesEl.textContent=moves;
+      if(isSolved()) onWin();
+    }
+  }
+
+  function onWin(){
+    solvedFlag=true; clearInterval(timer); running=false;
+    board.classList.add('solvedState');
+    board.children[EMPTY].classList.remove('nine'); // 9th tile fades in
+    var b = localStorage.getItem(bestKey);
+    if(!b || secs < +b){ localStorage.setItem(bestKey, secs); }
+    showBest();
+    var img = currentImage();
+    setTimeout(function(){
+      document.getElementById('winText').textContent = img.text + ' Gelöst in '+moves+' Zügen und '+fmt(secs)+'.';
+      document.getElementById('winPrice').textContent = img.price ? img.name+' · '+img.price : img.name;
+      win.classList.add('show');
+      confetti();
+    }, 700);
+  }
+
+  function confetti(){
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var colors=['#C9A44C','#F3EDE2','#A3B18A','#8a6d2f'];
+    for(var i=0;i<90;i++){
+      var c=document.createElement('div'); c.className='confetti';
+      var s=5+Math.random()*7;
+      c.style.cssText='left:'+(Math.random()*100)+'vw;width:'+s+'px;height:'+(s*0.5)+'px;background:'+
+        colors[i%colors.length]+';animation-duration:'+(2.2+Math.random()*2.2)+'s;animation-delay:'+(Math.random()*0.7)+'s;';
+      document.body.appendChild(c);
+      setTimeout(function(el){return function(){el.remove();};}(c), 5500);
+    }
+  }
+
+  // keyboard: arrows move the tile INTO the empty slot
+  addEventListener('keydown', function(e){
+    var map={ArrowUp:N, ArrowDown:-N, ArrowLeft:1, ArrowRight:-1};
+    if(!(e.key in map)) return;
+    e.preventDefault();
+    var empty=pos[EMPTY], from=empty+map[e.key];
+    if(from<0||from>=N*N) return;
+    if(Math.abs(map[e.key])===1 && Math.floor(from/N)!==Math.floor(empty/N)) return;
+    var tileId=pos.indexOf(from);
+    if(tileId>-1) tryMove(tileId,true);
+  });
+
+  // peek (hold)
+  var peekBtn=document.getElementById('peekBtn');
+  function peekOn(e){ e.preventDefault(); board.classList.add('peek'); var save=pos.slice(); board.dataset.save=JSON.stringify(save); pos=[]; for(var i=0;i<N*N;i++)pos[i]=i; render(); }
+  function peekOff(){ if(!board.dataset.save) return; pos=JSON.parse(board.dataset.save); delete board.dataset.save; board.classList.remove('peek'); render(); }
+  peekBtn.addEventListener('mousedown',peekOn); peekBtn.addEventListener('touchstart',peekOn,{passive:false});
+  addEventListener('mouseup',peekOff); addEventListener('touchend',peekOff);
+
+  document.getElementById('shuffleBtn').addEventListener('click', shuffle);
+  document.getElementById('nextBtn').addEventListener('click', function(){
+    customURL=null; imgIndex=(imgIndex+1)%IMAGES.length; buildTiles(); shuffle();
+  });
+
+  // drag & drop a brand photo → rebuild the game around it
+  ['dragenter','dragover'].forEach(function(ev){ addEventListener(ev,function(e){e.preventDefault();document.body.classList.add('dragover');}); });
+  ['dragleave','drop'].forEach(function(ev){ addEventListener(ev,function(e){e.preventDefault();document.body.classList.remove('dragover');}); });
+  addEventListener('drop', function(e){
+    var f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(f && f.type.indexOf('image')===0){
+      var r=new FileReader();
+      r.onload=function(){ customURL=r.result; buildTiles(); shuffle(); };
+      r.readAsDataURL(f);
+      return;
+    }
+    var url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
+    if(url && /^https?:/.test(url)){ customURL=url; buildTiles(); shuffle(); }
+  });
+
+  showBest(); buildTiles(); shuffle();
+})();
+</script>
+</body>
+</html>

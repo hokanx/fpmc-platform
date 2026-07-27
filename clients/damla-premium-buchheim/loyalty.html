@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damla Club — Treueprogramm (Demo)</title>
+<style>
+  :root{
+    --void:#0A0908; --coal:#141210; --card:#1B1815; --card2:#221E19;
+    --line:rgba(243,237,226,.12); --cream:#F3EDE2; --dim:rgba(243,237,226,.6);
+    --gold:#C9A44C; --gold-soft:rgba(201,164,76,.4); --pist:#A3B18A; --danger:#b8563e;
+    --serif:Georgia,'Times New Roman',ui-serif,serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(1000px 700px at 50% -10%,#1D1913 0%,var(--void) 62%);
+       color:var(--cream);font-family:var(--sans);font-weight:300;min-height:100svh;
+       display:flex;justify-content:center;padding:34px 16px 60px}
+  .app{width:100%;max-width:440px}
+  a{color:inherit}
+
+  .head{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+  .head img{width:52px;height:52px;border-radius:50%;border:1px solid var(--line)}
+  .head .t{font-family:var(--serif);font-size:21px;letter-spacing:.1em}
+  .head .t small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase;margin-top:3px}
+  .head .reset{margin-left:auto;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+      background:none;border:1px solid var(--line);padding:8px 12px;cursor:pointer}
+  .head .reset:hover{color:var(--danger);border-color:var(--danger)}
+
+  .panel{background:var(--card);border:1px solid var(--line);padding:26px;margin-bottom:18px}
+  h2{font-family:var(--serif);font-weight:400;font-size:22px}
+  .kicker{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+  .muted{color:var(--dim);font-size:13.5px}
+
+  /* sign in */
+  #signin input{width:100%;margin-top:16px;background:var(--void);border:1px solid var(--line);color:var(--cream);
+      padding:15px 16px;font-size:15px;font-family:var(--sans)}
+  #signin input:focus{outline:none;border-color:var(--gold)}
+  .btn{display:inline-block;width:100%;margin-top:14px;padding:15px;background:var(--gold);color:var(--void);
+      border:none;font-size:11px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;font-family:var(--sans);text-align:center}
+  .btn:hover{background:#d9b662}
+  .btn[disabled]{opacity:.35;cursor:not-allowed}
+  .btn.line{background:none;border:1px solid var(--line);color:var(--cream);width:auto;padding:11px 18px;margin:0}
+  .btn.line:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* member card */
+  .card-member{background:linear-gradient(135deg,#241f18 0%,#171410 60%);border:1px solid var(--gold-soft);
+      padding:26px;position:relative;overflow:hidden;margin-bottom:18px}
+  .card-member::after{content:'◆';position:absolute;right:-14px;bottom:-26px;font-size:130px;color:rgba(201,164,76,.07)}
+  .member-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .member-name{font-family:var(--serif);font-size:24px}
+  .tier-chip{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;border:1px solid var(--gold-soft);
+      color:var(--gold);padding:7px 12px;white-space:nowrap}
+  .pts{margin-top:18px;display:flex;align-items:baseline;gap:10px}
+  .pts b{font-family:var(--serif);font-size:54px;font-weight:400;color:var(--gold);transition:transform .3s}
+  .pts b.pop{transform:scale(1.12)}
+  .pts span{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
+  .nextbar{margin-top:16px;height:4px;background:rgba(243,237,226,.12);position:relative}
+  .nextbar i{position:absolute;inset:0 auto 0 0;background:var(--gold);width:0;transition:width 1s cubic-bezier(.16,1,.3,1)}
+  .nextlabel{margin-top:10px;font-size:12px;color:var(--dim)}
+  .nextlabel b{color:var(--pist);font-weight:400}
+
+  /* earn */
+  .earn-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+  .earn{background:var(--card2);border:1px solid var(--line);padding:16px;cursor:pointer;transition:.3s;text-align:left;font-family:var(--sans);color:var(--cream)}
+  .earn:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .earn .ico{font-size:20px}
+  .earn h4{font-weight:400;font-size:13.5px;margin-top:8px;letter-spacing:.04em}
+  .earn span{display:block;color:var(--gold);font-size:12px;margin-top:4px;font-family:var(--serif)}
+
+  /* tiers */
+  .tierlist{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .tier{display:flex;align-items:center;gap:14px;border:1px solid var(--line);padding:14px 16px;position:relative}
+  .tier .dot{width:10px;height:10px;border:1px solid var(--gold);transform:rotate(45deg);flex:none}
+  .tier.reached{border-color:var(--gold-soft);background:rgba(201,164,76,.05)}
+  .tier.reached .dot{background:var(--gold)}
+  .tier h4{font-family:var(--serif);font-weight:400;font-size:16px}
+  .tier small{display:block;color:var(--dim);font-size:12px;margin-top:2px}
+  .tier .req{margin-left:auto;font-family:var(--serif);color:var(--gold);font-size:14px;white-space:nowrap}
+  .tier.current::after{content:'Aktuell';position:absolute;top:-8px;right:12px;background:var(--gold);color:var(--void);
+      font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;padding:3px 8px}
+
+  /* rewards */
+  .reward{display:flex;align-items:center;gap:14px;border:1px solid var(--line);padding:14px 16px;margin-top:10px}
+  .reward img{width:54px;height:54px;object-fit:cover;flex:none;background:var(--card2)}
+  .reward h4{font-weight:400;font-size:14.5px}
+  .reward small{display:block;color:var(--dim);font-size:12px;margin-top:2px;font-family:var(--serif)}
+  .reward button{margin-left:auto;flex:none;background:none;border:1px solid var(--gold-soft);color:var(--gold);
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:10px 14px;cursor:pointer;font-family:var(--sans);transition:.3s}
+  .reward button:hover:not([disabled]){background:var(--gold);color:var(--void)}
+  .reward button[disabled]{opacity:.3;cursor:not-allowed}
+
+  /* history */
+  .hist{margin-top:14px;display:flex;flex-direction:column;gap:0;max-height:190px;overflow:auto}
+  .hist div{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--dim);
+      padding:10px 2px;border-bottom:1px solid var(--line)}
+  .hist b{font-weight:400;color:var(--cream)}
+  .hist .plus{color:var(--pist)}
+  .hist .minus{color:var(--danger)}
+
+  .demo-note{text-align:center;font-size:11px;color:var(--dim);letter-spacing:.14em;margin-top:22px;text-transform:uppercase}
+
+  /* toast + confetti */
+  .toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,140%);background:var(--gold);color:var(--void);
+      padding:14px 26px;font-size:13px;letter-spacing:.06em;z-index:70;transition:transform .5s cubic-bezier(.16,1,.3,1);max-width:88vw;text-align:center}
+  .toast.show{transform:translate(-50%,0)}
+  .confetti{position:fixed;top:-14px;pointer-events:none;z-index:60;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+  .hidden{display:none!important}
+  @media(prefers-reduced-motion:reduce){.confetti{display:none}.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="head">
+    <img src="https://damlakoeln.de/wp-content/uploads/2024/10/cropped-cropped-512x512-1.webp" alt="" onerror="this.style.display='none'">
+    <span class="t">DAMLA CLUB<small>Treue, Tropfen für Tropfen</small></span>
+    <button class="reset" id="resetBtn" title="Demo zurücksetzen">Reset</button>
+  </div>
+
+  <!-- sign in -->
+  <div class="panel" id="signin">
+    <div class="kicker">Willkommen</div>
+    <h2>Ihr Treueprofil</h2>
+    <p class="muted" style="margin-top:10px">Mit jedem Besuch, jeder Bewertung und jeder Empfehlung sammeln Sie
+      Tropfen — und tauschen sie gegen Künefe, Baklava &amp; mehr.</p>
+    <input id="nameInput" type="text" placeholder="Ihr Name" maxlength="30" autocomplete="off">
+    <button class="btn" id="joinBtn">Profil starten</button>
+  </div>
+
+  <!-- member area -->
+  <div id="member" class="hidden">
+    <div class="card-member">
+      <div class="member-row">
+        <div>
+          <div class="kicker">Mitgliedskarte</div>
+          <div class="member-name" id="memberName"></div>
+        </div>
+        <span class="tier-chip" id="tierChip"></span>
+      </div>
+      <div class="pts"><b id="ptsEl">0</b><span>Tropfen</span></div>
+      <div class="nextbar"><i id="nextBar"></i></div>
+      <div class="nextlabel" id="nextLabel"></div>
+    </div>
+
+    <div class="panel">
+      <div class="kicker">Tropfen sammeln</div>
+      <h2>Aktionen</h2>
+      <div class="earn-grid">
+        <button class="earn" data-pts="25" data-label="Besuch / Check-in"><span class="ico">☕</span><h4>Besuch &amp; Check-in</h4><span>+25 Tropfen</span></button>
+        <button class="earn" data-pts="40" data-label="Kahvaltı-Besuch"><span class="ico">🍳</span><h4>Kahvaltı-Besuch</h4><span>+40 Tropfen</span></button>
+        <button class="earn" data-pts="30" data-label="Google-Bewertung"><span class="ico">⭐</span><h4>Bewertung schreiben</h4><span>+30 Tropfen</span></button>
+        <button class="earn" data-pts="50" data-label="Freunde empfohlen"><span class="ico">🤝</span><h4>Freunde empfehlen</h4><span>+50 Tropfen</span></button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="kicker">Stufenleiter</div>
+      <h2>Ihre Reise</h2>
+      <div class="tierlist" id="tierList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="kicker">Einlösen</div>
+      <h2>Prämien</h2>
+      <div id="rewardList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="kicker">Verlauf</div>
+      <h2>Letzte Aktivitäten</h2>
+      <div class="hist" id="hist"></div>
+    </div>
+  </div>
+
+  <p class="demo-note">Demo · Damla Premium Buchheim · Modemannstr. 3, 51065 Köln</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var TIERS = [
+    {name:'Çay Dostu',       req:0,   perk:'Willkommens-Çay beim ersten Besuch'},
+    {name:'Künefe-Kenner',   req:150, perk:'Warme Künefe-Überraschung zum Geburtstag'},
+    {name:'Baklava-Meister', req:300, perk:'Vorab-Zugang zu neuen Sorten'},
+    {name:'Sultan',          req:600, perk:'Einladung zum Verkostungsabend'}
+  ];
+  var REWARDS = [
+    {id:'cay',    name:'Çay aufs Haus',            cost:60,  img:'https://damlakoeln.de/wp-content/uploads/2024/10/buzlu-kahve.png'},
+    {id:'kunefe', name:'Klassik Künefe gratis',    cost:150, img:'https://damlakoeln.de/wp-content/uploads/2024/10/Tatli-7.png'},
+    {id:'baklava',name:'Baklava-Teller (4 Stk.)',  cost:300, img:'https://damlakoeln.de/wp-content/uploads/2024/10/fistikli-baklava.png'},
+    {id:'fruh',   name:'–20 % auf Frühstück für 2',cost:400, img:'https://damlakoeln.de/wp-content/uploads/2024/10/DAMLA-lux.png'}
+  ];
+  var KEY='damla-club-demo';
+  var state = load() || {name:null, pts:0, hist:[], milestones:[]};
+
+  var $=function(id){return document.getElementById(id)};
+  var signin=$('signin'), member=$('member'), ptsEl=$('ptsEl'), toast=$('toast');
+
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  function tierOf(p){ var t=TIERS[0]; TIERS.forEach(function(x){ if(p>=x.req) t=x; }); return t; }
+  function nextTier(p){ for(var i=0;i<TIERS.length;i++){ if(p<TIERS[i].req) return TIERS[i]; } return null; }
+
+  function showToast(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(toast._t); toast._t=setTimeout(function(){toast.classList.remove('show');},2600);
+  }
+
+  function confetti(){
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var colors=['#C9A44C','#F3EDE2','#A3B18A','#8a6d2f'];
+    for(var i=0;i<80;i++){
+      var c=document.createElement('div'); c.className='confetti';
+      var s=5+Math.random()*7;
+      c.style.cssText='left:'+(Math.random()*100)+'vw;width:'+s+'px;height:'+(s*.5)+'px;background:'+colors[i%colors.length]+
+        ';animation-duration:'+(2.2+Math.random()*2)+'s;animation-delay:'+(Math.random()*.6)+'s;';
+      document.body.appendChild(c);
+      setTimeout(function(el){return function(){el.remove();};}(c), 5200);
+    }
+  }
+
+  function addHist(label, delta){
+    state.hist.unshift({l:label, d:delta, t:new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit'})});
+    state.hist = state.hist.slice(0,20);
+  }
+
+  function render(){
+    if(!state.name){ signin.classList.remove('hidden'); member.classList.add('hidden'); return; }
+    signin.classList.add('hidden'); member.classList.remove('hidden');
+    $('memberName').textContent = state.name;
+    ptsEl.textContent = state.pts;
+    var t = tierOf(state.pts), nt = nextTier(state.pts);
+    $('tierChip').textContent = t.name;
+    if(nt){
+      var prev = t.req, span = nt.req - prev;
+      $('nextBar').style.width = Math.min(100, Math.round((state.pts-prev)/span*100))+'%';
+      $('nextLabel').innerHTML = 'Noch <b>'+(nt.req-state.pts)+' Tropfen</b> bis „'+nt.name+'“';
+    } else {
+      $('nextBar').style.width='100%';
+      $('nextLabel').innerHTML='<b>Höchste Stufe erreicht — hoş geldiniz, Sultan!</b>';
+    }
+    // tiers
+    $('tierList').innerHTML = TIERS.map(function(x){
+      var cls = 'tier'+(state.pts>=x.req?' reached':'')+(x.name===t.name?' current':'');
+      return '<div class="'+cls+'"><span class="dot"></span><div><h4>'+x.name+'</h4><small>'+x.perk+'</small></div><span class="req">'+x.req+'</span></div>';
+    }).join('');
+    // rewards
+    $('rewardList').innerHTML = REWARDS.map(function(r){
+      var can = state.pts>=r.cost;
+      return '<div class="reward"><img src="'+r.img+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'+
+        '<div><h4>'+r.name+'</h4><small>'+r.cost+' Tropfen</small></div>'+
+        '<button data-id="'+r.id+'" '+(can?'':'disabled')+'>Einlösen</button></div>';
+    }).join('');
+    [].forEach.call($('rewardList').querySelectorAll('button'), function(b){
+      b.addEventListener('click', function(){ redeem(this.dataset.id); });
+    });
+    // history
+    $('hist').innerHTML = state.hist.length
+      ? state.hist.map(function(h){
+          var cls = h.d>0?'plus':'minus', sign = h.d>0?'+':'';
+          return '<div><span><b>'+h.l+'</b> · '+h.t+'</span><span class="'+cls+'">'+sign+h.d+'</span></div>';
+        }).join('')
+      : '<div><span>Noch keine Aktivitäten — sammeln Sie Ihren ersten Tropfen!</span></div>';
+  }
+
+  function pop(){ ptsEl.classList.add('pop'); setTimeout(function(){ptsEl.classList.remove('pop');},320); }
+
+  function earn(pts, label){
+    var before = tierOf(state.pts).name;
+    state.pts += pts; addHist(label, pts);
+    var after = tierOf(state.pts).name;
+    save(); render(); pop();
+    if(after!==before && state.milestones.indexOf(after)<0){
+      state.milestones.push(after); save();
+      confetti(); showToast('◆ Neue Stufe freigeschaltet: '+after+'!');
+    } else {
+      showToast('+'+pts+' Tropfen — teşekkürler, '+state.name+'!');
+    }
+  }
+
+  function redeem(id){
+    var r = REWARDS.filter(function(x){return x.id===id;})[0];
+    if(!r || state.pts<r.cost) return;
+    state.pts -= r.cost; addHist(r.name, -r.cost);
+    save(); render(); pop();
+    confetti(); showToast('Eingelöst: '+r.name+' — zeigen Sie diesen Bildschirm am Tresen.');
+  }
+
+  $('joinBtn').addEventListener('click', function(){
+    var n = $('nameInput').value.trim();
+    if(!n){ $('nameInput').focus(); return; }
+    state.name = n; save(); render();
+    showToast('Hoş geldiniz, '+n+'! Ihr Profil ist bereit.');
+  });
+  $('nameInput').addEventListener('keydown', function(e){ if(e.key==='Enter') $('joinBtn').click(); });
+
+  [].forEach.call(document.querySelectorAll('.earn'), function(b){
+    b.addEventListener('click', function(){ earn(+this.dataset.pts, this.dataset.label); });
+  });
+
+  $('resetBtn').addEventListener('click', function(){
+    if(confirm('Demo wirklich zurücksetzen?')){
+      localStorage.removeItem(KEY);
+      state={name:null,pts:0,hist:[],milestones:[]};
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
