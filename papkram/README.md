@@ -50,8 +50,11 @@ npm run build
 
 ## Deploying
 
+**Step-by-step instructions are in [SETUP.md](./SETUP.md).** The short version:
+
 A separate Vercel project with **Root Directory = `papkram`**. It works on the Vercel-provided
-`*.vercel.app` URL; a custom domain is optional.
+`*.vercel.app` URL; a custom domain is optional. Open **`/api/status`** on the deployment for a
+live checklist of what is and isn't configured — it reports yes/no only, never a value.
 
 **To run at all**
 
