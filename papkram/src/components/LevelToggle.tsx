@@ -19,7 +19,7 @@ type Props = {
 export default function LevelToggle({ value, onChange, disabled }: Props) {
   return (
     <fieldset disabled={disabled} className="disabled:opacity-60">
-      <legend className="text-sm font-bold uppercase tracking-wide text-ink-soft">
+      <legend className="text-sm font-bold text-ink-soft">
         Wie einfach soll der Text sein?
       </legend>
       <div className="mt-2 grid grid-cols-2 gap-3">

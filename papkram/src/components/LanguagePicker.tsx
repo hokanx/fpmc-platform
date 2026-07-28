@@ -20,7 +20,7 @@ export default function LanguagePicker({ current, busy, onPick }: Props) {
     <section aria-labelledby="sprache-titel">
       <h2
         id="sprache-titel"
-        className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-ink-soft"
+        className="flex items-center gap-2 text-sm font-bold text-ink-soft"
       >
         <TranslateIcon className="h-5 w-5" />
         {l.spracheWaehlen}

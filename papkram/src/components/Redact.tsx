@@ -86,6 +86,10 @@ export default function Redact({ prepared, onConfirm, onCancel }: Props) {
           Sie können Ihren Namen und Ihre Adresse schwarz machen. Ziehen Sie mit dem Finger über die
           Stelle. Der Brief wird dann ohne diese Stelle verschickt.
         </p>
+        <p className="mt-2 text-ink-soft">
+          Ihr Name steht oft noch an einer zweiten Stelle — zum Beispiel in der Anrede. Schauen Sie
+          kurz nach.
+        </p>
         <p className="mt-2 text-ink-soft">Sie können diesen Schritt auch überspringen.</p>
       </div>
 

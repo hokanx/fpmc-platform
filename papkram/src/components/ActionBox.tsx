@@ -26,7 +26,7 @@ export default function ActionBox({ letter }: { letter: LetterResult }) {
       className="card border-2 border-ink bg-note-bg flex flex-col gap-5"
     >
       <div>
-        <h2 id="aktion-titel" className="text-sm font-bold uppercase tracking-wide text-ink-soft">
+        <h2 id="aktion-titel" className="text-sm font-bold text-ink-soft">
           {l.worum}
         </h2>
         <p className="mt-1 text-2xl font-bold">{letter.worum_geht_es}</p>
@@ -38,7 +38,7 @@ export default function ActionBox({ letter }: { letter: LetterResult }) {
       </div>
 
       <div className="border-t border-line-strong pt-5">
-        <h3 className="text-sm font-bold uppercase tracking-wide text-ink-soft">{l.aktion}</h3>
+        <h3 className="text-sm font-bold text-ink-soft">{l.aktion}</h3>
         {letter.aktion ? (
           <p className="mt-1 text-xl font-bold">{letter.aktion}</p>
         ) : (
@@ -57,7 +57,7 @@ export default function ActionBox({ letter }: { letter: LetterResult }) {
         >
           <ClockIcon className="mt-0.5 h-6 w-6 shrink-0" />
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide">{l.frist}</p>
+            <p className="text-sm font-bold">{l.frist}</p>
             {frist ? (
               <>
                 <p className="text-xl font-bold">{frist.text}</p>
@@ -76,7 +76,7 @@ export default function ActionBox({ letter }: { letter: LetterResult }) {
         <div className="flex items-start gap-3 rounded-card bg-surface p-4">
           <EuroIcon className="mt-0.5 h-6 w-6 shrink-0" />
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-ink-soft">
+            <p className="text-sm font-bold text-ink-soft">
               {letter.betrag.richtung === "zahlen" ? l.zahlen : l.erhalten}
             </p>
             <p
