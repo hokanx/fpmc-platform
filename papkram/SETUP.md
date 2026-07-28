@@ -15,9 +15,19 @@ It only ever reports yes/no — never a key, token or address.
 2. **Settings → API keys → Create key.** Name it `papkram`.
 3. Copy it now — the console shows it once.
 4. **Add billing** under Settings → Billing. Without a payment method the key
-   returns errors on the first real request. $20 of credit is plenty to start:
-   at the Sonnet 5 default a one-page letter costs about **$0.01**, so that is
-   roughly 2,000 letters.
+   returns errors on the first real request.
+
+Measured cost at the defaults (`claude-sonnet-5`, `effort: medium`):
+
+| | |
+|---|---|
+| One-page letter | **~$0.032** |
+| Three-page letter | ~$0.052 |
+| One translation | ~$0.026 |
+
+So **$20 of credit is roughly 600 letters**. Every request writes its real token
+counts and a cost estimate to the logs (`"kind":"usage"`), so you never have to
+guess — see *Watching what it costs* below.
 
 ## 2. Create the Vercel project
 
@@ -102,17 +112,38 @@ The free tier is far more than Papkram needs.
 
 ### Spend cap
 
-`DAILY_REQUEST_CAP` defaults to **2000** page-reads per day — about **$20/day** at
-the Sonnet 5 default. Lower it while you are testing:
+`DAILY_REQUEST_CAP` counts **pages**, not letters, and defaults to **500** —
+about **$16/day**. Adjust to taste:
 
 | Value | Roughly |
 |---|---|
-| `200` | $2/day |
-| `2000` | $20/day (default) |
+| `100` | $3/day — sensible while testing |
+| `500` | $16/day (default) |
+| `2000` | $64/day |
 | `0` | no cap — not recommended |
 
-Also set a hard backstop in the Anthropic console under **Billing → Limits**, so a
-mistake in Papkram cannot spend more than you intend.
+Also set a hard backstop in the Anthropic console under **Billing → Limits**. The
+app's cap protects you from traffic; the console's cap protects you from the app.
+
+### Watching what it costs
+
+Every model call logs its real usage. In **Vercel → your project → Logs**, filter
+for `usage`:
+
+```json
+{"kind":"usage","route":"vereinfachen","model":"claude-sonnet-5",
+ "input_tokens":2888,"output_tokens":1170,"cache_read_tokens":3968,
+ "est_usd":0.032,"pages":1,"level":"einfach"}
+```
+
+Counts only — never any part of a letter. `cache_read_tokens` above zero means
+the system prompt is being cached, which is where a chunk of the saving comes
+from. If `est_usd` starts climbing, the usual cause is `ANTHROPIC_EFFORT` or a
+model change, not traffic.
+
+**Two keys is a good habit:** make a second API key named `papkram-test` with a
+low spend limit for local work, and keep the production key in Vercel only. Then a
+runaway loop on your laptop can't touch the live budget.
 
 ### Error alerts (optional)
 

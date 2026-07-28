@@ -139,8 +139,10 @@ From live runs against `test/fixtures/bescheid.png` (a Jobcenter Bewilligungsbes
 
 | | |
 |---|---|
-| Extraction accuracy | Absender, Frist (`2026-08-21`), Betrag (563 EUR, `erhalten`) and the required action correct on every run, identically from the clean scan and the phone photo. |
-| Latency | 17–27 s for one page; ~4 s to reject a non-letter. |
+| Extraction accuracy | Absender, Frist (`2026-08-21`), Betrag (563 EUR, `erhalten`) and the required action correct on every run, identically from the clean scan and the phone photo — and at every effort level. |
+| Cost | ~$0.032 per one-page letter, ~$0.052 for three pages, ~$0.026 per translation. Output tokens dominate, so effort matters more than page count. |
+| Latency | ~13 s for one page; ~4 s to reject a non-letter. |
+| Effort | `low` / `medium` / `high` were equally accurate here; `high` cost 50% more and took twice as long, so the default is `medium`. |
 | Einfache Sprache | ~11 words/sentence. |
 | Leichte Sprache | ~8.5 words/sentence, Mediopunkte applied consistently. |
 | Multi-page | Two pages produce one summary, not two. It also spotted a duplicated page unprompted and reported it in `unklar`. |

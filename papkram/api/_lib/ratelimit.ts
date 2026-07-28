@@ -30,10 +30,17 @@ function perHourLimit(): number {
   return Number.isFinite(raw) && raw > 0 ? raw : 20;
 }
 
-/** 0 disables the cap. Defaults to a deliberately conservative number. */
+/**
+ * Counts pages, not letters. 0 disables it.
+ *
+ * 500 is deliberately conservative: at the measured ~$0.032 per page that caps
+ * a runaway day at roughly $16. An unbounded default would turn one scripted
+ * abuser, or one bug in a retry loop, into an overnight bill. Raise it once
+ * real traffic is known.
+ */
 function dailyCap(): number {
   const raw = Number(process.env.DAILY_REQUEST_CAP);
-  return Number.isFinite(raw) && raw >= 0 ? raw : 2000;
+  return Number.isFinite(raw) && raw >= 0 ? raw : 500;
 }
 
 // --- in-memory fallback -----------------------------------------------------

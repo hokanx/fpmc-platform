@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ProviderError, type Provider } from "./provider";
+import { reportUsage } from "./report";
 import { LETTER_SCHEMA, parseLetter, type Letter, type Level, type Media, type OutLang } from "./schema";
 import {
   pageLabel,
@@ -24,13 +25,20 @@ type Effort = "low" | "medium" | "high" | "xhigh" | "max";
 function effort(): Effort {
   const raw = process.env.ANTHROPIC_EFFORT;
   const allowed: Effort[] = ["low", "medium", "high", "xhigh", "max"];
-  // `high` rather than `medium`, deliberately: this reads numbers and dates off
-  // a photograph, and a misread Frist or a flipped betrag.richtung is the kind
-  // of error that costs the reader money. Sonnet 5 respects effort strictly at
-  // the low end, so this is not the place to economise — the saving is already
-  // taken by running Sonnet rather than Opus. Drop to `medium` via
-  // ANTHROPIC_EFFORT if latency turns out to matter more than accuracy.
-  return allowed.includes(raw as Effort) ? (raw as Effort) : "high";
+  // Measured, not assumed. Three runs each against the Bewilligungsbescheid
+  // fixture (clean scan and phone photo):
+  //
+  //   low     11s   $0.029/letter   Frist, Betrag, Aktion all correct
+  //   medium  13s   $0.032/letter   all correct
+  //   high    22s   $0.044/letter   all correct
+  //
+  // `high` bought nothing here while costing 50% more and taking twice as long,
+  // and latency is not a footnote when someone is standing in their hallway
+  // holding the letter. `medium` rather than `low` keeps a step of headroom for
+  // the cases the fixture doesn't cover — faded thermal paper, cramped Inkasso
+  // letters, handwriting — since one fixture is thin evidence for going lower.
+  // Re-run the comparison against real letters before changing this again.
+  return allowed.includes(raw as Effort) ? (raw as Effort) : "medium";
 }
 
 function mediaBlock(media: Media): Anthropic.ContentBlockParam {
@@ -136,7 +144,9 @@ export function anthropicProvider(): Provider {
         ],
       });
 
-      return extractLetter(await stream.finalMessage());
+      const message = await stream.finalMessage();
+      reportUsage("vereinfachen", model, message.usage, { pages: pages.length, level });
+      return extractLetter(message);
     },
 
     async translate({ letter, target, level }) {
@@ -156,7 +166,9 @@ export function anthropicProvider(): Provider {
         ],
       });
 
-      const translated = extractLetter(await stream.finalMessage());
+      const message = await stream.finalMessage();
+      reportUsage("uebersetzen", model, message.usage, { target });
+      const translated = extractLetter(message);
 
       // The model translates prose; it has no business changing the numbers.
       // Carry the machine-readable fields over from the German original.
