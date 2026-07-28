@@ -8,24 +8,28 @@ import {
   USER_PROMPT,
 } from "./prompts";
 
-const DEFAULT_MODEL = "claude-opus-5";
+const DEFAULT_MODEL = "claude-sonnet-5";
 
 /**
- * `max_tokens` caps thinking AND response text together, and thinking is on by
- * default on Opus 5 — so this needs real headroom above the ~1.5k tokens the
- * JSON itself costs. A letter that truncates mid-JSON is a total loss.
+ * `max_tokens` caps thinking AND response text together, and adaptive thinking
+ * is on by default — so this needs real headroom above the ~1.5k tokens the JSON
+ * itself costs. A letter that truncates mid-JSON is a total loss, and the cap
+ * costs nothing unless it is actually used.
  */
-const MAX_TOKENS = 8000;
+const MAX_TOKENS = 12000;
 
 type Effort = "low" | "medium" | "high" | "xhigh" | "max";
 
 function effort(): Effort {
   const raw = process.env.ANTHROPIC_EFFORT;
   const allowed: Effort[] = ["low", "medium", "high", "xhigh", "max"];
-  // Extraction + rewriting, not open-ended reasoning. Opus 5 is strong at the
-  // low end of the ladder, and this task is latency-sensitive — someone is
-  // standing in their hallway holding a letter.
-  return allowed.includes(raw as Effort) ? (raw as Effort) : "medium";
+  // `high` rather than `medium`, deliberately: this reads numbers and dates off
+  // a photograph, and a misread Frist or a flipped betrag.richtung is the kind
+  // of error that costs the reader money. Sonnet 5 respects effort strictly at
+  // the low end, so this is not the place to economise — the saving is already
+  // taken by running Sonnet rather than Opus. Drop to `medium` via
+  // ANTHROPIC_EFFORT if latency turns out to matter more than accuracy.
+  return allowed.includes(raw as Effort) ? (raw as Effort) : "high";
 }
 
 function mediaBlock(media: Media): Anthropic.ContentBlockParam {
@@ -98,8 +102,13 @@ export function anthropicProvider(): Provider {
           {
             type: "text",
             text: systemPrompt(level),
-            // Stable across every request at this level — worth caching, and
-            // comfortably over Opus 5's 512-token minimum.
+            // Stable across every request at this level, so worth caching.
+            // Caveat: this prompt is ~1.1k tokens and Sonnet 5's minimum
+            // cacheable prefix is 1024 — comfortable on Opus 5 (512), marginal
+            // here. Below the minimum it silently does not cache rather than
+            // erroring, so confirm with messages.count_tokens() once a key is in
+            // place, and watch usage.cache_read_input_tokens on the second
+            // request of a burst.
             cache_control: { type: "ephemeral" },
           },
         ],
