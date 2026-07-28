@@ -3,15 +3,17 @@ import { AlertIcon } from "./icons";
 type Props = {
   message: string;
   onRetry?: () => void;
+  /** Back to the pages already photographed, so an error doesn't discard them. */
+  onBack?: () => void;
   onRestart: () => void;
 };
 
-export default function ErrorCard({ message, onRetry, onRestart }: Props) {
+export default function ErrorCard({ message, onRetry, onBack, onRestart }: Props) {
   return (
     <div className="flex flex-col gap-5">
       <div
         role="alert"
-        className="card border-2 border-urgent bg-urgent-bg flex items-start gap-3 text-ink"
+        className="card flex items-start gap-3 border-2 border-urgent bg-urgent-bg text-ink"
       >
         <AlertIcon className="mt-1 h-7 w-7 shrink-0 text-urgent" />
         <div>
@@ -23,6 +25,11 @@ export default function ErrorCard({ message, onRetry, onRestart }: Props) {
       {onRetry && (
         <button type="button" className="btn-primary" onClick={onRetry}>
           Noch einmal versuchen
+        </button>
+      )}
+      {onBack && (
+        <button type="button" className="btn-secondary" onClick={onBack}>
+          Zurück zu meinen Seiten
         </button>
       )}
       <button type="button" className="btn-secondary" onClick={onRestart}>

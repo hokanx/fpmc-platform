@@ -15,7 +15,9 @@ reading, and Behördendeutsch is not written for them.
 
 ## What it does
 
-1. **Photo or PDF in.** Camera capture on a phone, file picker everywhere else.
+1. **Photos or a PDF in.** Camera capture on a phone, file picker everywhere else. Up to
+   **12 pages** — a German Bescheid routinely runs to six, and the Frist is as often on page four
+   as page one.
 2. **Optional redaction.** Drag black boxes over your name and address — or tap *Adress·feld
    abdecken*, which covers the DIN 5008 address window in one go. The boxes are burned into the
    pixels before upload, so what leaves the device is a flattened image.
@@ -26,6 +28,8 @@ reading, and Behördendeutsch is not written for them.
 4. **An action box** above the summary: sender, what you have to do, the deadline with a day
    countdown, and the amount with its direction (pay vs. receive).
 5. **Translation** of the summary into English, Turkish, Arabic, Ukrainian or Russian, on demand.
+6. **Keep a copy** — print (which is "save as PDF" in every print dialogue), copy the text, or use
+   the system share sheet. All on the device; nothing is uploaded and no account exists.
 
 ## Running it
 
@@ -46,8 +50,32 @@ npm run build
 
 ## Deploying
 
-A separate Vercel project with **Root Directory = `papkram`**. Required environment variable:
-`ANTHROPIC_API_KEY`. Everything else has a working default — see `.env.example`.
+A separate Vercel project with **Root Directory = `papkram`**. It works on the Vercel-provided
+`*.vercel.app` URL; a custom domain is optional.
+
+**To run at all**
+
+| Variable | |
+|---|---|
+| `ANTHROPIC_API_KEY` | The only hard requirement. |
+
+**Before it is publicly reachable**
+
+| Variable | |
+|---|---|
+| `IMPRESSUM_NAME`, `IMPRESSUM_STRASSE`, `IMPRESSUM_ORT`, `IMPRESSUM_EMAIL` | Required by § 5 DDG. `/impressum` shows a visible warning naming the missing variables until all four are set. |
+
+**Before real traffic**
+
+| Variable | |
+|---|---|
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Without these, rate limiting is per serverless instance and resets on cold starts — a speed bump, not a control. |
+| `DAILY_REQUEST_CAP` | Spend guard; defaults to 2000/day (~$20 at the Sonnet 5 default). |
+| `ERROR_WEBHOOK_URL` | Optional. Errors otherwise go to stderr, which Vercel collects. |
+
+Also verify the five help-organisation links in `src/lib/hilfe.ts` — see *Known gaps*.
+
+Full list with commentary: `.env.example`.
 
 ## How it is put together
 
@@ -102,13 +130,29 @@ this is for). Colour never carries meaning alone — an urgent deadline is red *
 
 ## Known gaps
 
+- **No live model call has ever run.** There were no API credentials in the environment this was
+  built in. Everything downstream of the call is verified against fixtures; the call itself, and
+  therefore the prompt quality on real Behördendeutsch, is untested. Expect a round of prompt
+  tuning. `test/fixtures/` exists for exactly this.
+- **The help-organisation links are unverified.** The build environment's network policy blocked
+  those hosts. Open all five in `src/lib/hilfe.ts` before launch — sending a worried person to a
+  404, or to a paid service where free advice exists, is the worst thing this app could do.
 - **Read-aloud is not built.** `zusammenfassung` is an array of sentences specifically so a
-  `SpeechSynthesis` control is a drop-in later, at no API cost.
-- **The Mistral path is unexercised.** It is written against the SDK's verified wire types but has
-  never run against the live API. Smoke-test it before trusting `AI_PROVIDER=mistral`.
-- **The rate limiter is per serverless instance.** It stops accidental abuse, not a determined
-  attacker. Upstash Redis if that ever matters.
-- **`src/pages/Impressum.tsx` is a placeholder** and must be filled in before launch.
+  `SpeechSynthesis` control is a drop-in later, at no API cost. It is probably the largest
+  remaining gap for the actual audience.
+- **The Mistral path is unexercised.** Written against the SDK's verified wire types, never run
+  against the live API. Smoke-test before trusting `AI_PROVIDER=mistral`.
+- **PDF input is untested** end to end. The code path exists on both providers.
+
+## Limits worth knowing
+
+| | |
+|---|---|
+| Pages per letter | 12 |
+| Total upload | 3 MB of image, ~4.1 MB of JSON |
+| Why | Vercel caps serverless request bodies at 4.5 MB. `media.encodeAll()` steps quality down (0.8 → 0.55) across the whole letter to fit rather than failing the upload. Measured: 12 realistic phone photos land at 2.95 MB. |
+| Per-IP rate limit | 20 units/hour, one unit per page |
+| Daily cap | 2000 units |
 
 ## Test fixtures
 

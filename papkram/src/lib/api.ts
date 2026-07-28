@@ -16,12 +16,14 @@ const MESSAGES: Record<ApiError["error"] | "network" | "unknown", string> = {
   method_not_allowed: "Da ist etwas schief gelaufen. Bitte versuchen Sie es noch einmal.",
   bad_json: "Da ist etwas schief gelaufen. Bitte versuchen Sie es noch einmal.",
   bad_request: "Mit dem Bild stimmt etwas nicht. Bitte machen Sie ein neues Foto.",
-  too_large: "Das Bild ist zu groß. Bitte machen Sie ein neues Foto.",
+  too_large: "Die Fotos sind zusammen zu groß. Bitte schicken Sie weniger Seiten auf einmal.",
   unsupported_media: "Diese Datei können wir nicht lesen. Nutzen Sie ein Foto oder eine PDF-Datei.",
   rate_limited: "Sie haben gerade viele Briefe geschickt. Bitte warten Sie kurz.",
+  daily_cap: "Papkram ist für heute ausgelastet. Bitte versuchen Sie es morgen wieder.",
   not_configured: "Papkram ist gerade nicht bereit. Bitte versuchen Sie es später.",
   refused: "Diesen Brief können wir nicht zusammenfassen.",
   no_letter_found: "Auf dem Bild ist kein Brief zu erkennen. Bitte machen Sie ein neues Foto.",
+  too_many_pages: "Das sind zu viele Seiten. Bitte schicken Sie weniger Seiten auf einmal.",
   provider_failed: "Wir konnten den Brief gerade nicht lesen. Bitte versuchen Sie es noch einmal.",
   network: "Keine Verbindung. Bitte prüfen Sie Ihr Internet.",
   unknown: "Wir konnten den Brief gerade nicht lesen. Bitte versuchen Sie es noch einmal.",
@@ -77,11 +79,11 @@ async function post<T>(path: string, body: unknown, signal?: AbortSignal): Promi
 }
 
 export function vereinfachen(
-  media: Media,
+  pages: Media[],
   level: Level,
   signal?: AbortSignal,
 ): Promise<LetterResult> {
-  return post<LetterResult>("/api/vereinfachen", { media, level }, signal);
+  return post<LetterResult>("/api/vereinfachen", { pages, level }, signal);
 }
 
 export function uebersetzen(

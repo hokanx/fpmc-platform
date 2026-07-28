@@ -105,3 +105,49 @@
     @apply mx-auto w-full max-w-[38rem] px-5;
   }
 }
+
+/* Printing is how someone keeps a copy — every print dialogue offers
+   "save as PDF" — so the printed page has to stand on its own at a
+   Beratungsstelle without the buttons, nav or colour blocks. */
+@media print {
+  @page {
+    margin: 18mm 16mm;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+
+  header,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+
+  .card,
+  section {
+    border-color: #000 !important;
+    background: transparent !important;
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Link targets are useless on paper unless they're written out. */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    word-break: break-all;
+  }
+}

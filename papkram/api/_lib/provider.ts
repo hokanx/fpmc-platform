@@ -11,7 +11,8 @@ import type { ApiError, Letter, Level, Media, OutLang } from "./schema";
 export interface Provider {
   /** Human-readable name, shown on /datenschutz so the page can't drift from the code. */
   readonly id: "anthropic" | "mistral";
-  simplify(input: { media: Media; level: Level }): Promise<Letter>;
+  /** `pages` is one letter in page order — a single photo is a one-page letter. */
+  simplify(input: { pages: Media[]; level: Level }): Promise<Letter>;
   translate(input: { letter: Letter; target: OutLang; level: Level }): Promise<Letter>;
 }
 

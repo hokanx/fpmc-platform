@@ -2,10 +2,11 @@ import Anthropic from "@anthropic-ai/sdk";
 import { ProviderError, type Provider } from "./provider";
 import { LETTER_SCHEMA, parseLetter, type Letter, type Level, type Media, type OutLang } from "./schema";
 import {
+  pageLabel,
   systemPrompt,
   translateSystemPrompt,
   TRANSLATE_USER_PROMPT,
-  USER_PROMPT,
+  userPrompt,
 } from "./prompts";
 
 const DEFAULT_MODEL = "claude-sonnet-5";
@@ -91,7 +92,7 @@ export function anthropicProvider(): Provider {
   return {
     id: "anthropic",
 
-    async simplify({ media, level }) {
+    async simplify({ pages, level }) {
       // Streaming here is not for the browser — the route still returns one JSON
       // response. It keeps the connection to the API alive so a slow letter
       // doesn't trip the SDK's HTTP timeout at this max_tokens.
@@ -118,7 +119,20 @@ export function anthropicProvider(): Provider {
           format: { type: "json_schema", schema: LETTER_SCHEMA as Record<string, unknown> },
         },
         messages: [
-          { role: "user", content: [mediaBlock(media), { type: "text", text: USER_PROMPT }] },
+          {
+            role: "user",
+            content: [
+              // Each page is labelled in text immediately before its image, so
+              // page order is stated rather than inferred. Without this the
+              // model has to guess which scan came first, and on a Bescheid the
+              // Frist is often on a later page.
+              ...pages.flatMap((page, i): Anthropic.ContentBlockParam[] => [
+                { type: "text", text: pageLabel(i, pages.length) },
+                mediaBlock(page),
+              ]),
+              { type: "text", text: userPrompt(pages.length) },
+            ],
+          },
         ],
       });
 

@@ -1,10 +1,11 @@
 import { ProviderError, type Provider } from "./provider";
 import { LETTER_SCHEMA, parseLetter, type Letter, type Media } from "./schema";
 import {
+  pageLabel,
   systemPrompt,
   translateSystemPrompt,
   TRANSLATE_USER_PROMPT,
-  USER_PROMPT,
+  userPrompt,
 } from "./prompts";
 
 /**
@@ -112,8 +113,15 @@ export function mistralProvider(): Provider {
   return {
     id: "mistral",
 
-    simplify: ({ media, level }) =>
-      complete(systemPrompt(level), [mediaChunk(media), { type: "text", text: USER_PROMPT }]),
+    simplify: ({ pages, level }) =>
+      complete(systemPrompt(level), [
+        // Same page-labelling as the Anthropic path: order is stated, not inferred.
+        ...pages.flatMap((page, i): MistralContent[] => [
+          { type: "text", text: pageLabel(i, pages.length) },
+          mediaChunk(page),
+        ]),
+        { type: "text", text: userPrompt(pages.length) },
+      ]),
 
     async translate({ letter, target, level }) {
       const translated = await complete(

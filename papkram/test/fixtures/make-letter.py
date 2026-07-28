@@ -12,9 +12,10 @@ different ways.
 """
 
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 OUT = Path(__file__).resolve().parent / "bescheid.png"
+OUT_PHOTO = Path(__file__).resolve().parent / "bescheid-foto.jpg"
 
 # A4 at ~150 dpi, close to a decent phone photo of a letter.
 W, H = 1240, 1754
@@ -26,6 +27,40 @@ BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
 def font(path: str, size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(path, size)
+
+
+def photographed(img: Image.Image) -> Image.Image:
+    """Rough up a clean render into something like an actual phone photo.
+
+    The pristine version compresses far better than reality, which makes the
+    upload-budget maths look rosier than it is. Adding sensor noise, uneven
+    lighting and a slight skew produces a fixture that costs realistic bytes and
+    exercises the encodeAll() quality fallback.
+    """
+    import random
+
+    random.seed(7)
+    w, h = img.size
+
+    # Uneven lighting: a soft diagonal falloff, as if lit from one side.
+    light = Image.new("L", (w, h))
+    px = light.load()
+    for y in range(0, h, 4):
+        for x in range(0, w, 4):
+            v = 255 - int(70 * ((x / w) * 0.6 + (y / h) * 0.4))
+            for dy in range(4):
+                for dx in range(4):
+                    if x + dx < w and y + dy < h:
+                        px[x + dx, y + dy] = v
+    img = ImageChops.multiply(img, Image.merge("RGB", (light, light, light)))
+
+    # Sensor noise.
+    noise = Image.effect_noise((w, h), 12).convert("L")
+    img = ImageChops.add(img, Image.merge("RGB", (noise, noise, noise)), scale=2, offset=-24)
+
+    # Hand-held skew and a soft-focus pass.
+    img = img.rotate(-1.4, resample=Image.BICUBIC, expand=False, fillcolor=(90, 88, 84))
+    return img.filter(ImageFilter.GaussianBlur(0.6))
 
 
 def main() -> None:
@@ -134,6 +169,10 @@ def main() -> None:
 
     img.save(OUT)
     print(f"wrote {OUT} ({img.size[0]}×{img.size[1]})")
+
+    photo = photographed(img)
+    photo.save(OUT_PHOTO, quality=92)
+    print(f"wrote {OUT_PHOTO} ({photo.size[0]}×{photo.size[1]}, {OUT_PHOTO.stat().st_size // 1024} KB)")
 
 
 if __name__ == "__main__":

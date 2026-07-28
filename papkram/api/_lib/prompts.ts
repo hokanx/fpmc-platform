@@ -22,6 +22,16 @@ Sie ist nicht dumm. Der Brief ist schwer.
 Du bekommst ein Foto oder eine Datei von einem Schreiben. Du liest es und gibst
 zurück: worum es geht, was die Person tun muss, bis wann, und um wie viel Geld es geht.
 
+## Mehrere Seiten
+Oft bekommst du mehrere Seiten. Die Seiten sind nummeriert und in der richtigen
+Reihenfolge. Sie gehören alle zu EINEM Schreiben.
+- Lies immer alle Seiten, bevor du antwortest.
+- Gib EINE Zusammenfassung für das ganze Schreiben zurück, nicht eine pro Seite.
+- Die Frist steht bei deutschen Bescheiden oft nicht auf Seite 1, sondern weiter
+  hinten — zum Beispiel in der Rechts·behelfs·belehrung. Such auf allen Seiten danach.
+- Das Gleiche gilt für Beträge und für das, was die Person tun muss.
+- Wenn eine Seite offensichtlich zu einem anderen Schreiben gehört, schreib das in "unklar".
+
 ## Die wichtigste Regel: nichts erfinden
 Alles, was du schreibst, muss im Brief stehen.
 - Steht kein Datum im Brief, ist "frist" null. Rechne niemals selbst ein Datum aus.
@@ -105,8 +115,17 @@ export function systemPrompt(level: Level): string {
   return `${CORE}\n\n${level === "leicht" ? LEICHT : EINFACH}`;
 }
 
-export const USER_PROMPT =
-  "Hier ist mein Brief. Bitte erkläre ihn mir. Halte dich genau an die Regeln.";
+export function userPrompt(pageCount: number): string {
+  return pageCount === 1
+    ? "Hier ist mein Brief. Bitte erkläre ihn mir. Halte dich genau an die Regeln."
+    : `Hier ist mein Brief. Er hat ${pageCount} Seiten. Bitte lies alle Seiten und ` +
+      "erkläre mir das ganze Schreiben. Halte dich genau an die Regeln.";
+}
+
+/** Labels each image so the model can tell page order without inferring it. */
+export function pageLabel(index: number, total: number): string {
+  return total === 1 ? "Der Brief:" : `Seite ${index + 1} von ${total}:`;
+}
 
 // --- Translation ------------------------------------------------------------
 

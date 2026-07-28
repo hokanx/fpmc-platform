@@ -8,9 +8,14 @@ import type { LetterKind } from "../../api/_lib/schema";
  * them for free advice. The model only decides *whether* help is worth
  * offering (`hilfe_empfohlen`); which organisation appears is fixed here.
  *
- * These are national umbrella entry points, so they stay correct without a
- * postcode. Verify before launch, and keep the list short — a wall of links
- * helps nobody.
+ * These are national umbrella entry points, so they stay correct without asking
+ * for a postcode. Keep the list short — a wall of links helps nobody.
+ *
+ * ⚠️ UNVERIFIED. The build environment's network policy blocks these hosts, so
+ * none of the five URLs below has been fetched. Deep links rot. Open every one
+ * of them before launch, and re-check periodically — sending a worried person
+ * to a 404, or worse to a paid service where free advice exists, is the most
+ * damaging thing this file can do.
  */
 export type Hilfe = {
   name: string;

@@ -14,7 +14,13 @@ const STAGES = [
   { after: 20000, text: "Fast fertig. Dieser Brief ist etwas länger …" },
 ] as const;
 
-export default function Processing({ onCancel }: { onCancel: () => void }) {
+export default function Processing({
+  onCancel,
+  pages = 1,
+}: {
+  onCancel: () => void;
+  pages?: number;
+}) {
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
@@ -34,7 +40,11 @@ export default function Processing({ onCancel }: { onCancel: () => void }) {
       <p role="status" aria-live="polite" className="text-xl font-bold">
         {STAGES[stage].text}
       </p>
-      <p className="text-ink-soft">Das dauert meistens weniger als eine Minute.</p>
+      <p className="text-ink-soft">
+        {pages > 1
+          ? `${pages} Seiten dauern etwas länger.`
+          : "Das dauert meistens weniger als eine Minute."}
+      </p>
 
       <button
         type="button"

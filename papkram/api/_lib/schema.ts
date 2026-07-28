@@ -70,7 +70,8 @@ export type Media = {
   data: string;
 };
 
-export type SimplifyRequest = { media: Media; level: Level };
+/** One letter, in page order. A single photo is just a one-page letter. */
+export type SimplifyRequest = { pages: Media[]; level: Level };
 export type TranslateRequest = { letter: Letter; target: OutLang; level: Level };
 
 export type ApiError = {
@@ -82,9 +83,11 @@ export type ApiError = {
     | "too_large"
     | "unsupported_media"
     | "rate_limited"
+    | "daily_cap"
     | "not_configured"
     | "refused"
     | "no_letter_found"
+    | "too_many_pages"
     | "provider_failed";
   retry_after?: number;
 };
@@ -97,8 +100,26 @@ export const SUPPORTED_MEDIA = [
   "application/pdf",
 ] as const;
 
-/** Hard ceiling on the decoded upload. Matched by the client before it even tries. */
-export const MAX_MEDIA_BYTES = 8 * 1024 * 1024;
+/**
+ * German Bescheide routinely run to four or eight pages, and the Frist is as
+ * likely to be on page three as page one. Twelve is generous for a letter and
+ * still bounded.
+ */
+export const MAX_PAGES = 12;
+
+/**
+ * Total decoded bytes across all pages.
+ *
+ * The binding constraint is Vercel's 4.5 MB serverless request-body limit, not
+ * the model. Base64 inflates by ~4/3, so 3 MB of image becomes ~4.1 MB of JSON
+ * — which leaves headroom and still fits a dozen pages of text at readable
+ * quality. The client re-encodes at lower quality to stay under this rather
+ * than failing the upload; see media.encodeAll().
+ */
+export const MAX_TOTAL_BYTES = 3 * 1024 * 1024;
+
+/** Per-page ceiling, so one enormous photo can't consume the whole budget. */
+export const MAX_MEDIA_BYTES = 2 * 1024 * 1024;
 
 // --- JSON schema for structured output --------------------------------------
 

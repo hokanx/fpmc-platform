@@ -1,5 +1,6 @@
 import { clientIp, fail, PayloadTooLarge, readJson, send, type Req, type Res } from "./_lib/http";
 import { checkRate } from "./_lib/ratelimit";
+import { report } from "./_lib/report";
 import { getProvider, ProviderError } from "./_lib/provider";
 import {
   LEVELS,
@@ -44,10 +45,12 @@ export default async function handler(req: Req, res: Res): Promise<void> {
   const letter = parseLetter(b.letter);
   if (!letter) return fail(res, 400, "bad_request");
 
-  const rate = checkRate(clientIp(req));
+  const rate = await checkRate(clientIp(req));
   if (!rate.ok) {
     res.setHeader("Retry-After", String(rate.retryAfter));
-    return fail(res, 429, "rate_limited", { retry_after: rate.retryAfter });
+    return fail(res, rate.reason === "daily_cap" ? 503 : 429, rate.reason, {
+      retry_after: rate.retryAfter,
+    });
   }
 
   try {
@@ -58,10 +61,10 @@ export default async function handler(req: Req, res: Res): Promise<void> {
   } catch (err) {
     if (err instanceof ProviderError) {
       const status = err.code === "not_configured" ? 503 : err.code === "refused" ? 422 : 502;
-      console.error(`[uebersetzen] ${err.code}: ${err.message}`);
+      report("uebersetzen", err.code, err.message, { target, level });
       return fail(res, status, err.code);
     }
-    console.error(`[uebersetzen] unexpected: ${(err as Error).message}`);
+    report("uebersetzen", "provider_failed", (err as Error).message, { target });
     return fail(res, 502, "provider_failed");
   }
 }
