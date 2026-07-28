@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* Self-hosted, OFL. No Google Fonts CDN — no third-party request, no GDPR question.
+   Atkinson Hyperlegible is designed for low-vision readers: letterforms that are hard
+   to confuse (I / l / 1, O / 0) matter more here than personality. */
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+/* Arabic output (translation target). */
+@import "@fontsource/noto-naskh-arabic/400.css";
+@import "@fontsource/noto-naskh-arabic/700.css";
+
+@theme {
+  --color-ink: #14161a; /* body text — 16:1 on paper, AAA */
+  --color-ink-soft: #4a5058; /* secondary text — 7.5:1, AAA at body size */
+  --color-paper: #fbfaf7; /* page background, warm off-white (less glare than pure white) */
+  --color-surface: #ffffff;
+  --color-line: #d8d4cc;
+  --color-line-strong: #b4aea4;
+
+  --color-action: #14527d; /* primary buttons — white on this is 8.2:1 */
+  --color-action-dark: #0e3c5d;
+  --color-urgent: #9c2f16; /* deadline warnings — 7.4:1 on paper */
+  --color-urgent-bg: #fdf0ec;
+  --color-good: #1a5c33;
+  --color-good-bg: #eef6f0;
+  --color-note-bg: #f3f1ea;
+
+  --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Noto Naskh Arabic", "Atkinson Hyperlegible", serif;
+
+  --text-base: 1.125rem; /* 18px floor — never smaller for body copy */
+  --radius-card: 0.875rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    /* Room for the iOS home indicator / Android gesture bar. */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  :dir(rtl) {
+    font-family: var(--font-arabic);
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  /* Visible focus everywhere. Users who can't read small text often can't
+     track a subtle focus ring either. */
+  :focus-visible {
+    outline: 3px solid var(--color-action);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* 56px minimum height on every interactive control — thumbs, one-handed, outdoors.
+     Written out per variant rather than composed: Tailwind v4's @apply only
+     takes utilities, not other custom component classes. */
+  .btn-primary {
+    @apply inline-flex min-h-14 w-full items-center justify-center gap-3
+           rounded-card bg-action px-6 py-4 text-center font-bold text-white
+           transition-colors duration-150 hover:bg-action-dark active:bg-action-dark
+           disabled:opacity-60;
+  }
+
+  .btn-secondary {
+    @apply inline-flex min-h-14 w-full items-center justify-center gap-3
+           rounded-card border-2 border-line-strong bg-surface px-6 py-4 text-center
+           font-bold text-ink transition-colors duration-150 hover:border-ink
+           disabled:opacity-60;
+  }
+
+  .card {
+    @apply rounded-card border border-line bg-surface p-5;
+  }
+
+  /* Content column: ~60 characters is the readable maximum. */
+  .wrap {
+    @apply mx-auto w-full max-w-[38rem] px-5;
+  }
+}
