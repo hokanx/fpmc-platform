@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -46,10 +46,22 @@ function apiDev(): Plugin {
   };
 }
 
-export default defineConfig({
-  plugins: [react(), tailwindcss(), apiDev()],
-  build: {
-    target: "es2020",
-    cssCodeSplit: true,
-  },
+export default defineConfig(({ mode }) => {
+  // Vite only exposes VITE_-prefixed variables, and only to the browser bundle.
+  // The api/ handlers run in this process and read plain process.env — the same
+  // way they will on Vercel — so .env has to be loaded into it explicitly.
+  // Without this, `npm run dev` with a key in .env fails with not_configured,
+  // which is exactly what SETUP.md tells people to do.
+  const env = loadEnv(mode, process.cwd(), "");
+  for (const [key, value] of Object.entries(env)) {
+    if (process.env[key] === undefined) process.env[key] = value;
+  }
+
+  return {
+    plugins: [react(), tailwindcss(), apiDev()],
+    build: {
+      target: "es2020",
+      cssCodeSplit: true,
+    },
+  };
 });

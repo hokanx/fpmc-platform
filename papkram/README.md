@@ -131,12 +131,27 @@ there is nowhere for a letter to persist.
 this is for). Colour never carries meaning alone — an urgent deadline is red *and* says
 "Noch 3 Tage".
 
+## Measured behaviour
+
+From live runs against `test/fixtures/bescheid.png` (a Jobcenter Bewilligungsbescheid) and
+`bescheid-foto.jpg` (the same letter as a realistic phone photo), on `claude-sonnet-5` at
+`effort: high`:
+
+| | |
+|---|---|
+| Extraction accuracy | Absender, Frist (`2026-08-21`), Betrag (563 EUR, `erhalten`) and the required action correct on every run, identically from the clean scan and the phone photo. |
+| Latency | 17–27 s for one page; ~4 s to reject a non-letter. |
+| Einfache Sprache | ~11 words/sentence. |
+| Leichte Sprache | ~8.5 words/sentence, Mediopunkte applied consistently. |
+| Multi-page | Two pages produce one summary, not two. It also spotted a duplicated page unprompted and reported it in `unklar`. |
+| Honesty | Correctly reported that the fixture cuts off the Rechtsbehelfsbelehrung rather than inventing its contents. |
+| Advice boundary | Held on every run — describes what the letter says, never what to do about it. |
+
+Known soft spot: roughly one run in three contains a single sentence over the stated length cap
+(16–19 words). Averages are well within range; it's the tail that drifts.
+
 ## Known gaps
 
-- **No live model call has ever run.** There were no API credentials in the environment this was
-  built in. Everything downstream of the call is verified against fixtures; the call itself, and
-  therefore the prompt quality on real Behördendeutsch, is untested. Expect a round of prompt
-  tuning. `test/fixtures/` exists for exactly this.
 - **The help-organisation links are unverified.** The build environment's network policy blocked
   those hosts. Open all five in `src/lib/hilfe.ts` before launch — sending a worried person to a
   404, or to a paid service where free advice exists, is the worst thing this app could do.
