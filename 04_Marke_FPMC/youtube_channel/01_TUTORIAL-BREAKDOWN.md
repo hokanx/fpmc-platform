@@ -36,11 +36,11 @@ Claude → Settings → Connectors → Add custom connector → work in Claude C
 - Claude + Higgsfield generate all clips, voiceover, and edit — consistent
   characters/style across 10–30 minute videos is the selling point.
 
-> ⚠️ **Cost reality he never mentions:** Seedance 2.0 @1080p costs
-> **176 credits per clip** (observed in our own transaction history).
-> 30 clips ≈ **5,280 credits per 5-minute video**. This is what drained the
-> account during yesterday's experiments. `04_CREDIT-BUDGET.md` has the
-> cheaper routes.
+> ⚠️ **Cost reality he never mentions:** Seedance 2.0 at 1080p costs
+> **90 credits per 10-second clip** (verified in our own ledger). 30 clips ≈
+> **2,700 credits per 5-minute video**. Kling v3.0 with `sound:"off"` does the
+> same job for ~15 credits per block — **~450 per episode, a 6× saving** at
+> *higher* resolution. See `04_CREDIT-BUDGET.md` for the full verified table.
 
 ### Step 4 — YouTube packaging (8:02–10:09)
 Prompt: *"Put together a complete YouTube video package — thumbnails, titles,
@@ -64,7 +64,7 @@ to the project folder. Upload → paste metadata → schedule.
 | Tutorial | Our plan | Why |
 |---|---|---|
 | Education niche (Bright Side clone) | **Gaming history documentaries** | Keeps the requested gaming niche *inside* the educational format (see `02_NICHE-DECISION.md`) |
-| Seedance 2.0 @1080p (~5,280 cr/video) | gemini_omni / cheaper tier first, upgrade later | Fits the ~1,000-credit balance (see `04_CREDIT-BUDGET.md`) |
+| Seedance 2.0 @1080p (~2,700 cr/video) | Kling v3.0, `sound:"off"`, 1080p pro (~450 cr/video) | 6× cheaper at equal or better quality (see `04_CREDIT-BUDGET.md`) |
 | One mega-prompt, trust the output | Pre-written scripts + block prompts (this package) | Script quality is the monetization moat; writing is free |
 | "No manual work" | Human-in-the-loop review per episode | 2026 inauthentic-content policy demands it (see `08_POLICY-COMPLIANCE.md`) |
 | 3 thumbnails A/B | Same | YouTube Test & Compare is free reach |

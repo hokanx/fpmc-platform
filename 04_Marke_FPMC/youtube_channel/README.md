@@ -24,11 +24,13 @@ prepared **before spending a single Higgsfield credit**.
 - [x] Tutorial video analyzed (Higgsfield scene-by-scene analysis)
 - [x] Niche decided and documented
 - [x] Channel identity drafted
-- [x] Credit budget with real observed costs
+- [x] Credit budget verified job-by-job against the account ledger
+- [x] Model route settled: **Kling v3.0, `sound:"off"`, 1080p pro — ~450 cr per
+      5-min episode** (6× cheaper than the tutorial's Seedance route)
 - [x] EP01 fully production-ready (30 narration blocks + 30 video prompts + style key)
 - [x] EP02 + EP03 scripts complete (narration + visual direction)
 - [ ] Channel created on YouTube (manual — see `03_CHANNEL-IDENTITY.md`)
-- [ ] Calibration clip generated (~20–60 credits — see `04_CREDIT-BUDGET.md`)
+- [ ] Calibration clip generated (~30 credits — see `04_CREDIT-BUDGET.md`)
 - [ ] EP01 produced and scheduled
 
 ## The one-line summary
