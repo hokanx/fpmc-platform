@@ -18,6 +18,7 @@ prepared **before spending a single Higgsfield credit**.
 | 7 | `episodes/EP01 … EP03` | Production-ready scripts (narration blocks + video prompts) |
 | 8 | `07_UPLOAD-PACKAGE-TEMPLATES.md` | Titles, descriptions, tags, thumbnail prompts |
 | 9 | `08_POLICY-COMPLIANCE.md` | 2026 YouTube AI rules — what keeps the channel monetizable |
+| 10 | `09_CALIBRATION-LOG.md` | **Live run results:** real billed prices, locked settings, job ids, gotchas |
 
 ## Status
 
@@ -25,12 +26,14 @@ prepared **before spending a single Higgsfield credit**.
 - [x] Niche decided and documented
 - [x] Channel identity drafted
 - [x] Credit budget verified job-by-job against the account ledger
-- [x] Model route settled: **Kling v3.0, `sound:"off"`, 1080p pro — ~450 cr per
-      5-min episode** (6× cheaper than the tutorial's Seedance route)
+- [x] Model route settled: **Kling v3.0, `sound:"off"`, 1080p pro — ~18 cr per
+      block, ~540 cr per 5-min episode** (5× cheaper than the tutorial's
+      Seedance route; prices verified against real charges)
 - [x] EP01 fully production-ready (30 narration blocks + 30 video prompts + style key)
 - [x] EP02 + EP03 scripts complete (narration + visual direction)
 - [ ] Channel created on YouTube (manual — see `03_CHANNEL-IDENTITY.md`)
-- [ ] Calibration clip generated (~30 credits — see `04_CREDIT-BUDGET.md`)
+- [x] Calibration done — EP01 hook (blocks 1-3) built, assembled, 1080p + subtitles
+      (job `5a8b0398-e862-45e2-a693-d087473e173e`, see `09_CALIBRATION-LOG.md`)
 - [ ] EP01 produced and scheduled
 
 ## The one-line summary
