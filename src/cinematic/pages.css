@@ -631,19 +631,20 @@ html[dir="rtl"] .fpmc-manifest p {
   margin-top: 1rem;
   display: grid;
   gap: 0.9rem;
-  max-width: 22rem;
+  max-width: 26rem;
 }
 .fpmc-artist-drop-body img {
   width: 100%;
+  max-width: 18rem;
   aspect-ratio: 1;
   object-fit: cover;
-  filter: saturate(0);
   border: 1px solid var(--color-graphite);
 }
 .fpmc-artist-drop-body p {
   margin: 0;
   color: var(--color-ash);
   font-size: 0.92rem;
+  line-height: 1.55;
 }
 
 /* song-title artwork slot (transparent PNG supplied by FPMC) */

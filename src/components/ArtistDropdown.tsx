@@ -37,7 +37,12 @@ export function ArtistDropdown({ name, href, intro }: Props) {
       {open ? (
         <div className="fpmc-artist-drop-body">
           <img src={RADI_IMG} alt={name} loading="lazy" decoding="async" />
-          <p>{intro}</p>
+          {intro
+            .split("\n\n")
+            .filter(Boolean)
+            .map((para) => (
+              <p key={para.slice(0, 24)}>{para}</p>
+            ))}
         </div>
       ) : null}
     </div>
