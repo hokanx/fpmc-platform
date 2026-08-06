@@ -13,6 +13,7 @@ import { NotifyForm } from "../components/NotifyForm";
 import { ReelBand } from "../components/ReelBand";
 import {
   GIVEAWAY,
+  GIVEAWAY_VISIBLE,
   REELS,
   RELEASE_AT,
   SOCIAL_ROW,
@@ -141,20 +142,22 @@ export function Start() {
             <p className="fpmc-band-body">{t("start.release.signup.body")}</p>
             <NotifyForm />
 
-            <div className="fpmc-giveaway">
-              <span className="fh-eyebrow">{t("start.release.giveaway.title")}</span>
-              <p>{t("start.release.giveaway.body")}</p>
-              <p style={{ marginTop: "1.2rem" }}>
-                <a
-                  href={GIVEAWAY.channelHref}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="fpmc-cta fpmc-cta--follow"
-                >
-                  {GIVEAWAY.channel}
-                </a>
-              </p>
-            </div>
+            {GIVEAWAY_VISIBLE ? (
+              <div className="fpmc-giveaway">
+                <span className="fh-eyebrow">{t("start.release.giveaway.title")}</span>
+                <p>{t("start.release.giveaway.body")}</p>
+                <p style={{ marginTop: "1.2rem" }}>
+                  <a
+                    href={GIVEAWAY.channelHref}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="fpmc-cta fpmc-cta--follow"
+                  >
+                    {GIVEAWAY.channel}
+                  </a>
+                </p>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

@@ -42,6 +42,12 @@ export const DROP_URL = "https://www.youtube.com/channel/UCpNEN5-7gzhUpapA3ob2Zq
 // Facts confirmed by FPMC: 3 pieces, FPMC x Redstar Radi collab, runs on
 // Instagram, date announced later. No terms are published here — the terms doc
 // is still a draft pending legal review.
+//
+// PARKED on FPMC's instruction (06.08.2026): the whole giveaway block is hidden
+// until the mechanics and the date are settled. Flip this to true to bring it
+// back — the copy, the link and the section are all still in place.
+export const GIVEAWAY_VISIBLE = false;
+
 export const GIVEAWAY = {
   pieces: 3,
   item: "T-Shirt",

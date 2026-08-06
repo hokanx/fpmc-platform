@@ -18,7 +18,8 @@ import { useI18n } from "../i18n";
 
 import "../cinematic/pages.css";
 
-const SONG_TITLE_ART: string | null = null; // e.g. "/media/label/song-title.png"
+const SONG_TITLE_ART: string | null = "/media/label/song-title.png";
+const SONG_TITLE_TEXT = "موسم الهجرة الي الشمال";
 
 export function Label() {
   const { t } = useI18n();
@@ -77,7 +78,14 @@ export function Label() {
         <div className="fpmc-artist" data-reveal>
           <div>
             {SONG_TITLE_ART ? (
-              <img className="fpmc-title-art" src={SONG_TITLE_ART} alt="" aria-hidden />
+              <img
+                className="fpmc-title-art"
+                src={SONG_TITLE_ART}
+                alt={SONG_TITLE_TEXT}
+                dir="rtl"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               <div className="fpmc-title-art-pending">{t("label.artist.titleart.pending")}</div>
             )}
