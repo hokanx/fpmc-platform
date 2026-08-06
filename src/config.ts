@@ -89,28 +89,28 @@ export const WEBSITES: Website[] = [
     kind: "Tattoo-Studio",
     city: "Bergisch Gladbach",
     href: "https://sacky-ink.higgsfield.app/",
-    preview: "/media/portfolio/sacky-ink.jpg",
+    preview: "/media/cinematic/portfolio/sacky.jpg",
   },
   {
     name: "Geuenich Immobilien",
     kind: "Immobilien",
     city: "Bergisch Gladbach",
     href: "https://geuenich-immobilien.higgsfield.app/",
-    preview: "/media/portfolio/geuenich.jpg",
+    preview: "/media/cinematic/portfolio/geuenich.jpg",
   },
   {
     name: "ChiRi",
     kind: "Restaurant",
     city: "Bergisch Gladbach",
     href: "https://chiri-cinema.higgsfield.app/",
-    preview: "/media/portfolio/chiri.jpg",
+    preview: "/media/cinematic/portfolio/chiri.jpg",
   },
   {
     name: "Lobby Shishalounge",
     kind: "Shisha-Lounge",
     city: "Köln-Mülheim",
     href: "https://lobby-shishalounge.higgsfield.app/",
-    preview: "/media/portfolio/lobby.jpg",
+    preview: "/media/cinematic/portfolio/lobby.jpg",
   },
 ] as const;
 

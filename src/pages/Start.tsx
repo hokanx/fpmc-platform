@@ -68,40 +68,7 @@ export function Start() {
         ]}
       />
 
-      {/* ---- 1. the social clips, laid out fixed ---- */}
-      <div data-reveal>
-        <ReelBand
-          eyebrow={t("start.reels.eyebrow")}
-          title={t("start.reels.title")}
-          body={t("start.reels.body")}
-          layout="fixed"
-          reels={[REELS.radi, REELS.getReady1, REELS.getReady2, REELS.iykyk]}
-        />
-      </div>
-
-      {/* ---- 2. follow ---- */}
-      <section className="fpmc-band" id="follow">
-        <div className="fpmc-band-head" data-reveal>
-          <span className="fh-eyebrow">{t("start.follow.eyebrow")}</span>
-          <h2>{t("start.follow.title")}</h2>
-          <p className="fpmc-band-body">{t("start.follow.body")}</p>
-        </div>
-        <div className="fpmc-follow fpmc-follow--prominent" data-reveal>
-          {SOCIAL_ROW.map((s) => (
-            <a
-              key={s.key}
-              href={s.href}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="fpmc-cta fpmc-cta--follow fpmc-cta--follow-solid"
-            >
-              {s.label} <span style={{ opacity: 0.7 }}>{s.handle}</span>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* ---- 3. the release: countdown + song details ---- */}
+      {/* ---- 1. the release: countdown + song details (right after the hero) ---- */}
       <section id="release" aria-labelledby="release-title">
         <div className="fpmc-release">
           <div data-reveal>
@@ -158,6 +125,39 @@ export function Start() {
               </div>
             ) : null}
           </div>
+        </div>
+      </section>
+
+      {/* ---- 2. the social clips, laid out fixed ---- */}
+      <div data-reveal>
+        <ReelBand
+          eyebrow={t("start.reels.eyebrow")}
+          title={t("start.reels.title")}
+          body={t("start.reels.body")}
+          layout="fixed"
+          reels={[REELS.radi, REELS.getReady1, REELS.getReady2, REELS.iykyk]}
+        />
+      </div>
+
+      {/* ---- 3. follow ---- */}
+      <section className="fpmc-band" id="follow">
+        <div className="fpmc-band-head" data-reveal>
+          <span className="fh-eyebrow">{t("start.follow.eyebrow")}</span>
+          <h2>{t("start.follow.title")}</h2>
+          <p className="fpmc-band-body">{t("start.follow.body")}</p>
+        </div>
+        <div className="fpmc-follow fpmc-follow--prominent" data-reveal>
+          {SOCIAL_ROW.map((s) => (
+            <a
+              key={s.key}
+              href={s.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="fpmc-cta fpmc-cta--follow fpmc-cta--follow-solid"
+            >
+              {s.label} <span style={{ opacity: 0.7 }}>{s.handle}</span>
+            </a>
+          ))}
         </div>
       </section>
 

@@ -401,11 +401,10 @@ html[dir="rtl"] .fpmc-manifest p {
 .fpmc-deck {
   display: grid;
   gap: 1.2rem;
+  min-width: 0;
 }
 .fpmc-deck-track {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(21rem, 26rem);
+  display: flex;
   gap: 1rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -413,12 +412,14 @@ html[dir="rtl"] .fpmc-manifest p {
   scrollbar-width: thin;
   cursor: grab;
   -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }
 .fpmc-deck-track:active {
   cursor: grabbing;
 }
 .fpmc-deck-card {
-  scroll-snap-align: center;
+  scroll-snap-align: start;
+  flex: 0 0 min(26rem, 82vw);
   display: grid;
   gap: 0.9rem;
   background: var(--color-carbon);
@@ -442,11 +443,12 @@ html[dir="rtl"] .fpmc-manifest p {
   object-fit: cover;
   object-position: top center;
   display: block;
-  filter: saturate(0.15) contrast(1.05);
-  transition: filter 300ms ease, transform 600ms ease;
+  /* the sites are dark by design — show them as they are, no desaturation
+     that would crush them into black */
+  filter: none;
+  transition: transform 600ms ease;
 }
 .fpmc-deck-card:hover .fpmc-deck-shot img {
-  filter: saturate(1);
   transform: scale(1.02);
 }
 .fpmc-deck-meta {
