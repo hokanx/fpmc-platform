@@ -1,0 +1,223 @@
+/* FPMC film hero — Mode A two-chapter video scrub.
+ * ONE generated film, cut at its midpoint into two chapters. Each chapter is a
+ * <video> whose currentTime is driven by the scroll progress of its own band.
+ * Transform/clip-path only; the reduced-motion variant lives in the DOM beside
+ * the motion variant and CSS decides which one is shown (never JS).
+ */
+
+.fh {
+  position: relative;
+  /* 140vh per chapter on desktop, ~70% of that on mobile */
+  height: 280vh;
+}
+@media (max-width: 767px) {
+  .fh {
+    height: 196vh;
+  }
+}
+
+.fh-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-void, #0a0a0a);
+}
+
+/* --- media layers ------------------------------------------------------- */
+
+.fh-poster,
+.fh-clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fh-poster {
+  z-index: 1;
+  filter: saturate(0);
+}
+
+.fh-clip {
+  z-index: 2;
+  filter: saturate(0);
+  /* hard switch at the chapter boundary — no crossfade of half-decoded frames */
+  visibility: hidden;
+}
+.fh-clip[data-active="true"] {
+  visibility: visible;
+}
+
+/* Letterbox + grain, so generated footage and real photography share a grade */
+.fh-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(10, 10, 10, 0.72) 100%),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.55) 0%, transparent 22%, transparent 62%, rgba(10, 10, 10, 0.88) 100%);
+}
+
+/* --- the mark, registered onto the surface the film lands on ------------- */
+
+.fh-mark {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  filter: blur(0.2px) contrast(1.1);
+  will-change: opacity, transform;
+}
+
+/* --- chapter copy ------------------------------------------------------- */
+
+.fh-stages {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  align-content: center;
+  padding: 0 clamp(1.25rem, 6vw, 6rem);
+  padding-bottom: clamp(6rem, 14vh, 10rem);
+}
+
+.fh-chapter {
+  grid-area: 1 / 1;
+  max-width: 46rem;
+  will-change: transform, clip-path;
+}
+.fh-chapter[data-align="right"] {
+  justify-self: end;
+  text-align: right;
+}
+html[dir="rtl"] .fh-chapter[data-align="right"] {
+  justify-self: start;
+  text-align: left;
+}
+
+.fh-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ash, #8a8a8a);
+  margin-bottom: 1.1rem;
+}
+
+.fh-title {
+  font-size: var(--fs-display, clamp(2.75rem, 9vw, 7rem));
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.1rem;
+  text-wrap: balance;
+}
+
+.fh-line {
+  color: var(--color-light, #f2f2f2);
+  opacity: 0.82;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  max-width: 34rem;
+  margin: 0;
+}
+.fh-chapter[data-align="right"] .fh-line {
+  margin-left: auto;
+}
+
+.fh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.fh-chapter[data-align="right"] .fh-actions {
+  justify-content: flex-end;
+}
+
+/* --- chapter rail (bottom, safe-area aware) ----------------------------- */
+
+.fh-rail {
+  position: absolute;
+  z-index: 6;
+  left: clamp(1.25rem, 6vw, 6rem);
+  right: clamp(1.25rem, 6vw, 6rem);
+  bottom: calc(1.6rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: var(--color-ash, #8a8a8a);
+}
+
+.fh-rail-track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: rgba(242, 242, 242, 0.18);
+  overflow: hidden;
+}
+
+.fh-rail-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-light, #f2f2f2);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+html[dir="rtl"] .fh-rail-fill {
+  transform-origin: right center;
+}
+
+.fh-rail-num[data-active="true"] {
+  color: var(--color-light, #f2f2f2);
+}
+
+/* --- reduced motion: both variants in the DOM, CSS picks ---------------- */
+
+.fh-static {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fh {
+    height: auto;
+  }
+  .fh-stage {
+    position: relative;
+    height: auto;
+  }
+  .fh-motion {
+    display: none;
+  }
+  .fh-static {
+    display: block;
+  }
+  .fh-static-frame {
+    position: relative;
+    min-height: 70svh;
+  }
+  .fh-static-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0);
+  }
+  .fh-static-copy {
+    position: relative;
+    z-index: 2;
+    padding: clamp(3rem, 10vh, 7rem) clamp(1.25rem, 6vw, 6rem);
+  }
+  .fh-stages,
+  .fh-rail {
+    display: none;
+  }
+}

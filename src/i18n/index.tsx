@@ -10,6 +10,10 @@ import {
 import de from "./de.json";
 import en from "./en.json";
 import ar from "./ar.json";
+// Keys for the three-page restructure (Start / Arbeit / Label) live in their own
+// files so the original dictionaries stay untouched. AR falls back to EN.
+import pagesDe from "./pages.de.json";
+import pagesEn from "./pages.en.json";
 
 export const LOCALES = ["de", "en", "ar"] as const;
 export type Locale = (typeof LOCALES)[number];
@@ -19,7 +23,11 @@ const RTL_LOCALES: Locale[] = ["ar"];
 const STORAGE_KEY = "fpmc.locale";
 
 type Dict = Record<string, string>;
-const DICTS: Record<Locale, Dict> = { de, en, ar };
+const DICTS: Record<Locale, Dict> = {
+  de: { ...de, ...pagesDe },
+  en: { ...en, ...pagesEn },
+  ar,
+};
 
 // Fallback chain: active locale → EN → DE → the key itself.
 // This is what lets AR ship stubbed: missing keys resolve gracefully.

@@ -1,0 +1,536 @@
+/* FPMC — section styles for the three-page restructure.
+ * Lichtspiel v2: achromatic, flat surfaces, dotted rules, no shadows.
+ * Every section family is used at most once per page, and never twice in a row.
+ */
+
+/* --------------------------------------------------------------- structure */
+
+.fpmc-page {
+  background: var(--color-void);
+  overflow-x: clip;
+}
+
+.fpmc-band {
+  padding: clamp(4.5rem, 12vh, 9rem) clamp(1.25rem, 6vw, 6rem);
+  border-top: 1px solid var(--color-graphite);
+}
+
+.fpmc-band-head {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+
+.fpmc-band-body {
+  color: var(--color-ash);
+  margin: 1.1rem 0 0;
+  max-width: 34rem;
+}
+
+/* Film grain — unifies generated footage with real reel stills. */
+.fpmc-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------- nav */
+
+.fpmc-nav {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem clamp(1.25rem, 6vw, 6rem);
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.9), transparent);
+  backdrop-filter: blur(2px);
+}
+
+.fpmc-nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 2.5vw, 2rem);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+.fpmc-nav-links a[aria-current="page"] {
+  color: var(--color-light);
+}
+.fpmc-nav-links a:hover {
+  color: var(--color-light);
+}
+
+/* ------------------------------------------------------------- CTA garments */
+/* One interaction identity per intent — never one shared button style. */
+
+.fpmc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid var(--color-light);
+  color: var(--color-light);
+  transition: background-color 220ms ease, color 220ms ease;
+}
+.fpmc-cta:hover {
+  background: var(--color-light);
+  color: var(--color-void);
+}
+
+/* release: notched fill block */
+.fpmc-cta--release {
+  border: 0;
+  background: var(--color-light);
+  color: var(--color-void);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+.fpmc-cta--release:hover {
+  background: var(--color-ash);
+  color: var(--color-void);
+}
+
+/* follow: pill */
+.fpmc-cta--follow {
+  border-radius: 999px;
+  padding: 0.7rem 1.3rem;
+  border-color: var(--color-graphite);
+  color: var(--color-ash);
+}
+.fpmc-cta--follow:hover {
+  border-color: var(--color-light);
+  background: transparent;
+  color: var(--color-light);
+}
+
+/* enquiry: viewfinder brackets */
+.fpmc-cta--enquire {
+  position: relative;
+  border: 0;
+  padding: 0.9rem 1.9rem;
+}
+.fpmc-cta--enquire::before,
+.fpmc-cta--enquire::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--color-light);
+}
+.fpmc-cta--enquire::before {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.fpmc-cta--enquire::after {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+.fpmc-cta--enquire:hover {
+  background: transparent;
+  color: var(--color-light);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+/* --------------------------------------------------- manifest rail (family) */
+
+.fpmc-manifest {
+  display: grid;
+  gap: 0;
+  counter-reset: mline;
+}
+.fpmc-manifest li {
+  counter-increment: mline;
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.1rem, 3vh, 2rem) 0;
+  border-bottom: 1px dotted var(--color-graphite);
+}
+.fpmc-manifest li::before {
+  content: "0" counter(mline);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--color-ash);
+  letter-spacing: 0.1em;
+  flex: none;
+}
+.fpmc-manifest p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4.2vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+html[dir="rtl"] .fpmc-manifest p {
+  font-family: var(--font-arabic-display);
+  text-transform: none;
+}
+
+/* ------------------------------------------------------- trades (family 2) */
+
+.fpmc-trades {
+  display: grid;
+  gap: 1px;
+  background: var(--color-graphite);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+.fpmc-trade {
+  background: var(--color-void);
+  padding: clamp(1.6rem, 4vw, 2.6rem);
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+.fpmc-trade img {
+  width: 34px;
+  height: 34px;
+  opacity: 0.85;
+}
+.fpmc-trade h3 {
+  margin: 0;
+}
+.fpmc-trade p {
+  margin: 0;
+  color: var(--color-ash);
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------- release block (family 3) */
+
+.fpmc-release {
+  display: grid;
+  gap: 1px;
+  background: var(--color-graphite);
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  border-top: 1px solid var(--color-graphite);
+}
+.fpmc-release > * {
+  background: var(--color-void);
+  padding: clamp(2rem, 6vw, 4rem);
+}
+.fpmc-release-when {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.6rem;
+}
+.fpmc-release-note {
+  color: var(--color-ash);
+  margin: 0 0 2rem;
+}
+
+.fpmc-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+.fpmc-form input {
+  flex: 1 1 14rem;
+  background: transparent;
+  border: 1px solid var(--color-graphite);
+  color: var(--color-light);
+  padding: 0.85rem 1rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+.fpmc-form input:focus {
+  outline: 1px solid var(--color-light);
+  outline-offset: 2px;
+}
+.fpmc-form-msg {
+  margin: 0.9rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-ash);
+}
+
+.fpmc-giveaway {
+  margin-top: 2.4rem;
+  padding-top: 1.6rem;
+  border-top: 1px dotted var(--color-graphite);
+}
+.fpmc-giveaway p {
+  margin: 0.5rem 0 0;
+  color: var(--color-ash);
+  font-size: 0.95rem;
+  max-width: 30rem;
+}
+
+/* ----------------------------------------------------- reel row (family 4) */
+
+.fpmc-reel-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(15rem, 17rem);
+  gap: clamp(0.8rem, 2vw, 1.4rem);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+}
+.fpmc-reel {
+  position: relative;
+  display: block;
+  aspect-ratio: 9 / 16;
+  background: var(--color-carbon);
+  border: 1px solid var(--color-graphite);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+/* every second card drops down — staggered, not a grid of clones */
+.fpmc-reel-row > .fpmc-reel:nth-child(even) {
+  transform: translateY(clamp(0.8rem, 3vh, 2.2rem));
+}
+.fpmc-reel video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0) contrast(1.05);
+}
+.fpmc-reel-meta {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  gap: 0.25rem;
+  padding: 2.4rem 1rem 1rem;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.92), transparent);
+}
+.fpmc-reel-caption {
+  font-size: 0.9rem;
+  color: var(--color-light);
+}
+.fpmc-reel-plays {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+.fpmc-reel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+.fpmc-reel:hover::after {
+  border-color: var(--color-light);
+}
+
+/* --------------------------------------------------------- stats (family 5) */
+
+.fpmc-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: clamp(1.6rem, 5vw, 3.5rem);
+}
+.fpmc-stat-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+}
+.fpmc-stat-label {
+  margin-top: 0.9rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+
+/* --------------------------------------------------- site cards (family 6) */
+
+.fpmc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1px;
+  background: var(--color-graphite);
+}
+.fpmc-card {
+  background: var(--color-void);
+  padding: clamp(1.5rem, 4vw, 2.4rem);
+  display: grid;
+  gap: 0.6rem;
+  align-content: space-between;
+  min-height: 13rem;
+  transition: background-color 220ms ease;
+}
+.fpmc-card:hover {
+  background: var(--color-carbon);
+}
+.fpmc-card-kind {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+.fpmc-card h3 {
+  margin: 0;
+}
+.fpmc-card-go {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+.fpmc-card:hover .fpmc-card-go {
+  color: var(--color-light);
+}
+
+/* ---------------------------------------------- category rows (family 7) */
+
+.fpmc-rows {
+  border-top: 1px solid var(--color-graphite);
+}
+.fpmc-row {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  gap: clamp(1rem, 4vw, 3rem);
+  align-items: center;
+  padding: clamp(1.4rem, 4vh, 2.4rem) 0;
+  border-bottom: 1px solid var(--color-graphite);
+}
+.fpmc-row-index {
+  font-family: var(--font-display);
+  color: var(--color-ash);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+.fpmc-row h3 {
+  margin: 0 0 0.4rem;
+}
+.fpmc-row p {
+  margin: 0;
+  color: var(--color-ash);
+  font-size: 0.95rem;
+  max-width: 42rem;
+}
+.fpmc-row-state {
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------- artist block (family 8) */
+
+.fpmc-artist {
+  display: grid;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  align-items: center;
+}
+.fpmc-artist-meta {
+  display: grid;
+  gap: 0.8rem;
+}
+.fpmc-artist-meta dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1.4rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.fpmc-artist-meta dt {
+  color: var(--color-ash);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  align-self: center;
+}
+.fpmc-artist-meta dd {
+  margin: 0;
+}
+
+/* the song-title artwork slot (transparent PNG supplied by FPMC) */
+.fpmc-title-art {
+  width: 100%;
+  max-width: 34rem;
+  filter: saturate(0);
+}
+.fpmc-title-art-pending {
+  border: 1px dotted var(--color-graphite);
+  padding: clamp(1.6rem, 5vw, 3rem);
+  color: var(--color-ash);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------ follow + foot */
+
+.fpmc-follow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.fpmc-foot {
+  padding: clamp(2.5rem, 8vh, 5rem) clamp(1.25rem, 6vw, 6rem);
+  border-top: 1px solid var(--color-graphite);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem 2.4rem;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--color-ash);
+}
+.fpmc-foot a:hover {
+  color: var(--color-light);
+}
+.fpmc-foot-links {
+  display: flex;
+  gap: 1.4rem;
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------ scroll reveal */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-reveal][data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .fpmc-reel-row > .fpmc-reel:nth-child(even) {
+    transform: none;
+  }
+}
