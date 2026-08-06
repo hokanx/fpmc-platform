@@ -174,13 +174,14 @@
   align-self: end;
 }
 
-/* On narrow screens the centred logo sits low enough that the bottom chapter's
-   CTA would land on it — push the whole bottom chapter down so it clears the
-   logo. The chapter is bottom-aligned, so its CTA sits at the bottom edge of
-   the padded band; more bottom padding moves it cleanly below the logo. */
+/* On narrow screens the centred logo fills a lot of vertical space, so the
+   bottom chapter must sit at the TRUE bottom edge to stay clear of it.
+   The chapter is bottom-aligned: LESS bottom padding moves it DOWN (toward the
+   edge), MORE moves it UP (toward the logo). We want it low. */
 @media (max-width: 767px) {
   .fh[data-zone="split"] .fh-stages {
-    padding-bottom: clamp(9rem, 28vh, 14rem);
+    padding-bottom: clamp(3rem, 8vh, 5rem);
+    padding-top: clamp(5rem, 14vh, 8rem);
   }
   .fh[data-zone="split"] .fh-chapter[data-align="right"] .fh-line {
     max-width: 16rem;
