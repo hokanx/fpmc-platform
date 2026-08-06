@@ -1,6 +1,5 @@
 import { NavLink, Link } from "react-router-dom";
 import { Logo } from "./Logo";
-import { LangSwitcher } from "./LangSwitcher";
 import { useI18n } from "../i18n";
 
 export function Header() {
@@ -37,8 +36,6 @@ export function Header() {
           <NavLink to="/links" className={navClass}>
             {t("nav.links")}
           </NavLink>
-          <span className="hidden h-4 w-px bg-graphite sm:block" aria-hidden />
-          <LangSwitcher />
         </nav>
       </div>
     </header>

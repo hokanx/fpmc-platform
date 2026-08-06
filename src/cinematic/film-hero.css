@@ -141,6 +141,21 @@
   --r: 1;
 }
 
+/* zone="top": the film's own subject owns the middle of the frame (the animated
+   logo), so the chapter copy is pinned into the upper band and kept narrow —
+   the centre stays free of text. */
+.fh[data-zone="top"] .fh-stages {
+  align-content: start;
+  padding-top: clamp(5.5rem, 15vh, 9rem);
+  padding-bottom: 0;
+}
+.fh[data-zone="top"] .fh-chapter {
+  max-width: 26rem;
+}
+.fh[data-zone="top"] .fh-title {
+  font-size: clamp(2.1rem, 4.6vw, 3.6rem);
+}
+
 /* --- chapter copy ------------------------------------------------------- */
 
 .fh-stages {

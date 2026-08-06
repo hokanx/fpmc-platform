@@ -53,11 +53,13 @@ export function Header() {
 
 export function LangSwitch() {
   const { locale, setLocale } = useI18n();
+  // The site is English only; this renders nothing while LOCALES has one entry.
+  if (LOCALES.length < 2) return null;
   return (
     <span className="fpmc-lang" role="group" aria-label="Language">
       {LOCALES.map((l: Locale) => (
         <button key={l} data-active={locale === l} onClick={() => setLocale(l)}>
-          {l === "ar" ? "ع" : l.toUpperCase()}
+          {l.toUpperCase()}
         </button>
       ))}
     </span>

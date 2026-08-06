@@ -54,6 +54,8 @@ type Props = {
   chapters: [FilmChapter, FilmChapter];
   mark?: MarkPlacement;
   ariaLabel?: string;
+  /** "top" keeps the centre of the frame free of text (film with its own subject) */
+  zone?: "center" | "top";
 };
 
 /** Band weights. Chapter 2 is slightly longer so the landing beat can breathe. */
@@ -73,7 +75,7 @@ function easeOutCubic(v: number) {
   return 1 - Math.pow(1 - v, 3);
 }
 
-export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
+export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC", zone = "center" }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null]);
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([null, null]);
@@ -216,7 +218,7 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
     : undefined;
 
   return (
-    <section ref={sectionRef} className="fh" aria-label={ariaLabel}>
+    <section ref={sectionRef} className="fh" data-zone={zone} aria-label={ariaLabel}>
       <div className="fh-stage">
         {/* ---------- motion variant ---------- */}
         <div className="fh-motion">

@@ -4,6 +4,9 @@
  * served from our own origin (no Instagram embed, no third-party cookies, no
  * layout jank). A card plays only while it is on screen and pauses when it
  * leaves; the poster frame paints first. Clicking opens the real reel.
+ *
+ * layout: "fixed" lays every clip out at once in a fixed grid (nothing hidden
+ * off-screen, no horizontal scrolling); "row" is the snapping scroll rail.
  */
 import { useEffect, useRef } from "react";
 
@@ -15,6 +18,7 @@ type Props = {
   title: string;
   body?: string;
   reels: Reel[];
+  layout?: "row" | "fixed";
 };
 
 function ReelCard({ reel }: { reel: Reel }) {
@@ -68,14 +72,14 @@ function ReelCard({ reel }: { reel: Reel }) {
           {reel.caption}
         </span>
         <span className="fpmc-reel-plays">
-          {reel.plays.toLocaleString("de-DE")} {t("reels.plays")}
+          {reel.plays.toLocaleString("en-US")} {t("reels.plays")}
         </span>
       </span>
     </a>
   );
 }
 
-export function ReelBand({ eyebrow, title, body, reels }: Props) {
+export function ReelBand({ eyebrow, title, body, reels, layout = "row" }: Props) {
   return (
     <section className="fpmc-band">
       <div className="fpmc-band-head">
@@ -83,7 +87,7 @@ export function ReelBand({ eyebrow, title, body, reels }: Props) {
         <h2>{title}</h2>
         {body ? <p className="fpmc-band-body">{body}</p> : null}
       </div>
-      <div className="fpmc-reel-row">
+      <div className={layout === "fixed" ? "fpmc-reel-row fpmc-reel-row--fixed" : "fpmc-reel-row"}>
         {reels.map((reel) => (
           <ReelCard key={reel.code} reel={reel} />
         ))}

@@ -290,6 +290,19 @@ html[dir="rtl"] .fpmc-manifest p {
   padding-bottom: 1rem;
   scrollbar-width: thin;
 }
+/* fixed variant: every clip visible at once, no horizontal scrolling, no offset */
+.fpmc-reel-row--fixed {
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  overflow: visible;
+  scroll-snap-type: none;
+  padding-bottom: 0;
+}
+.fpmc-reel-row--fixed > .fpmc-reel:nth-child(even) {
+  transform: none;
+}
+
 .fpmc-reel {
   position: relative;
   display: block;

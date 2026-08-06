@@ -35,6 +35,9 @@
   "start.release.note": "German time. The premiere link goes live on release day.",
   "start.release.signup.title": "Don't miss it",
   "start.release.signup.body": "One email for news and drops. No ads, no reselling.",
+  "start.release.song.eyebrow": "The track",
+  "start.release.song.artistLabel": "Artist",
+  "start.release.song.labelLabel": "Label",
   "start.release.giveaway.title": "Giveaway",
   "start.release.giveaway.body": "For the release we're giving away 3 T-shirts from the FPMC × Redstar Radi collab — only 3 pieces. It runs on Instagram; the date follows.",
 
@@ -89,7 +92,7 @@
   "arbeit.reels.title": "From the set",
 
   "label.ch1.eyebrow": "FPMC Label",
-  "label.ch1.title": "We release it ourselves.",
+  "label.ch1.title": "Label & Records",
   "label.ch1.line": "Production, music video and release — one house, one signature.",
   "label.ch2.eyebrow": "First chapter",
   "label.ch2.title": "Redstar Radi",

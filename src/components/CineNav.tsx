@@ -1,11 +1,10 @@
-/* Chrome for the three cinematic pages: mark, the three routes, language.
+/* Chrome for the three cinematic pages: mark and the three routes.
  * The top bar belongs to the brand — the chapter rail lives at the bottom of
- * the film stage, never up here.
+ * the film stage, never up here. No language switcher: the site is English only.
  */
 import { NavLink } from "react-router-dom";
 
 import { Logo } from "./Logo";
-import { LangSwitcher } from "./LangSwitcher";
 import { useI18n } from "../i18n";
 
 export function CineNav() {
@@ -29,7 +28,6 @@ export function CineNav() {
           </NavLink>
         ))}
       </nav>
-      <LangSwitcher />
     </header>
   );
 }

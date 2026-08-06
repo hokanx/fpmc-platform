@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import { useI18n } from "../../i18n";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { Reveal } from "../../components/motion/Reveal";
 import { WordReveal } from "../../components/motion/WordReveal";
@@ -26,9 +25,11 @@ function renderParagraph(text: string) {
 }
 
 export function LegalPage({ doc }: { doc: { de: LegalDoc; en: LegalDoc } }) {
-  const { locale } = useI18n();
-  const content = locale === "de" ? doc.de : doc.en; // AR falls back to EN
-  useDocumentTitle(content.title);
+  useDocumentTitle(doc.en.title);
+  // The site is English only (06.08.2026), so the legal pages render the English
+  // edition. The German edition stays in legalContent.ts — swap to doc.de if
+  // FPMC wants Impressum/Datenschutz served in German.
+  const content = doc.en;
 
   return (
     <section className="px-5 py-20 sm:py-24">

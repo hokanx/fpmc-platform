@@ -52,9 +52,24 @@ export function Countdown({ target, className, cta = true }: Props) {
   return (
     <div className={className} aria-live="off">
       {done ? (
-        <p className="text-light" style={{ fontSize: "clamp(1.4rem,3vw,2.2rem)", margin: 0 }}>
-          {t("cin.release.live")}
-        </p>
+        <>
+          <p className="text-light" style={{ fontSize: "clamp(1.4rem,3vw,2.2rem)", margin: 0 }}>
+            {t("cin.release.live")}
+          </p>
+          {/* the CTA exists only once there is something to watch */}
+          {cta ? (
+            <p style={{ margin: "1.6rem 0 0" }}>
+              <a
+                href={DROP_URL}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="fpmc-cta fpmc-cta--release"
+              >
+                {t("countdown.cta")}
+              </a>
+            </p>
+          ) : null}
+        </>
       ) : (
         <div style={{ display: "flex", gap: "clamp(1rem,3vw,2.6rem)", flexWrap: "wrap" }}>
           {units.map(([value, label]) => (
@@ -86,19 +101,6 @@ export function Countdown({ target, className, cta = true }: Props) {
           ))}
         </div>
       )}
-
-      {cta ? (
-        <p style={{ margin: "2rem 0 0" }}>
-          <a
-            href={DROP_URL}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="fpmc-cta fpmc-cta--release"
-          >
-            {t("countdown.cta")}
-          </a>
-        </p>
-      ) : null}
     </div>
   );
 }

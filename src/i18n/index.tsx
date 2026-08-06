@@ -1,59 +1,39 @@
+/* FPMC — i18n.
+ *
+ * The site is ENGLISH ONLY (FPMC decision, 06.08.2026). German and Arabic were
+ * removed from the interface together with the language switcher. The `de.json`,
+ * `ar.json` and `pages.de.json` dictionaries are deliberately LEFT IN THIS
+ * FOLDER, unimported: the German copy is finished work and can be brought back
+ * by re-adding it to LOCALES and DICTS. Nothing else in the app needs to change.
+ *
+ * The `t()` / `locale` / `dir` API is unchanged, so every existing page keeps
+ * working untouched.
+ */
 import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
   type ReactNode,
 } from "react";
-import de from "./de.json";
+
 import en from "./en.json";
-import ar from "./ar.json";
-// Keys for the three-page restructure (Start / Arbeit / Label) live in their own
-// files so the original dictionaries stay untouched. AR falls back to EN.
-import pagesDe from "./pages.de.json";
 import pagesEn from "./pages.en.json";
 
-export const LOCALES = ["de", "en", "ar"] as const;
+export const LOCALES = ["en"] as const;
 export type Locale = (typeof LOCALES)[number];
 
-export const DEFAULT_LOCALE: Locale = "de";
-const RTL_LOCALES: Locale[] = ["ar"];
-const STORAGE_KEY = "fpmc.locale";
+export const DEFAULT_LOCALE: Locale = "en";
 
 type Dict = Record<string, string>;
-const DICTS: Record<Locale, Dict> = {
-  de: { ...de, ...pagesDe },
-  en: { ...en, ...pagesEn },
-  ar,
-};
+const DICT: Dict = { ...en, ...pagesEn };
 
-// Fallback chain: active locale → EN → DE → the key itself.
-// This is what lets AR ship stubbed: missing keys resolve gracefully.
-function resolve(locale: Locale, key: string): string {
-  return (
-    DICTS[locale]?.[key] ||
-    DICTS.en?.[key] ||
-    DICTS.de?.[key] ||
-    key
-  );
+function resolve(key: string): string {
+  return DICT[key] || key;
 }
 
-export function dirFor(locale: Locale): "rtl" | "ltr" {
-  return RTL_LOCALES.includes(locale) ? "rtl" : "ltr";
-}
-
-function isLocale(value: string | null): value is Locale {
-  return !!value && (LOCALES as readonly string[]).includes(value);
-}
-
-function initialLocale(): Locale {
-  if (typeof window === "undefined") return DEFAULT_LOCALE;
-  // DE is the hard default (spec). Only a prior explicit choice overrides it —
-  // no browser-language sniffing, so first load is deterministic German.
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  return isLocale(stored) ? stored : DEFAULT_LOCALE;
+export function dirFor(_locale: Locale): "rtl" | "ltr" {
+  return "ltr";
 }
 
 type I18nValue = {
@@ -66,29 +46,17 @@ type I18nValue = {
 const I18nContext = createContext<I18nValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale);
-
-  // Keep <html lang/dir> in sync — RTL mirroring is driven from here.
-  useEffect(() => {
-    const root = document.documentElement;
-    root.lang = locale;
-    root.dir = dirFor(locale);
-  }, [locale]);
-
-  const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      /* storage blocked — language simply won't persist */
-    }
-  }, []);
-
-  const t = useCallback((key: string) => resolve(locale, key), [locale]);
+  const t = useCallback((key: string) => resolve(key), []);
 
   const value = useMemo<I18nValue>(
-    () => ({ locale, dir: dirFor(locale), setLocale, t }),
-    [locale, setLocale, t],
+    () => ({
+      locale: DEFAULT_LOCALE,
+      dir: "ltr",
+      // kept for API compatibility — there is nothing to switch to
+      setLocale: () => {},
+      t,
+    }),
+    [t],
   );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;

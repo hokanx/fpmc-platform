@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Cursor, Magnetic } from "../cinematic/motion";
-import { LangSwitch } from "../cinematic/sections";
 import { MAILTO, SOCIALS } from "../config";
 import "../cinematic/cinematic.css";
 
@@ -38,7 +37,6 @@ export function Links() {
         <Link to="/" className="fpmc-eyebrow fpmc-nav-link" style={{ textDecoration: "none" }}>
           ← fpmc.house
         </Link>
-        <LangSwitch />
       </header>
 
       <main

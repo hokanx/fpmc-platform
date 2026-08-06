@@ -1,6 +1,11 @@
-/* FPMC — Start. The landing page: the house in one breath, the release with a
- * live countdown to 07.08.2026 16:00 German time, the giveaway hint, the real
- * reels, and the follow row. The film hero runs the projector.
+/* FPMC — Start. The landing page.
+ *
+ * Order (FPMC, 06.08.2026): the animated-logo film hero, then the social clips
+ * laid out fixed, then the follow CTA, then the release with the countdown and
+ * the song details. The house, the manifesto and the numbers close it out.
+ *
+ * The hero film IS the animated logo, so it carries no code-registered mark and
+ * the chapter copy sits in the upper band — the centre of the frame stays free.
  */
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -12,6 +17,7 @@ import { Countdown } from "../components/Countdown";
 import { NotifyForm } from "../components/NotifyForm";
 import { ReelBand } from "../components/ReelBand";
 import {
+  ARTIST,
   GIVEAWAY,
   GIVEAWAY_VISIBLE,
   REELS,
@@ -22,12 +28,15 @@ import { useI18n } from "../i18n";
 
 import "../cinematic/pages.css";
 
+const SONG_TITLE_ART = "/media/label/song-title.png";
+const SONG_TITLE_TEXT = "موسم الهجرة الي الشمال";
+
 export function Start() {
   const { t } = useI18n();
   useReveal();
 
   useEffect(() => {
-    document.title = "FPMC — Film · Musik · KI";
+    document.title = "FPMC — Film · Music · AI";
   }, []);
 
   return (
@@ -37,17 +46,7 @@ export function Start() {
       <FilmHero
         slug="home"
         ariaLabel="FPMC"
-        mark={{
-          left: "65%",
-          top: "48%",
-          width: "15%",
-          transform: "translate(-50%, -50%) perspective(700px) rotateX(52deg) rotateZ(-10deg)",
-          // overlay lets the case's scuffs read through the stencil
-          blend: "overlay",
-          opacity: 0.8,
-          // the beam crosses the lid and leaves the stencil behind it
-          reveal: "wipe",
-        }}
+        zone="top"
         chapters={[
           {
             eyebrow: t("start.ch1.eyebrow"),
@@ -61,26 +60,111 @@ export function Start() {
             line: t("start.ch2.line"),
             align: "right",
             actions: (
-              <>
-                <a href="#release" className="fpmc-cta fpmc-cta--release">
-                  {t("start.ch2.cta")}
-                </a>
-                <a
-                  href={SOCIAL_ROW[0].href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="fpmc-cta fpmc-cta--follow"
-                >
-                  {t("start.ch2.follow")}
-                </a>
-              </>
+              <a href="#release" className="fpmc-cta fpmc-cta--release">
+                {t("start.ch2.cta")}
+              </a>
             ),
           },
         ]}
       />
 
-      {/* ---- the house: three trades (editorial grid) ---- */}
-      <section className="fpmc-band" id="haus">
+      {/* ---- 1. the social clips, laid out fixed ---- */}
+      <div data-reveal>
+        <ReelBand
+          eyebrow={t("start.reels.eyebrow")}
+          title={t("start.reels.title")}
+          body={t("start.reels.body")}
+          layout="fixed"
+          reels={[REELS.radi, REELS.getReady1, REELS.getReady2, REELS.iykyk]}
+        />
+      </div>
+
+      {/* ---- 2. follow ---- */}
+      <section className="fpmc-band" id="follow">
+        <div className="fpmc-band-head" data-reveal>
+          <span className="fh-eyebrow">{t("start.follow.eyebrow")}</span>
+          <h2>{t("start.follow.title")}</h2>
+          <p className="fpmc-band-body">{t("start.follow.body")}</p>
+        </div>
+        <div className="fpmc-follow" data-reveal>
+          {SOCIAL_ROW.map((s) => (
+            <a
+              key={s.key}
+              href={s.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="fpmc-cta fpmc-cta--follow"
+            >
+              {s.label} <span style={{ opacity: 0.6 }}>{s.handle}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ---- 3. the release: countdown + song details ---- */}
+      <section id="release" aria-labelledby="release-title">
+        <div className="fpmc-release">
+          <div data-reveal>
+            <span className="fh-eyebrow">{t("start.release.eyebrow")}</span>
+            <h2 id="release-title" className="fpmc-release-when">
+              {t("start.release.when")}
+            </h2>
+            <p className="fpmc-release-note">{t("start.release.note")}</p>
+            <Countdown target={RELEASE_AT} />
+          </div>
+
+          <div data-reveal>
+            <span className="fh-eyebrow">{t("start.release.song.eyebrow")}</span>
+            <img
+              className="fpmc-title-art"
+              src={SONG_TITLE_ART}
+              alt={SONG_TITLE_TEXT}
+              dir="rtl"
+              loading="lazy"
+              decoding="async"
+              style={{ margin: "1.4rem 0 1.8rem" }}
+            />
+            <div className="fpmc-artist-meta">
+              <dl>
+                <dt>{t("start.release.song.artistLabel")}</dt>
+                <dd>
+                  <a href={ARTIST.instagram} target="_blank" rel="noreferrer noopener">
+                    {ARTIST.name}
+                  </a>
+                </dd>
+                <dt>{t("start.release.song.labelLabel")}</dt>
+                <dd>FPMC</dd>
+              </dl>
+            </div>
+
+            <div style={{ marginTop: "2.4rem" }}>
+              <h3>{t("start.release.signup.title")}</h3>
+              <p className="fpmc-band-body">{t("start.release.signup.body")}</p>
+              <NotifyForm />
+            </div>
+
+            {GIVEAWAY_VISIBLE ? (
+              <div className="fpmc-giveaway">
+                <span className="fh-eyebrow">{t("start.release.giveaway.title")}</span>
+                <p>{t("start.release.giveaway.body")}</p>
+                <p style={{ marginTop: "1.2rem" }}>
+                  <a
+                    href={GIVEAWAY.channelHref}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="fpmc-cta fpmc-cta--follow"
+                  >
+                    {GIVEAWAY.channel}
+                  </a>
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      {/* ---- 4. the house: three trades ---- */}
+      <section className="fpmc-band" id="house">
         <div className="fpmc-band-head" data-reveal>
           <span className="fh-eyebrow">{t("start.house.eyebrow")}</span>
           <h2>{t("start.house.title")}</h2>
@@ -105,7 +189,7 @@ export function Start() {
         </div>
       </section>
 
-      {/* ---- manifesto rail (numbered rows) ---- */}
+      {/* ---- 5. manifesto rail ---- */}
       <section className="fpmc-band">
         <div className="fpmc-band-head" data-reveal>
           <span className="fh-eyebrow">{t("start.manifest.eyebrow")}</span>
@@ -126,53 +210,7 @@ export function Start() {
         </ul>
       </section>
 
-      {/* ---- release: colour-blocked diptych ---- */}
-      <section id="release" aria-labelledby="release-title">
-        <div className="fpmc-release">
-          <div data-reveal>
-            <span className="fh-eyebrow">{t("start.release.eyebrow")}</span>
-            <h2 id="release-title" className="fpmc-release-when">
-              {t("start.release.when")}
-            </h2>
-            <p className="fpmc-release-note">{t("start.release.note")}</p>
-            <Countdown target={RELEASE_AT} />
-          </div>
-          <div data-reveal>
-            <h3>{t("start.release.signup.title")}</h3>
-            <p className="fpmc-band-body">{t("start.release.signup.body")}</p>
-            <NotifyForm />
-
-            {GIVEAWAY_VISIBLE ? (
-              <div className="fpmc-giveaway">
-                <span className="fh-eyebrow">{t("start.release.giveaway.title")}</span>
-                <p>{t("start.release.giveaway.body")}</p>
-                <p style={{ marginTop: "1.2rem" }}>
-                  <a
-                    href={GIVEAWAY.channelHref}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="fpmc-cta fpmc-cta--follow"
-                  >
-                    {GIVEAWAY.channel}
-                  </a>
-                </p>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </section>
-
-      {/* ---- reels ---- */}
-      <div data-reveal>
-        <ReelBand
-          eyebrow={t("start.reels.eyebrow")}
-          title={t("start.reels.title")}
-          body={t("start.reels.body")}
-          reels={[REELS.getReady1, REELS.getReady2, REELS.iykyk, REELS.radi]}
-        />
-      </div>
-
-      {/* ---- numbers: giant numerals ---- */}
+      {/* ---- 6. numbers ---- */}
       <section className="fpmc-band">
         <div className="fpmc-band-head" data-reveal>
           <span className="fh-eyebrow">{t("start.numbers.eyebrow")}</span>
@@ -195,29 +233,7 @@ export function Start() {
             <div className="fpmc-stat-label">{t("cin.numbers.n4")}</div>
           </div>
         </div>
-      </section>
-
-      {/* ---- follow row ---- */}
-      <section className="fpmc-band" id="folgen">
-        <div className="fpmc-band-head" data-reveal>
-          <span className="fh-eyebrow">{t("start.follow.eyebrow")}</span>
-          <h2>{t("start.follow.title")}</h2>
-          <p className="fpmc-band-body">{t("start.follow.body")}</p>
-        </div>
-        <div className="fpmc-follow" data-reveal>
-          {SOCIAL_ROW.map((s) => (
-            <a
-              key={s.key}
-              href={s.href}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="fpmc-cta fpmc-cta--follow"
-            >
-              {s.label} <span style={{ opacity: 0.6 }}>{s.handle}</span>
-            </a>
-          ))}
-        </div>
-        <p style={{ marginTop: "2.5rem" }} data-reveal>
+        <p style={{ marginTop: "3rem" }} data-reveal>
           <Link to="/arbeit" className="fpmc-cta fpmc-cta--enquire">
             {t("nav.arbeit")} →
           </Link>
