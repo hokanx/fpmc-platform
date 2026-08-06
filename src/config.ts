@@ -66,31 +66,51 @@ export const ARTIST = {
 } as const;
 
 /* ---------------------------------------------------------------- portfolio */
-// Live client websites built by FPMC.
-export const WEBSITES = [
+// Live client websites built by FPMC. `preview` is a real screenshot of the
+// live site, served from our own origin and shown in the swipe deck.
+export type Website = {
+  name: string;
+  kind: string;
+  city: string;
+  href: string;
+  preview: string;
+};
+
+export const WEBSITES: Website[] = [
+  {
+    name: "Shi Asia",
+    kind: "Restaurant",
+    city: "Köln",
+    href: "https://shi-asia.higgsfield.app/",
+    preview: "/media/portfolio/shi-asia.jpg",
+  },
   {
     name: "Sacky Ink",
     kind: "Tattoo-Studio",
     city: "Bergisch Gladbach",
     href: "https://sacky-ink.higgsfield.app/",
+    preview: "/media/portfolio/sacky-ink.jpg",
   },
   {
     name: "Geuenich Immobilien",
     kind: "Immobilien",
     city: "Bergisch Gladbach",
     href: "https://geuenich-immobilien.higgsfield.app/",
+    preview: "/media/portfolio/geuenich.jpg",
   },
   {
     name: "ChiRi",
     kind: "Restaurant",
     city: "Bergisch Gladbach",
     href: "https://chiri-cinema.higgsfield.app/",
+    preview: "/media/portfolio/chiri.jpg",
   },
   {
     name: "Lobby Shishalounge",
     kind: "Shisha-Lounge",
     city: "Köln-Mülheim",
     href: "https://lobby-shishalounge.higgsfield.app/",
+    preview: "/media/portfolio/lobby.jpg",
   },
 ] as const;
 

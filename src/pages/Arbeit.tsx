@@ -8,6 +8,7 @@ import { FilmHero } from "../cinematic/film-hero";
 import { useReveal } from "../cinematic/use-reveal";
 import { CineFoot, CineNav } from "../components/CineNav";
 import { ReelBand } from "../components/ReelBand";
+import { SwipeDeck } from "../components/SwipeDeck";
 import { MAILTO, REELS, WEBSITES } from "../config";
 import { useI18n } from "../i18n";
 
@@ -115,29 +116,15 @@ export function Arbeit() {
         </div>
       </section>
 
-      {/* ---- websites: staggered cards, real live links ---- */}
+      {/* ---- websites: swipeable deck with real screenshots ---- */}
       <section className="fpmc-band" id="websites">
         <div className="fpmc-band-head" data-reveal>
           <span className="fh-eyebrow">{t("arbeit.sites.eyebrow")}</span>
           <h2>{t("arbeit.sites.title")}</h2>
           <p className="fpmc-band-body">{t("arbeit.sites.body")}</p>
         </div>
-        <div className="fpmc-cards" data-reveal>
-          {WEBSITES.map((w) => (
-            <a
-              key={w.name}
-              className="fpmc-card"
-              href={w.href}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <span className="fpmc-card-kind">
-                {w.kind} · {w.city}
-              </span>
-              <h3>{w.name}</h3>
-              <span className="fpmc-card-go">{t("arbeit.sites.visit")} →</span>
-            </a>
-          ))}
+        <div data-reveal>
+          <SwipeDeck websites={WEBSITES} />
         </div>
       </section>
 

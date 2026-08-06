@@ -54,8 +54,9 @@ type Props = {
   chapters: [FilmChapter, FilmChapter];
   mark?: MarkPlacement;
   ariaLabel?: string;
-  /** "top" keeps the centre of the frame free of text (film with its own subject) */
-  zone?: "center" | "top";
+  /** "top" keeps the centre free (film with its own subject); "split" pins
+   *  chapter one to the top and chapter two to the bottom, framing a centred logo */
+  zone?: "center" | "top" | "split";
 };
 
 /** Band weights. Chapter 2 is slightly longer so the landing beat can breathe. */

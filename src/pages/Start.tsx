@@ -46,7 +46,7 @@ export function Start() {
       <FilmHero
         slug="home"
         ariaLabel="FPMC"
-        zone="top"
+        zone="split"
         chapters={[
           {
             eyebrow: t("start.ch1.eyebrow"),
@@ -86,16 +86,16 @@ export function Start() {
           <h2>{t("start.follow.title")}</h2>
           <p className="fpmc-band-body">{t("start.follow.body")}</p>
         </div>
-        <div className="fpmc-follow" data-reveal>
+        <div className="fpmc-follow fpmc-follow--prominent" data-reveal>
           {SOCIAL_ROW.map((s) => (
             <a
               key={s.key}
               href={s.href}
               target="_blank"
               rel="noreferrer noopener"
-              className="fpmc-cta fpmc-cta--follow"
+              className="fpmc-cta fpmc-cta--follow fpmc-cta--follow-solid"
             >
-              {s.label} <span style={{ opacity: 0.6 }}>{s.handle}</span>
+              {s.label} <span style={{ opacity: 0.7 }}>{s.handle}</span>
             </a>
           ))}
         </div>
@@ -132,8 +132,6 @@ export function Start() {
                     {ARTIST.name}
                   </a>
                 </dd>
-                <dt>{t("start.release.song.labelLabel")}</dt>
-                <dd>FPMC</dd>
               </dl>
             </div>
 

@@ -3,6 +3,10 @@
   "nav.arbeit": "Work",
   "nav.label": "Label",
 
+  "deck.prev": "Previous",
+  "deck.next": "Next",
+  "deck.hint": "Swipe / drag",
+
   "reels.plays": "views",
   "reels.open": "watch on Instagram",
 
@@ -37,7 +41,6 @@
   "start.release.signup.body": "One email for news and drops. No ads, no reselling.",
   "start.release.song.eyebrow": "The track",
   "start.release.song.artistLabel": "Artist",
-  "start.release.song.labelLabel": "Label",
   "start.release.giveaway.title": "Giveaway",
   "start.release.giveaway.body": "For the release we're giving away 3 T-shirts from the FPMC × Redstar Radi collab — only 3 pieces. It runs on Instagram; the date follows.",
 
