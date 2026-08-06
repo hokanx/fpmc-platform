@@ -16,6 +16,7 @@ import { CineFoot, CineNav } from "../components/CineNav";
 import { Countdown } from "../components/Countdown";
 import { NotifyForm } from "../components/NotifyForm";
 import { ReelBand } from "../components/ReelBand";
+import { ArtistDropdown } from "../components/ArtistDropdown";
 import {
   ARTIST,
   GIVEAWAY,
@@ -94,10 +95,12 @@ export function Start() {
             <div className="fpmc-artist-meta">
               <dl>
                 <dt>{t("start.release.song.artistLabel")}</dt>
-                <dd>
-                  <a href={ARTIST.instagram} target="_blank" rel="noreferrer noopener">
-                    {ARTIST.name}
-                  </a>
+                <dd style={{ padding: 0 }}>
+                  <ArtistDropdown
+                    name={ARTIST.name}
+                    href={ARTIST.instagram}
+                    intro={t("start.release.song.artistIntro")}
+                  />
                 </dd>
               </dl>
             </div>
