@@ -82,7 +82,7 @@ export const WEBSITES: Website[] = [
     kind: "Restaurant",
     city: "Köln",
     href: "https://shi-asia.higgsfield.app/",
-    preview: "/media/portfolio/shi-asia.jpg",
+    preview: "/media/portfolio/shi-asia-2.jpg",
   },
   {
     name: "Sacky Ink",
