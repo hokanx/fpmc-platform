@@ -65,14 +65,80 @@
 
 /* --- the mark, registered onto the surface the film lands on ------------- */
 
-.fh-mark {
+/* --- the mark, ANIMATED onto the surface the film lands on --------------- *
+ * One scroll-eased value, --r (0 → 1), set by the controller. Every variant is
+ * a different reading of the same value, matched to the surface's physics.
+ * Only clip-path / transform / filter / opacity are touched — all compositable.
+ */
+
+.fh-mark-wrap {
   position: absolute;
   z-index: 4;
   pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: soft-light;
-  filter: blur(0.2px) contrast(1.1);
-  will-change: opacity, transform;
+  --r: 0;
+  --max: 0.9;
+  opacity: calc(var(--r) * var(--max));
+  will-change: opacity;
+}
+
+.fh-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+  will-change: clip-path, transform, filter;
+}
+
+/* projector bloom: swells as the light crosses the mark, then settles */
+.fh-mark-glow {
+  position: absolute;
+  inset: -45%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 242, 242, 0.3) 0%, transparent 62%);
+  mix-blend-mode: screen;
+  filter: blur(14px);
+  opacity: calc(var(--r) * (1 - var(--r)) * 2.6);
+}
+
+/* WIPE — the beam crosses the case lid; the stencil exists where light passed.
+   The edge leans, so it reads as a raking light and not a UI swipe. */
+.fh-mark--wipe {
+  clip-path: polygon(
+    -30% 0%,
+    calc(var(--r) * 168% - 30%) 0%,
+    calc(var(--r) * 168% - 74%) 100%,
+    -74% 100%
+  );
+  /* keeps a residual softness at rest so the lid's scuffs stay visible through
+     the stencil instead of a razor-clean vector sitting on top of the case */
+  filter: blur(calc(0.35px + (1 - var(--r)) * 0.9px)) contrast(calc(1 + var(--r) * 0.18))
+    brightness(calc(1 + var(--r) * (1 - var(--r)) * 0.7));
+  transform: scale(calc(1.03 - var(--r) * 0.03));
+}
+
+/* REFLECTION — dark glass: the mark surfaces out of blur, drifting up, with a
+   slight lateral shear so it belongs to the panel's angle. A vertical falloff
+   mimics light dissipating down the panel. */
+.fh-mark--reflection {
+  filter: blur(calc(0.9px + (1 - var(--r)) * 4px)) contrast(1.05)
+    brightness(calc(1 + var(--r) * (1 - var(--r)) * 1.1));
+  transform: translateY(calc((1 - var(--r)) * 16px)) skewX(-2deg)
+    scale(calc(0.985 + var(--r) * 0.015));
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.58) 68%, rgba(0, 0, 0, 0.16) 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.58) 68%, rgba(0, 0, 0, 0.16) 100%);
+}
+
+/* SPIN — printed label: resolves from the centre outward while the last of the
+   disc's rotation eases out under it. Residual softness reads as ink on paper. */
+.fh-mark--spin {
+  clip-path: circle(calc(var(--r) * 78%) at 50% 50%);
+  transform: rotate(calc((1 - var(--r)) * -16deg)) scale(calc(0.94 + var(--r) * 0.06));
+  filter: blur(calc(0.4px + (1 - var(--r)) * 1.4px)) contrast(calc(0.96 + var(--r) * 0.1));
+}
+
+/* the resolved state, for the static hero */
+.fh-mark-wrap--resolved {
+  --r: 1;
 }
 
 /* --- chapter copy ------------------------------------------------------- */
@@ -210,6 +276,16 @@ html[dir="rtl"] .fh-rail-fill {
     height: 100%;
     object-fit: cover;
     filter: saturate(0);
+  }
+  /* the mark keeps its placement inside the static frame, fully resolved */
+  .fh-static-frame .fh-mark-wrap {
+    position: absolute;
+  }
+  .fh-static-frame .fh-mark-wrap img {
+    position: static;
+    inset: auto;
+    height: auto;
+    object-fit: initial;
   }
   .fh-static-copy {
     position: relative;

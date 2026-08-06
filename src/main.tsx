@@ -2,9 +2,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
-// Fonts are loaded from Google Fonts in index.html (FPMC request, 06.08.2026).
-// The previous build self-hosted the same OFL families via @fontsource; that
-// path is DSGVO-safer for a German audience and is one <link> away if wanted.
+// Self-hosted OFL fonts (bundled by Vite — no Google Fonts CDN, GDPR-clean).
+import "@fontsource/antonio/400.css";
+import "@fontsource/antonio/500.css";
+import "@fontsource/antonio/700.css";
+import "@fontsource/inter/300.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/amiri/400.css";
+import "@fontsource/amiri/700.css";
+import "@fontsource/noto-naskh-arabic/400.css";
+import "@fontsource/noto-naskh-arabic/700.css";
 
 import "./index.css";
 import { I18nProvider } from "./i18n";

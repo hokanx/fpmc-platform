@@ -42,6 +42,9 @@ export function Label() {
           transform: "translate(-50%, -50%)",
           blend: "multiply",
           opacity: 0.9,
+          // printed label: resolves from the centre as the disc settles
+          reveal: "spin",
+          glow: false,
         }}
         chapters={[
           {

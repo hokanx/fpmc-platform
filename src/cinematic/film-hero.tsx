@@ -2,6 +2,16 @@
  * chapters. Each chapter is a <video> whose currentTime is driven by the scroll
  * progress of its own band, so scrolling literally runs the projector.
  *
+ * The ending is a performance, not a paste: over the last stretch of the scrub
+ * the mark is ANIMATED onto the surface the film lands on, in the grammar of
+ * that surface —
+ *   wipe        the projector beam crosses the flight-case lid and the stencil
+ *               appears where the light has already passed
+ *   reflection  the mark surfaces in dark glass, drifting up out of blur with a
+ *               specular sheen
+ *   spin        the printed label settles with the disc, resolving from the
+ *               centre outward as the rotation eases to rest
+ *
  * Rules this component holds to:
  *  - the poster paints a finished hero before any JS runs
  *  - `linger` is 0: a chapter answers within a frame of crossing its band
@@ -9,8 +19,6 @@
  *  - chapter copy moves with transform + clip-path only, never opacity-to-zero
  *  - both the motion and the reduced-motion variant live in the DOM; CSS picks
  *  - with reduced motion NO video is ever fetched (src is assigned in JS only)
- *  - the mark is registered onto the surface the film lands on, over the last
- *    5% of scrub progress, wearing the scene's grade
  */
 import { useEffect, useRef, type ReactNode } from "react";
 
@@ -24,15 +32,20 @@ export type FilmChapter = {
   actions?: ReactNode;
 };
 
-/** Where the real mark sits on the surface the film lands on. */
+/** Where the real mark sits on the surface the film lands on, and how it arrives. */
 export type MarkPlacement = {
   left: string;
   top: string;
   width: string;
+  /** placement transform of the plane the mark lies on (perspective/rotation) */
   transform?: string;
   opacity?: number;
   /** blend mode against the surface — a bright surface needs multiply/darken */
   blend?: "soft-light" | "screen" | "multiply" | "darken" | "overlay";
+  /** how the mark is animated in, matched to the surface */
+  reveal?: "wipe" | "reflection" | "spin";
+  /** projector bloom behind the mark, peaking mid-reveal (default true) */
+  glow?: boolean;
 };
 
 type Props = {
@@ -49,9 +62,15 @@ const TOTAL = WEIGHTS[0] + WEIGHTS[1];
 const BOUNDARY = WEIGHTS[0] / TOTAL;
 /** Never raise this: at 0.2 the film reads as frozen at the chapter entry. */
 const LINGER = 0;
+/** The mark's arrival owns the last stretch of the scrub. */
+const MARK_FROM = 0.84;
 
 function clamp01(v: number) {
   return v < 0 ? 0 : v > 1 ? 1 : v;
+}
+
+function easeOutCubic(v: number) {
+  return 1 - Math.pow(1 - v, 3);
 }
 
 export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
@@ -60,9 +79,10 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([null, null]);
   const railFillRef = useRef<HTMLDivElement>(null);
   const railNumRefs = useRef<(HTMLSpanElement | null)[]>([null, null]);
-  const markRef = useRef<HTMLImageElement>(null);
+  const markWrapRef = useRef<HTMLDivElement>(null);
 
   const base = `/media/film/${slug}`;
+  const reveal = mark?.reveal ?? "wipe";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -97,6 +117,7 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
     let rafId = 0;
     const lastSeek = [-1, -1];
     let lastActive = -1;
+    let lastReveal = -1;
 
     const progress = () => {
       const rect = section.getBoundingClientRect();
@@ -156,10 +177,15 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
       if (railFillRef.current) {
         railFillRef.current.style.transform = `scaleX(${p.toFixed(4)})`;
       }
-      if (markRef.current) {
-        // The camera "finds" the mark: it resolves over the last 5% of scrub.
-        const reveal = clamp01((p - 0.95) / 0.05);
-        markRef.current.style.opacity = String(reveal * (mark?.opacity ?? 0.9));
+
+      // The camera finds the mark: one eased 0→1 value drives the whole
+      // arrival, and CSS turns it into the motion this surface deserves.
+      if (markWrapRef.current) {
+        const r = easeOutCubic(clamp01((p - MARK_FROM) / (1 - MARK_FROM)));
+        if (Math.abs(r - lastReveal) > 0.002) {
+          markWrapRef.current.style.setProperty("--r", r.toFixed(4));
+          lastReveal = r;
+        }
       }
 
       rafId = requestAnimationFrame(render);
@@ -177,7 +203,17 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
         v.load();
       });
     };
-  }, [base, mark?.opacity]);
+  }, [base]);
+
+  const markStyle = mark
+    ? ({
+        left: mark.left,
+        top: mark.top,
+        width: mark.width,
+        transform: mark.transform,
+        ["--max" as string]: String(mark.opacity ?? 0.9),
+      } as React.CSSProperties)
+    : undefined;
 
   return (
     <section ref={sectionRef} className="fh" aria-label={ariaLabel}>
@@ -203,20 +239,15 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
           ))}
 
           {mark ? (
-            <img
-              ref={markRef}
-              className="fh-mark"
-              src="/fpmc-logo.svg"
-              alt=""
-              aria-hidden
-              style={{
-                left: mark.left,
-                top: mark.top,
-                width: mark.width,
-                transform: mark.transform,
-                mixBlendMode: mark.blend ?? "soft-light",
-              }}
-            />
+            <div ref={markWrapRef} className="fh-mark-wrap" style={markStyle} aria-hidden>
+              {mark.glow === false ? null : <span className="fh-mark-glow" />}
+              <img
+                className={`fh-mark fh-mark--${reveal}`}
+                src="/fpmc-logo.svg"
+                alt=""
+                style={{ mixBlendMode: mark.blend ?? "soft-light" }}
+              />
+            </div>
           ) : null}
 
           <div className="fh-stages">
@@ -233,7 +264,8 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
                   // complete; later chapters start clipped, before JS runs.
                   clipPath: i === 0 ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",
                   transform: i === 0 ? "translateY(0)" : "translateY(26px)",
-                  transition: "clip-path 520ms cubic-bezier(0.22,1,0.36,1), transform 520ms cubic-bezier(0.22,1,0.36,1)",
+                  transition:
+                    "clip-path 520ms cubic-bezier(0.22,1,0.36,1), transform 520ms cubic-bezier(0.22,1,0.36,1)",
                 }}
               >
                 <span className="fh-eyebrow">{ch.eyebrow}</span>
@@ -274,9 +306,24 @@ export function FilmHero({ slug, chapters, mark, ariaLabel = "FPMC" }: Props) {
           {chapters.map((ch, i) => (
             <div className="fh-static-frame" key={`static-${ch.title}`}>
               <img src={`${base}/scene-0${i + 1}-last.jpg`} alt="" aria-hidden />
+              {/* the arrival, held at its resolved state */}
+              {mark && i === 1 ? (
+                <div className="fh-mark-wrap fh-mark-wrap--resolved" style={markStyle} aria-hidden>
+                  <img
+                    className={`fh-mark fh-mark--${reveal}`}
+                    src="/fpmc-logo.svg"
+                    alt=""
+                    style={{ mixBlendMode: mark.blend ?? "soft-light" }}
+                  />
+                </div>
+              ) : null}
               <div className="fh-static-copy">
                 <span className="fh-eyebrow">{ch.eyebrow}</span>
-                {i === 0 ? <h1 className="fh-title">{ch.title}</h1> : <h2 className="fh-title">{ch.title}</h2>}
+                {i === 0 ? (
+                  <h1 className="fh-title">{ch.title}</h1>
+                ) : (
+                  <h2 className="fh-title">{ch.title}</h2>
+                )}
                 <p className="fh-line">{ch.line}</p>
                 {ch.actions ? <div className="fh-actions">{ch.actions}</div> : null}
               </div>

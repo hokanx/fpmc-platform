@@ -41,8 +41,11 @@ export function Start() {
           top: "48%",
           width: "15%",
           transform: "translate(-50%, -50%) perspective(700px) rotateX(52deg) rotateZ(-10deg)",
-          blend: "soft-light",
-          opacity: 0.85,
+          // overlay lets the case's scuffs read through the stencil
+          blend: "overlay",
+          opacity: 0.8,
+          // the beam crosses the lid and leaves the stencil behind it
+          reveal: "wipe",
         }}
         chapters={[
           {

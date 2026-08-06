@@ -63,6 +63,8 @@ export function Arbeit() {
           transform: "translate(-50%, -50%) perspective(800px) rotateY(14deg) rotateZ(-2deg)",
           blend: "screen",
           opacity: 0.5,
+          // the mark surfaces in the dark glass out of blur
+          reveal: "reflection",
         }}
         chapters={[
           {
