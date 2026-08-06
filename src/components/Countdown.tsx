@@ -4,12 +4,15 @@
  */
 import { useEffect, useState } from "react";
 
+import { DROP_URL } from "../config";
 import { useI18n } from "../i18n";
 
 type Props = {
   /** ISO instant with offset, e.g. 2026-08-07T16:00:00+02:00 */
   target: string;
   className?: string;
+  /** show the drop CTA under the digits (default true) */
+  cta?: boolean;
 };
 
 function pad(n: number) {
@@ -26,7 +29,7 @@ function split(msLeft: number) {
   };
 }
 
-export function Countdown({ target, className }: Props) {
+export function Countdown({ target, className, cta = true }: Props) {
   const { t } = useI18n();
   const targetMs = new Date(target).getTime();
   const [left, setLeft] = useState(() => targetMs - Date.now());
@@ -83,6 +86,19 @@ export function Countdown({ target, className }: Props) {
           ))}
         </div>
       )}
+
+      {cta ? (
+        <p style={{ margin: "2rem 0 0" }}>
+          <a
+            href={DROP_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="fpmc-cta fpmc-cta--release"
+          >
+            {t("countdown.cta")}
+          </a>
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -35,6 +35,9 @@ export const FIRST_CHAPTER = "07.08.";
 /** The premiere link goes live with the drop — kept null until it exists. */
 export const PREMIERE_URL: string | null = null;
 
+/** Where the countdown's CTA sends: the channel carrying the drop. */
+export const DROP_URL = "https://www.youtube.com/channel/UCpNEN5-7gzhUpapA3ob2ZqQ";
+
 /* ----------------------------------------------------------------- giveaway */
 // Facts confirmed by FPMC: 3 pieces, FPMC x Redstar Radi collab, runs on
 // Instagram, date announced later. No terms are published here — the terms doc
