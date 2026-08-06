@@ -10,18 +10,18 @@ export const PHONE_DISPLAY = "+49 1556 7485270";
 export const PHONE_E164 = "+4915567485270";
 export const WHATSAPP = "https://wa.me/4915567485270";
 
-// Handle map per Content Pack v2 (09.07.2026): sign-off is always fpmc.house.
-// Platform-native handles: IG @fpmc.house · YT @fpmc-house · TikTok @fpmc.club.
+// Handle map: sign-off is always fpmc.house. TikTok uses the same handle as
+// Instagram (confirmed by FPMC): IG @fpmc.house · YT @fpmc-house · TikTok @fpmc.house.
 export const SOCIALS = {
   youtube: "https://www.youtube.com/@fpmc-house",
   instagram: "https://www.instagram.com/fpmc.house",
-  tiktok: "https://www.tiktok.com/@fpmc.club",
+  tiktok: "https://www.tiktok.com/@fpmc.house",
 } as const;
 
 export const SOCIAL_ROW = [
   { key: "instagram", label: "Instagram", handle: "@fpmc.house", href: SOCIALS.instagram },
   { key: "youtube", label: "YouTube", handle: "@fpmc-house", href: SOCIALS.youtube },
-  { key: "tiktok", label: "TikTok", handle: "@fpmc.club", href: SOCIALS.tiktok },
+  { key: "tiktok", label: "TikTok", handle: "@fpmc.house", href: SOCIALS.tiktok },
 ] as const;
 
 /* ------------------------------------------------------------------ release */
