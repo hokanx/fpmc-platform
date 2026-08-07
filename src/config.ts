@@ -26,10 +26,9 @@ export const SOCIAL_ROW = [
 
 /* ------------------------------------------------------------------ release */
 
-// First chapter — 07.08.2026, 16:00 German time (CEST = UTC+2).
-export const RELEASE_AT = "2026-08-07T16:00:00+02:00";
-export const RELEASE_DATE_LABEL = "07.08.2026";
-export const RELEASE_TIME_LABEL = "16:00 Uhr";
+// First chapter — 07.08.2026, 18:00 German time (CEST = UTC+2).
+export const RELEASE_AT = "2026-08-07T18:00:00+02:00";
+export const RELEASE_TIME_LABEL = "18:00 Uhr";
 export const FIRST_CHAPTER = "07.08.";
 
 /** The premiere link goes live with the drop — kept null until it exists. */
