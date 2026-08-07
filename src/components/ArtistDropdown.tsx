@@ -1,7 +1,6 @@
 /* Expandable artist note — sits next to the artist name in the release section.
  * The name is display type (not a link); a dedicated Instagram icon opens the
- * profile. A small toggle reveals the artist photo and the bio, split into
- * paragraphs.
+ * profile. An "About the artist" toggle with a chevron expands the bio + photo.
  */
 import { useState } from "react";
 
@@ -23,6 +22,21 @@ function InstagramIcon() {
       <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
       <circle cx="12" cy="12" r="4.2" />
       <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={open ? "fpmc-artist-drop-arrow is-open" : "fpmc-artist-drop-arrow"}
+      width="11"
+      height="7"
+      viewBox="0 0 11 7"
+      fill="none"
+      aria-hidden
+    >
+      <path d="M1 1l4.5 4.5L10 1" stroke="currentColor" strokeWidth="1.4" />
     </svg>
   );
 }
@@ -54,10 +68,11 @@ export function ArtistDropdown({ name, href, intro }: Props) {
           type="button"
           className="fpmc-artist-drop-toggle"
           aria-expanded={open}
-          aria-label={open ? t("artist.note.hide") : t("artist.note.show")}
+          aria-label={t("artist.note.toggle")}
           onClick={() => setOpen((o) => !o)}
         >
-          {open ? "−" : "+"}
+          <span>{t("artist.note.toggle")}</span>
+          <Chevron open={open} />
         </button>
       </div>
 
