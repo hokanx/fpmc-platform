@@ -1,5 +1,5 @@
 /* FPMC countdown — counts down to the release in the visitor's own clock while
- * the target itself is a fixed instant (07.08.2026, 16:00 German time), so it
+ * the target itself is a fixed instant (07.08.2026, 18:00 German time), so it
  * is correct from every timezone. Once the instant passes it flips to "live".
  */
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { DROP_URL } from "../config";
 import { useI18n } from "../i18n";
 
 type Props = {
-  /** ISO instant with offset, e.g. 2026-08-07T16:00:00+02:00 */
+  /** ISO instant with offset, e.g. 2026-08-07T18:00:00+02:00 */
   target: string;
   className?: string;
   /** show the drop CTA under the digits (default true) */
