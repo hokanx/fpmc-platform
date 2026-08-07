@@ -1,11 +1,31 @@
 /* Expandable artist note — sits next to the artist name in the release section.
- * A small toggle reveals a one-line introduction and the artist's photo.
+ * The name is display type (not a link); a dedicated Instagram icon opens the
+ * profile. A small toggle reveals the artist photo and the bio, split into
+ * paragraphs.
  */
 import { useState } from "react";
 
 import { useI18n } from "../i18n";
 
 const RADI_IMG = "/media/artist/radi.jpg";
+
+function InstagramIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden
+    >
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
 
 type Props = {
   name: string;
@@ -20,8 +40,15 @@ export function ArtistDropdown({ name, href, intro }: Props) {
   return (
     <div className="fpmc-artist-drop">
       <div className="fpmc-artist-drop-row">
-        <a href={href} target="_blank" rel="noreferrer noopener">
-          {name}
+        <span className="fpmc-artist-drop-name">{name}</span>
+        <a
+          className="fpmc-artist-drop-icon"
+          href={href}
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label={t("artist.note.ig")}
+        >
+          <InstagramIcon />
         </a>
         <button
           type="button"
@@ -37,12 +64,14 @@ export function ArtistDropdown({ name, href, intro }: Props) {
       {open ? (
         <div className="fpmc-artist-drop-body">
           <img src={RADI_IMG} alt={name} loading="lazy" decoding="async" />
-          {intro
-            .split("\n\n")
-            .filter(Boolean)
-            .map((para) => (
-              <p key={para.slice(0, 24)}>{para}</p>
-            ))}
+          <div className="fpmc-artist-drop-text">
+            {intro
+              .split("\n\n")
+              .filter(Boolean)
+              .map((para) => (
+                <p key={para.slice(0, 24)}>{para}</p>
+              ))}
+          </div>
         </div>
       ) : null}
     </div>
