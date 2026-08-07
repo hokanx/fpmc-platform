@@ -258,6 +258,28 @@ html[dir="rtl"] .fpmc-manifest p {
   margin: 0 0 2rem;
 }
 
+/* embedded premiere + Spotify, in place of the countdown */
+.fpmc-release-video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--color-graphite);
+  background: var(--color-void);
+}
+.fpmc-release-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.fpmc-release-spotify {
+  margin-top: 1.2rem;
+}
+.fpmc-release-spotify iframe {
+  display: block;
+  width: 100%;
+}
+
 .fpmc-form {
   display: flex;
   flex-wrap: wrap;

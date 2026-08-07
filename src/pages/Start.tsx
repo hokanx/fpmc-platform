@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import { FilmHero } from "../cinematic/film-hero";
 import { useReveal } from "../cinematic/use-reveal";
 import { CineFoot, CineNav } from "../components/CineNav";
-import { Countdown } from "../components/Countdown";
 import { NotifyForm } from "../components/NotifyForm";
 import { ReelBand } from "../components/ReelBand";
 import { ArtistDropdown } from "../components/ArtistDropdown";
@@ -22,7 +21,6 @@ import {
   GIVEAWAY,
   GIVEAWAY_VISIBLE,
   REELS,
-  RELEASE_AT,
   SOCIAL_ROW,
 } from "../config";
 import { useI18n } from "../i18n";
@@ -78,7 +76,32 @@ export function Start() {
               {t("start.release.when")}
             </h2>
             <p className="fpmc-release-note">{t("start.release.note")}</p>
-            <Countdown target={RELEASE_AT} />
+
+            {/* the premiere, embedded in place of the countdown */}
+            <div className="fpmc-release-video">
+              <iframe
+                src="https://www.youtube.com/embed/1B7But2hfHw"
+                title="FPMC — First Chapter"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+
+            <div className="fpmc-release-spotify">
+              <iframe
+                title="FPMC — Spotify"
+                style={{ borderRadius: 12 }}
+                src="https://open.spotify.com/embed/track/4u0QqfrgJZInscjI6hBbpZ?utm_source=generator&si=d8f0af5039804b93"
+                width="100%"
+                height="152"
+                frameBorder="0"
+                allowFullScreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+              />
+            </div>
           </div>
 
           <div data-reveal>
