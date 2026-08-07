@@ -45,7 +45,7 @@ export function Start() {
       <CineNav />
 
       <FilmHero
-        slug="home"
+        slug="home-logo"
         ariaLabel="FPMC"
         zone="split"
         chapters={[
