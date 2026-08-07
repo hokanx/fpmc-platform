@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { useI18n } from "../i18n";
 
-const RADI_IMG = "/media/artist/radi.jpg";
+const RADI_IMG = "/media/artist/radi-2.jpg";
 
 function InstagramIcon() {
   return (
